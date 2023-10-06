@@ -35,7 +35,7 @@ public class Player extends JPanel implements KeyListener, ActionListener {
         if (upPressed && playerY > 0) {
             playerY -= MOVEMENT_SPEED;
         }
-        if (downPressed && playerY + 100 < DisplayGraphics.windowHeight) {
+        if (downPressed && playerY + 135 < DisplayGraphics.windowHeight) {
             playerY += MOVEMENT_SPEED;
         }
     }
@@ -70,7 +70,8 @@ public class Player extends JPanel implements KeyListener, ActionListener {
      */
 
     public void paint(Graphics g) {
-        setForeground(Color.black);
+        super.paintComponent(g);
+        g.setColor(Color.black);
         g.fillRect(100, playerY, 100, 100);
     }
 

@@ -15,6 +15,5 @@ public class DisplayGraphics extends Canvas {
         mainWindow.setSize(400, 400);
         mainWindow.setVisible(true);
         windowHeight = mainWindow.getBounds().height;
-        System.out.println(windowHeight);
     }
 }
