@@ -2,6 +2,9 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+/**
+ * .
+ */
 public class Enemy extends JPanel implements ActionListener, Drawable {
 
     public int enemyX = DisplayGraphics.windowDimensions.width;

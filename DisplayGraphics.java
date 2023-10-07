@@ -10,9 +10,14 @@ public class DisplayGraphics extends JPanel implements KeyListener {
     public static Rectangle windowDimensions;
     private Player player = new Player();
     private Enemy enemy = new Enemy();
+    private ProjectilesArrayList projectiles = new ProjectilesArrayList();
     boolean upPressed = false;
     boolean downPressed = false;
+    boolean blockNextShot = false;
 
+    /**
+     * .
+     */
     public DisplayGraphics() {
         new Timer(5, new TimerListener()).start();
         addKeyListener(this);
@@ -30,6 +35,10 @@ public class DisplayGraphics extends JPanel implements KeyListener {
             upPressed = true;
         } else if (code == KeyEvent.VK_DOWN) {
             downPressed = true;
+        } else if (code == KeyEvent.VK_SPACE && !blockNextShot) {
+            projectiles.setPosition(100 + 50, player.playerY + 50);
+            projectiles.addProjectile();
+            blockNextShot = true;
         }
     }
 
@@ -44,6 +53,8 @@ public class DisplayGraphics extends JPanel implements KeyListener {
             upPressed = false;
         } else if (code == KeyEvent.VK_DOWN) {
             downPressed = false;
+        } else if (code == KeyEvent.VK_SPACE) {
+            blockNextShot = false;
         }
     }
 
@@ -56,12 +67,14 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         super.paintComponent(g);
         player.draw(g);
         enemy.draw(g);
+        projectiles.draw(g);
     }
 
     private class TimerListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             player.move(upPressed, downPressed);
+            projectiles.moveProjectiles();
             repaint();
         }
     }
