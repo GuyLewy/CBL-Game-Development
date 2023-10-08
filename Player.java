@@ -7,8 +7,8 @@ import javax.swing.*;
  */
 public class Player extends JPanel implements Drawable {
     public static final int MOVEMENT_SPEED = 5;
-    public static final int PLAYER_WIDTH = 100;
-    public static final int PLAYER_HEIGHT = 100;
+    public final int playerWidth = 100;
+    public final int playerHeight = 100;
 
     public int playerY = 100;
     public int playerX = 100;
@@ -17,7 +17,7 @@ public class Player extends JPanel implements Drawable {
     @Override
     public void draw(Graphics g) {
         g.setColor(Color.black);
-        g.fillRect(playerX, playerY, PLAYER_WIDTH, PLAYER_HEIGHT);
+        g.fillRect(playerX, playerY, playerWidth, playerHeight);
     }
 
     /**
