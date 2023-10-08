@@ -1,34 +1,30 @@
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
 
 /**
- * .
+ * Enemy class used to create new enemies, includes all of their details such as
+ * speed and position as well as the sprite to display.
  */
-public class Enemy extends JPanel implements ActionListener, Drawable {
+public class Enemy extends JPanel implements Drawable {
 
+    static final int ENEMY_SPEED = 5;
     public int enemyX = DisplayGraphics.windowDimensions.width;
-    public int enemyY = 0;
+    public int enemyY;
 
-    Timer t = new Timer(5, this);
-
-    public Enemy() {
-        t.start();
+    Enemy(int yPos) {
+        this.enemyY = yPos;
     }
 
     @Override
     public void draw(Graphics g) {
         g.setColor(Color.red);
-        g.fillRect(enemyX, enemyY, 100, 100);
+        g.fillRect(this.enemyX, this.enemyY, 100, 100);
     }
 
-    public void actionPerformed(ActionEvent e) {
-        enemyX -= Player.MOVEMENT_SPEED;
+    /**
+     * Moves enemy to the left based on its movement speed.
+     */
+    public void moveEnemy() {
+        enemyX -= ENEMY_SPEED;
     }
-
-    // public void paint(Graphics g) {
-    // super.paintComponent(g);
-    // g.setColor(Color.red);
-    // g.fillRect(enemyX, enemyY, 100, 100);
-    // }
 }
