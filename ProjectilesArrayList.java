@@ -41,7 +41,6 @@ public class ProjectilesArrayList implements Drawable {
      * .
      */
     public void draw(Graphics g) {
-        System.out.println(projectiles);
         for (int i = 0; i < projectiles.size(); i++) {
             Projectile next = projectiles.get(i);
             if (next.disappear) {
