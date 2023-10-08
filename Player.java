@@ -9,6 +9,7 @@ public class Player extends JPanel implements Drawable {
     public static final int MOVEMENT_SPEED = 5;
 
     public int playerY = 100;
+    public Projectile playerProjectiles;
 
     @Override
     public void draw(Graphics g) {

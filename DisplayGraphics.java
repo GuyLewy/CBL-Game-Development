@@ -10,10 +10,11 @@ public class DisplayGraphics extends JPanel implements KeyListener {
 
     public static Rectangle windowDimensions;
     private Player player = new Player();
+    private ProjectilesArrayList projectiles = new ProjectilesArrayList();
     private EnemiesArrayList enemies = new EnemiesArrayList();
     boolean upPressed = false;
     boolean downPressed = false;
-    int enemySpawnDelayCounter = 0;
+    boolean blockNextShot = false;
     int enemySpawnDelay = 50;
 
     /**
@@ -41,6 +42,10 @@ public class DisplayGraphics extends JPanel implements KeyListener {
             upPressed = true;
         } else if (code == KeyEvent.VK_DOWN) {
             downPressed = true;
+        } else if (code == KeyEvent.VK_SPACE && !blockNextShot) {
+            projectiles.setPosition(100 + 50, player.playerY + 50);
+            projectiles.addProjectile();
+            blockNextShot = true;
         }
     }
 
@@ -59,6 +64,8 @@ public class DisplayGraphics extends JPanel implements KeyListener {
             upPressed = false;
         } else if (code == KeyEvent.VK_DOWN) {
             downPressed = false;
+        } else if (code == KeyEvent.VK_SPACE) {
+            blockNextShot = false;
         }
     }
 
@@ -81,6 +88,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         player.draw(g);
+        projectiles.draw(g);
         enemies.draw(g);
     }
 
@@ -99,6 +107,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             player.move(upPressed, downPressed);
+            projectiles.moveProjectiles();
             enemies.moveEnemies();
             if (enemySpawnDelayCounter >= enemySpawnDelay) {
                 enemies.generateEnemy(0, 0);
