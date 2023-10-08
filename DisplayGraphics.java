@@ -109,7 +109,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         public void actionPerformed(ActionEvent e) {
             player.move(upPressed, downPressed);
             projectiles.moveProjectiles();
-            enemies.moveEnemies();
+            enemies.updateEnemies(projectiles);
             if (enemySpawnDelayCounter >= enemySpawnDelay) {
                 enemies.generateEnemy(0, 0);
                 enemySpawnDelayCounter = 0;
