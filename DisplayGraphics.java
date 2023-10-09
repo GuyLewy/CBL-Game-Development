@@ -12,11 +12,13 @@ public class DisplayGraphics extends JPanel implements KeyListener {
     private Player player = new Player();
     private ProjectilesArrayList projectiles = new ProjectilesArrayList();
     private EnemiesArrayList enemies = new EnemiesArrayList();
+    private PlayerShotBar playerBar = new PlayerShotBar();
     boolean upPressed = false;
     boolean downPressed = false;
     boolean blockNextShot = false;
     int enemySpawnDelayCounter;
     int enemySpawnDelay = 50;
+    int playerShotDelayCounter = player.playerShotDelay;
 
     /**
      * Constructor method to initialize a timer and set the DisplayGraphics object
@@ -27,6 +29,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         addKeyListener(this);
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
+        playerBar.playerBarSetup(player.playerShotDelay);
     }
 
     /**
@@ -48,6 +51,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
                  (int) (player.playerY + player.playerHeight / 2));
             projectiles.addProjectile();
             blockNextShot = true;
+            playerShotDelayCounter = -1;
         }
     }
 
@@ -66,8 +70,6 @@ public class DisplayGraphics extends JPanel implements KeyListener {
             upPressed = false;
         } else if (code == KeyEvent.VK_DOWN) {
             downPressed = false;
-        } else if (code == KeyEvent.VK_SPACE) {
-            blockNextShot = false;
         }
     }
 
@@ -92,6 +94,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         player.draw(g);
         projectiles.draw(g);
         enemies.draw(g);
+        playerBar.draw(g);
     }
 
     /**
@@ -115,7 +118,13 @@ public class DisplayGraphics extends JPanel implements KeyListener {
                 enemies.generateEnemy(0, 0);
                 enemySpawnDelayCounter = 0;
             }
+            if (playerShotDelayCounter >= player.playerShotDelay) {
+                blockNextShot = false;
+            } else {
+                playerShotDelayCounter++;
+            }
             enemySpawnDelayCounter++;
+            playerBar.updateBar(playerShotDelayCounter);
             repaint();
         }
     }
