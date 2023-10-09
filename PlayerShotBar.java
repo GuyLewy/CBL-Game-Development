@@ -25,7 +25,7 @@ public class PlayerShotBar extends JPanel implements Drawable {
                 (0.645 * DisplayGraphics.windowDimensions.getWidth()
                 + 25 * i);
             nextSquare.yPosition = 15;
-            nextSquare.time = (int) (delay / 10 * (i + 3));
+            nextSquare.time = (int) (delay / 10 * (i + 2));
 
             squares[i] = nextSquare;
         }

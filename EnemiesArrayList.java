@@ -20,7 +20,7 @@ public class EnemiesArrayList {
      *                  such as health, speed and damage
      */
     public void generateEnemy(int xPos, int enemyType) {
-        int yPos = random.nextInt(DisplayGraphics.windowDimensions.height - 200) + 50;
+        int yPos = random.nextInt(DisplayGraphics.windowDimensions.height - 400) + 75;
         Enemy newEnemy = new Enemy(yPos);
         enemies.add(newEnemy);
     }
