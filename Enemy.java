@@ -10,6 +10,9 @@ public class Enemy extends JPanel implements Drawable {
     static final int ENEMY_SPEED = 5;
     public int enemyX = DisplayGraphics.windowDimensions.width;
     public int enemyY;
+    static final int PROJECTILE_DELAY = 200;
+    int projectileDelayCounter = 0;
+    public ProjectilesArrayList enemyProjectiles = new ProjectilesArrayList();
 
     Enemy(int yPos) {
         this.enemyY = yPos;
@@ -21,10 +24,32 @@ public class Enemy extends JPanel implements Drawable {
         g.fillRect(this.enemyX, this.enemyY, 100, 100);
     }
 
+    public void drawProjectiles(Graphics g) {
+        enemyProjectiles.draw(g);
+        System.out.println("drawing enemy projectiles");
+    }
+
     /**
      * Moves enemy to the left based on its movement speed.
      */
     public void moveEnemy() {
         enemyX -= ENEMY_SPEED;
     }
+
+    public void moveProjectiles() {
+        for (var i = 0; i < enemyProjectiles.projectiles.size(); i++) {
+            enemyProjectiles.projectiles.get(i).moveProjectile(-10);
+        }
+    }
+
+    public void shoot() {
+        if (projectileDelayCounter >= PROJECTILE_DELAY) {
+            enemyProjectiles.addProjectile(enemyX, enemyY + 50);
+            projectileDelayCounter = 0;
+            System.out.println("enemy shoots");
+        } else {
+            projectileDelayCounter++;
+        }
+    }
+
 }

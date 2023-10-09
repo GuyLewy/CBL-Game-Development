@@ -36,6 +36,12 @@ public class EnemiesArrayList {
         }
     }
 
+    public void drawEnemyProjectiles(Graphics g) {
+        for (var i = 0; i < enemies.size(); i++) {
+            enemies.get(i).drawProjectiles(g);
+        }
+    }
+
     /**
      * A method that iterates accross all eneemies and moves them all to the left
      * based on their movement speed, aditionally it despawns them if they hit the
@@ -48,6 +54,14 @@ public class EnemiesArrayList {
             } else {
                 enemies.remove(i);
             }
+        }
+    }
+
+    public void handleEnemyProjectiles() {
+        for (var i = 0; i < enemies.size(); i++) {
+            enemies.get(i).shoot();
+            enemies.get(i).moveProjectiles();
+
         }
     }
 }
