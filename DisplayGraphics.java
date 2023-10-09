@@ -13,11 +13,12 @@ public class DisplayGraphics extends JPanel implements KeyListener {
     private ProjectilesArrayList projectiles = new ProjectilesArrayList();
     private EnemiesArrayList enemies = new EnemiesArrayList();
     private PlayerShotBar playerBar = new PlayerShotBar();
+    private ScoreCounter score = new ScoreCounter();
     boolean upPressed = false;
     boolean downPressed = false;
     boolean blockNextShot = false;
     int enemySpawnDelayCounter;
-    int enemySpawnDelay = 50;
+    int enemySpawnDelay = 100;
     int playerShotDelayCounter = player.playerShotDelay;
 
     /**
@@ -51,7 +52,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
                  (int) (player.playerY + player.playerHeight / 2));
             projectiles.addProjectile();
             blockNextShot = true;
-            playerShotDelayCounter = -1;
+            playerShotDelayCounter = 0;
         }
     }
 
@@ -95,6 +96,8 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         projectiles.draw(g);
         enemies.draw(g);
         playerBar.draw(g);
+        score.draw(g);
+
     }
 
     /**
@@ -113,18 +116,25 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         public void actionPerformed(ActionEvent e) {
             player.move(upPressed, downPressed);
             projectiles.moveProjectiles();
+
             enemies.updateEnemies(projectiles);
+
             if (enemySpawnDelayCounter >= enemySpawnDelay) {
                 enemies.generateEnemy(0, 0);
                 enemySpawnDelayCounter = 0;
             }
+
             if (playerShotDelayCounter >= player.playerShotDelay) {
                 blockNextShot = false;
             } else {
                 playerShotDelayCounter++;
             }
+    
             enemySpawnDelayCounter++;
+
             playerBar.updateBar(playerShotDelayCounter);
+            score.updateScore(enemies);
+
             repaint();
         }
     }

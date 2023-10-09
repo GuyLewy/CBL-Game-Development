@@ -22,7 +22,8 @@ public class PlayerShotBar extends JPanel implements Drawable {
             nextSquare.width = 20;
             nextSquare.height = 20;
             nextSquare.xPosition = (int) 
-                (DisplayGraphics.windowDimensions.getWidth() - 710 + 25 * i);
+                (0.645 * DisplayGraphics.windowDimensions.getWidth()
+                + 25 * i);
             nextSquare.yPosition = 15;
             nextSquare.time = (int) (delay / 10 * (i + 3));
 
@@ -40,7 +41,8 @@ public class PlayerShotBar extends JPanel implements Drawable {
      */
     public void draw(Graphics g) {
         g.setColor(new Color(90, 90, 90));
-        g.fillRect((int) (DisplayGraphics.windowDimensions.getWidth() - 720), 10, 240, 30);
+        g.fillRect((int) (0.64 * DisplayGraphics.windowDimensions.getWidth()),
+            10, 240, 30);
         for (int i = 0; i < 9; i++) {
             LoadingBarSquare next = squares[i];
 
