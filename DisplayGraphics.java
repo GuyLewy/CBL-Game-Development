@@ -34,7 +34,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
     }
 
     /**
-     * Method to determine wether a key on the keyboard was pressed and get the
+     * Method to determine whether a key on the keyboard was pressed and get the
      * keycode of the key, it is used to control the actions that the player
      * chooses.
      * 
@@ -48,8 +48,8 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         } else if (code == KeyEvent.VK_DOWN) {
             downPressed = true;
         } else if (code == KeyEvent.VK_SPACE && !blockNextShot) {
-            projectiles.setPosition((int) (player.playerWidth * 1.5),
-                 (int) (player.playerY + player.playerHeight / 2));
+            projectiles.setPosition((int) (player.playerX + 100),
+                 (int) (player.playerY + 65));
             projectiles.addProjectile();
             blockNextShot = true;
             playerShotDelayCounter = 0;
@@ -57,7 +57,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
     }
 
     /**
-     * Method used to determen wether a key on the keyboard was released and get the
+     * Method used to determen whether a key on the keyboard was released and get the
      * keykoad of the key, this is used to determine when the player wants to stop
      * moving.
      * 
