@@ -6,9 +6,10 @@ import java.util.Random;
  * EnemyArrayList, used to go through all available enemies and update them.
  */
 public class EnemiesArrayList {
-
+    public boolean enemyKilled = false;
     public ArrayList<Enemy> enemies = new ArrayList<Enemy>();
     Random random = new Random();
+    int height = Enemy.ENEMY_HEIGHT;
 
     /**
      * A method to create a new enemy then add it to the ArrayList of all existing
@@ -19,7 +20,7 @@ public class EnemiesArrayList {
      *                  such as health, speed and damage
      */
     public void generateEnemy(int xPos, int enemyType) {
-        int yPos = random.nextInt(DisplayGraphics.windowDimensions.height - 200) + 50;
+        int yPos = random.nextInt(DisplayGraphics.windowDimensions.height - 400) + 75;
         Enemy newEnemy = new Enemy(yPos);
         enemies.add(newEnemy);
     }
@@ -39,6 +40,45 @@ public class EnemiesArrayList {
     public void drawEnemyProjectiles(Graphics g) {
         for (var i = 0; i < enemies.size(); i++) {
             enemies.get(i).drawProjectiles(g);
+        }
+    }
+
+    /**
+     * A method checks if any of the enemies is hit by a projectile,
+     * has no life points left and then moves the enemies.
+     */
+    public void updateEnemies(ProjectilesArrayList projectiles) {
+        enemyKilled = false;
+        checkProjectiles(projectiles);
+        checkLifePoints();
+        moveEnemies();
+    }
+
+    /**
+     * A method checks, if any of the projectiles in ArrayList..
+     * @param projectiles is hit by any of the projectiles.
+     */
+    public void checkProjectiles(ProjectilesArrayList projectiles) {
+        for (int i = 0; i < enemies.size(); i++) {
+            Enemy next = enemies.get(i);
+            if (projectiles.areBulletsHitting(next.enemyX, next.enemyY, height)) {
+                next.removeLifePoint();
+            }
+        }
+    }
+
+    /**
+     * Method checks, if any of the enemies has no life points left.
+     * In that case, it removes that enemy.
+     */
+    public void checkLifePoints() {
+        for (int i = 0; i < enemies.size(); i++) {
+            Enemy next = enemies.get(i);
+
+            if (next.lifePointsLeft <= 0) {
+                enemies.remove(i);
+                enemyKilled = true;
+            }
         }
     }
 
