@@ -7,14 +7,17 @@ import javax.swing.*;
  */
 public class Player extends JPanel implements Drawable {
     public static final int MOVEMENT_SPEED = 5;
+    public final int playerWidth = 100;
+    public final int playerHeight = 100;
 
     public int playerY = 100;
+    public int playerX = 100;
     public Projectile playerProjectiles;
 
     @Override
     public void draw(Graphics g) {
         g.setColor(Color.black);
-        g.fillRect(100, playerY, 100, 100);
+        g.fillRect(playerX, playerY, playerWidth, playerHeight);
     }
 
     /**

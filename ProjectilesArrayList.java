@@ -37,6 +37,21 @@ public class ProjectilesArrayList implements Drawable {
         }
     }
 
+    /**.
+     * 
+     */
+    public boolean areBulletsHitting(int x, int y, int enemyHeight) {
+        for (int i = 0; i < projectiles.size(); i++) {
+            Projectile next = projectiles.get(i);
+            if (x - next.projectileX <= 0 &&  next.projectileY - y >= 0
+                && y + enemyHeight - next.projectileY >= 0) {
+                next.disappear = true;
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * .
      */

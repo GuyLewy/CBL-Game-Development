@@ -4,8 +4,12 @@ import javax.swing.*;
 /**
  * .
  */
+
 public class Projectile extends JPanel implements Drawable {
     public static final int RANGE = DisplayGraphics.windowDimensions.width;
+    public static final int PROJECTILE_WIDTH = 10;
+    public static final int PROJECTILE_HEIGHT = 10;
+
     int projectileX;
     int projectileY;
     public static final int PROJECTILE_SPEED = 5;
@@ -14,7 +18,7 @@ public class Projectile extends JPanel implements Drawable {
     @Override
     public void draw(Graphics g) {
         g.setColor(new Color(77, 46, 8));
-        g.fillRect(projectileX, projectileY, 10, 10);
+        g.fillRect(projectileX, projectileY, PROJECTILE_WIDTH, PROJECTILE_HEIGHT);
         
     }
 

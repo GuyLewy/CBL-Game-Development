@@ -44,7 +44,8 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         } else if (code == KeyEvent.VK_DOWN) {
             downPressed = true;
         } else if (code == KeyEvent.VK_SPACE && !blockNextShot) {
-            projectiles.setPosition(100 + 50, player.playerY + 50);
+            projectiles.setPosition((int) (player.playerWidth * 1.5),
+                 (int) (player.playerY + player.playerHeight / 2));
             projectiles.addProjectile();
             blockNextShot = true;
         }
@@ -109,7 +110,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         public void actionPerformed(ActionEvent e) {
             player.move(upPressed, downPressed);
             projectiles.moveProjectiles();
-            enemies.moveEnemies();
+            enemies.updateEnemies(projectiles);
             if (enemySpawnDelayCounter >= enemySpawnDelay) {
                 enemies.generateEnemy(0, 0);
                 enemySpawnDelayCounter = 0;
