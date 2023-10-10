@@ -19,15 +19,15 @@ public class Projectile extends JPanel implements Drawable {
     public void draw(Graphics g) {
         g.setColor(new Color(77, 46, 8));
         g.fillRect(projectileX, projectileY, PROJECTILE_WIDTH, PROJECTILE_HEIGHT);
-        
+
     }
 
     /**
      * .
      */
-    public void moveProjectile() {
-        if (projectileX < RANGE) {
-            projectileX += PROJECTILE_SPEED;
+    public void moveProjectile(int projectileSpeed) {
+        if (projectileX < RANGE && projectileX > 0) {
+            projectileX += projectileSpeed;
         } else {
             disappear = true;
         }

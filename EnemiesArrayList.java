@@ -37,6 +37,12 @@ public class EnemiesArrayList {
         }
     }
 
+    public void drawEnemyProjectiles(Graphics g) {
+        for (var i = 0; i < enemies.size(); i++) {
+            enemies.get(i).drawProjectiles(g);
+        }
+    }
+
     /**
      * A method checks if any of the enemies is hit by a projectile,
      * has no life points left and then moves the enemies.
@@ -88,6 +94,14 @@ public class EnemiesArrayList {
             } else {
                 enemies.remove(i);
             }
+        }
+    }
+
+    public void handleEnemyProjectiles() {
+        for (var i = 0; i < enemies.size(); i++) {
+            enemies.get(i).shoot();
+            enemies.get(i).moveProjectiles();
+
         }
     }
 }

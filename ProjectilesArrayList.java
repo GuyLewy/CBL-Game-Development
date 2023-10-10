@@ -7,13 +7,10 @@ import java.util.*;
 public class ProjectilesArrayList implements Drawable {
     public ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 
-    public int projectileX;
-    public int projectileY;
-
     /**
      * .
      */
-    public void addProjectile() {
+    public void addProjectile(int projectileX, int projectileY) {
         Projectile p = new Projectile();
         p.givePosition(projectileX, projectileY);
         projectiles.add(p);
@@ -22,18 +19,10 @@ public class ProjectilesArrayList implements Drawable {
     /**
      * .
      */
-    public void setPosition(int x, int y) {
-        projectileX = x;
-        projectileY = y;
-    }
-
-    /**
-     * .
-     */
-    public void moveProjectiles() {
+    public void moveProjectiles(int speed) {
         for (int i = 0; i < projectiles.size(); i++) {
             Projectile next = projectiles.get(i);
-            next.moveProjectile();
+            next.moveProjectile(speed);
         }
     }
 
