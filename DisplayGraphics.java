@@ -12,11 +12,14 @@ public class DisplayGraphics extends JPanel implements KeyListener {
     private Player player = new Player();
     private ProjectilesArrayList projectiles = new ProjectilesArrayList();
     private EnemiesArrayList enemies = new EnemiesArrayList();
+    private PlayerShotBar playerBar = new PlayerShotBar();
+    private ScoreCounter score = new ScoreCounter();
     boolean upPressed = false;
     boolean downPressed = false;
     boolean blockNextShot = false;
     int enemySpawnDelayCounter;
-    int enemySpawnDelay = 50;
+    int enemySpawnDelay = 65;
+    int playerShotDelayCounter = player.playerShotDelay;
 
     /**
      * Constructor method to initialize a timer and set the DisplayGraphics object
@@ -27,10 +30,11 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         addKeyListener(this);
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
+        playerBar.playerBarSetup(player.playerShotDelay);
     }
 
     /**
-     * Method to determine wether a key on the keyboard was pressed and get the
+     * Method to determine whether a key on the keyboard was pressed and get the
      * keycode of the key, it is used to control the actions that the player
      * chooses.
      * 
@@ -44,15 +48,16 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         } else if (code == KeyEvent.VK_DOWN) {
             downPressed = true;
         } else if (code == KeyEvent.VK_SPACE && !blockNextShot) {
-            projectiles.setPosition((int) (player.playerWidth * 1.5),
-                 (int) (player.playerY + player.playerHeight / 2));
+            projectiles.setPosition((int) (player.playerX + 100),
+                 (int) (player.playerY + 65));
             projectiles.addProjectile();
             blockNextShot = true;
+            playerShotDelayCounter = 0;
         }
     }
 
     /**
-     * Method used to determen wether a key on the keyboard was released and get the
+     * Method used to determen whether a key on the keyboard was released and get the
      * keykoad of the key, this is used to determine when the player wants to stop
      * moving.
      * 
@@ -66,8 +71,6 @@ public class DisplayGraphics extends JPanel implements KeyListener {
             upPressed = false;
         } else if (code == KeyEvent.VK_DOWN) {
             downPressed = false;
-        } else if (code == KeyEvent.VK_SPACE) {
-            blockNextShot = false;
         }
     }
 
@@ -92,6 +95,9 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         player.draw(g);
         projectiles.draw(g);
         enemies.draw(g);
+        playerBar.draw(g);
+        score.draw(g);
+
     }
 
     /**
@@ -110,12 +116,25 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         public void actionPerformed(ActionEvent e) {
             player.move(upPressed, downPressed);
             projectiles.moveProjectiles();
+
             enemies.updateEnemies(projectiles);
+
             if (enemySpawnDelayCounter >= enemySpawnDelay) {
                 enemies.generateEnemy(0, 0);
                 enemySpawnDelayCounter = 0;
             }
+
+            if (playerShotDelayCounter >= player.playerShotDelay) {
+                blockNextShot = false;
+            } else {
+                playerShotDelayCounter++;
+            }
+    
             enemySpawnDelayCounter++;
+
+            playerBar.updateBar(playerShotDelayCounter);
+            score.updateScore(enemies);
+
             repaint();
         }
     }

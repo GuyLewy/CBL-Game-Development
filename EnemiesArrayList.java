@@ -6,7 +6,7 @@ import java.util.Random;
  * EnemyArrayList, used to go through all available enemies and update them.
  */
 public class EnemiesArrayList {
-
+    public boolean enemyKilled = false;
     public ArrayList<Enemy> enemies = new ArrayList<Enemy>();
     Random random = new Random();
     int height = Enemy.ENEMY_HEIGHT;
@@ -20,7 +20,7 @@ public class EnemiesArrayList {
      *                  such as health, speed and damage
      */
     public void generateEnemy(int xPos, int enemyType) {
-        int yPos = random.nextInt(DisplayGraphics.windowDimensions.height - 200) + 50;
+        int yPos = random.nextInt(DisplayGraphics.windowDimensions.height - 400) + 75;
         Enemy newEnemy = new Enemy(yPos);
         enemies.add(newEnemy);
     }
@@ -42,6 +42,7 @@ public class EnemiesArrayList {
      * has no life points left and then moves the enemies.
      */
     public void updateEnemies(ProjectilesArrayList projectiles) {
+        enemyKilled = false;
         checkProjectiles(projectiles);
         checkLifePoints();
         moveEnemies();
@@ -70,6 +71,7 @@ public class EnemiesArrayList {
 
             if (next.lifePointsLeft <= 0) {
                 enemies.remove(i);
+                enemyKilled = true;
             }
         }
     }

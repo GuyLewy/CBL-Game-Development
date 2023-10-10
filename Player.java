@@ -1,4 +1,7 @@
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 /**
@@ -10,14 +13,32 @@ public class Player extends JPanel implements Drawable {
     public final int playerWidth = 100;
     public final int playerHeight = 100;
 
+    public int playerShotDelay = 40;
     public int playerY = 100;
     public int playerX = 100;
     public Projectile playerProjectiles;
 
+    public BufferedImage player;
+
+    public Player() {
+        getPlayerImage();
+    }
+
+    /**
+     * .
+     */
+    public void getPlayerImage() {
+        try {
+            player = ImageIO.read(getClass().getResourceAsStream("/player/player.png"));
+        } catch (IOException e) {
+            ;
+        }
+    }
+
     @Override
     public void draw(Graphics g) {
-        g.setColor(Color.black);
-        g.fillRect(playerX, playerY, playerWidth, playerHeight);
+        Graphics2D g2D = (Graphics2D) g;
+        g2D.drawImage(player, null, playerX, playerY);
     }
 
     /**

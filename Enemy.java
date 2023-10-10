@@ -9,7 +9,7 @@ public class Enemy extends JPanel implements Drawable {
     public static final int ENEMY_WIDTH = 100;
     public static final int ENEMY_HEIGHT = 100;
     public static final int ENEMY_LIFE_POINTS = 1;
-    static final int ENEMY_SPEED = 5;
+    static final int ENEMY_SPEED = 4;
 
     public int lifePointsLeft = ENEMY_LIFE_POINTS;
     public int enemyX = DisplayGraphics.windowDimensions.width;
