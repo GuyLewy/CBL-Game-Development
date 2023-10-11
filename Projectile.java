@@ -12,7 +12,7 @@ public class Projectile extends JPanel implements Drawable {
 
     int projectileX;
     int projectileY;
-    public static final int PROJECTILE_SPEED = 5;
+    public static final int PROJECTILE_SPEED = 1;
     boolean disappear = false;
 
     @Override

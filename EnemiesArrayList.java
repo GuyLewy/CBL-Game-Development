@@ -10,6 +10,7 @@ public class EnemiesArrayList {
     public ArrayList<Enemy> enemies = new ArrayList<Enemy>();
     Random random = new Random();
     int height = Enemy.ENEMY_HEIGHT;
+    int width = Enemy.ENEMY_WIDTH;
 
     /**
      * A method to create a new enemy then add it to the ArrayList of all existing
@@ -51,17 +52,19 @@ public class EnemiesArrayList {
         enemyKilled = false;
         checkProjectiles(projectiles);
         checkLifePoints();
+        handleEnemyProjectiles();
         moveEnemies();
     }
 
     /**
      * A method checks, if any of the projectiles in ArrayList..
+     * 
      * @param projectiles is hit by any of the projectiles.
      */
     public void checkProjectiles(ProjectilesArrayList projectiles) {
         for (int i = 0; i < enemies.size(); i++) {
             Enemy next = enemies.get(i);
-            if (projectiles.areBulletsHitting(next.enemyX, next.enemyY, height)) {
+            if (projectiles.areBulletsHitting(next.enemyX, next.enemyY, width, height)) {
                 next.removeLifePoint();
             }
         }

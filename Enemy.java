@@ -30,7 +30,6 @@ public class Enemy extends JPanel implements Drawable {
 
     public void drawProjectiles(Graphics g) {
         enemyProjectiles.draw(g);
-        System.out.println("drawing enemy projectiles");
     }
 
     /**
@@ -54,11 +53,8 @@ public class Enemy extends JPanel implements Drawable {
         if (projectileDelayCounter >= PROJECTILE_DELAY) {
             enemyProjectiles.addProjectile(enemyX, enemyY + 50);
             projectileDelayCounter = 0;
-            System.out.println("enemy shoots");
         } else {
             projectileDelayCounter++;
         }
     }
-
-
 }
