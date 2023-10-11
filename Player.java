@@ -14,6 +14,7 @@ public class Player implements Drawable {
     public static final int MOVEMENT_SPEED = 5;
     public final int playerWidth = 100;
     public final int playerHeight = 100;
+    int playerHealth = 3;
 
     public int playerShotDelay = 40;
     public int playerY = 100;
@@ -37,17 +38,24 @@ public class Player implements Drawable {
         }
     }
 
+    /**
+     * .
+     * 
+     * @param enemiesArrayList .
+     */
     public void checkProjectiles(EnemiesArrayList enemiesArrayList) {
-
         ArrayList<Enemy> enemies = enemiesArrayList.enemies;
         for (int i = 0; i < enemies.size(); i++) {
             ProjectilesArrayList nextProjectileList = enemies.get(i).enemyProjectiles;
-
             if (nextProjectileList.areBulletsHitting(playerX, playerY, playerWidth, playerHeight)) {
-                System.out.println("Player Hit");
+                playerHealth--;
+                if (playerHealth <= 0) {
+                    DisplayGraphics.endGame();
+                }
             }
 
         }
+
     }
 
     @Override

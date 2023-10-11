@@ -14,6 +14,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
     private EnemiesArrayList enemies = new EnemiesArrayList();
     private PlayerShotBar playerBar = new PlayerShotBar();
     private ScoreCounter score = new ScoreCounter();
+    public static boolean gameRunning;
     boolean upPressed = false;
     boolean downPressed = false;
     boolean blockNextShot = false;
@@ -26,11 +27,16 @@ public class DisplayGraphics extends JPanel implements KeyListener {
      * as focusable so that keystrokes can be recorded.
      */
     public DisplayGraphics() {
+        gameRunning = true;
         new Timer(5, new TimerListener()).start();
         addKeyListener(this);
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
         playerBar.playerBarSetup(player.playerShotDelay);
+    }
+
+    public static void endGame() {
+        gameRunning = false;
     }
 
     /**
@@ -114,28 +120,31 @@ public class DisplayGraphics extends JPanel implements KeyListener {
          */
         @Override
         public void actionPerformed(ActionEvent e) {
-            player.move(upPressed, downPressed);
-            playerProjectiles.moveProjectiles(5);
-            enemies.updateEnemies(playerProjectiles);
-            player.checkProjectiles(enemies);
+            if (gameRunning) {
 
-            if (enemySpawnDelayCounter >= enemySpawnDelay) {
-                enemies.generateEnemy(0, 0);
-                enemySpawnDelayCounter = 0;
+                player.move(upPressed, downPressed);
+                playerProjectiles.moveProjectiles(5);
+                enemies.updateEnemies(playerProjectiles);
+                player.checkProjectiles(enemies);
+
+                if (enemySpawnDelayCounter >= enemySpawnDelay) {
+                    enemies.generateEnemy(0, 0);
+                    enemySpawnDelayCounter = 0;
+                }
+
+                if (playerShotDelayCounter >= player.playerShotDelay) {
+                    blockNextShot = false;
+                } else {
+                    playerShotDelayCounter++;
+                }
+
+                enemySpawnDelayCounter++;
+
+                playerBar.updateBar(playerShotDelayCounter);
+                score.updateScore(enemies);
+
+                repaint();
             }
-
-            if (playerShotDelayCounter >= player.playerShotDelay) {
-                blockNextShot = false;
-            } else {
-                playerShotDelayCounter++;
-            }
-
-            enemySpawnDelayCounter++;
-
-            playerBar.updateBar(playerShotDelayCounter);
-            score.updateScore(enemies);
-
-            repaint();
         }
     }
 
