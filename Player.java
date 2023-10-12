@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
@@ -8,10 +10,11 @@ import javax.swing.*;
  * Enemy class includes all of the player details such as speed and position as
  * well as the sprite to display.
  */
-public class Player extends JPanel implements Drawable {
+public class Player implements Drawable {
     public static final int MOVEMENT_SPEED = 5;
     public final int playerWidth = 100;
-    public final int playerHeight = 100;
+    public final int playerHeight = 120;
+    int playerHealth = 3;
 
     public int playerShotDelay = 40;
     public int playerY = 100;
@@ -32,6 +35,30 @@ public class Player extends JPanel implements Drawable {
             player = ImageIO.read(getClass().getResourceAsStream("/player/player.png"));
         } catch (IOException e) {
             ;
+        }
+    }
+
+    /**
+     * .
+     * 
+     * @param enemiesArrayList .
+     */
+    public void checkProjectiles(EnemiesArrayList enemiesArrayList) {
+        ArrayList<Enemy> enemies = enemiesArrayList.enemies;
+        for (int i = 0; i < enemies.size(); i++) {
+            ProjectilesArrayList nextProjectileList = enemies.get(i).enemyProjectiles;
+            if (nextProjectileList.areBulletsHitting(playerX, playerY, playerWidth, playerHeight)) {
+                loseHealth();
+            }
+
+        }
+
+    }
+
+    public void loseHealth() {
+        playerHealth--;
+        if (playerHealth <= 0) {
+            DisplayGraphics.endGame();
         }
     }
 

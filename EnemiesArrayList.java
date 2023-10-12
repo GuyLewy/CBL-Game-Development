@@ -10,6 +10,7 @@ public class EnemiesArrayList {
     public ArrayList<Enemy> enemies = new ArrayList<Enemy>();
     Random random = new Random();
     int height = Enemy.ENEMY_HEIGHT;
+    int width = Enemy.ENEMY_WIDTH;
 
     /**
      * A method to create a new enemy then add it to the ArrayList of all existing
@@ -37,25 +38,35 @@ public class EnemiesArrayList {
         }
     }
 
+    public void drawEnemyProjectiles(Graphics g) {
+        for (var i = 0; i < enemies.size(); i++) {
+            enemies.get(i).drawProjectiles(g);
+        }
+    }
+
     /**
      * A method checks if any of the enemies is hit by a projectile,
      * has no life points left and then moves the enemies.
      */
-    public void updateEnemies(ProjectilesArrayList projectiles) {
+    public int updateEnemies(ProjectilesArrayList projectiles, int playerX, int playerY, int playerWidth,
+            int playerHeight) {
         enemyKilled = false;
         checkProjectiles(projectiles);
         checkLifePoints();
+        handleEnemyProjectiles();
         moveEnemies();
+        return checkPlayerCollisions(playerX, playerY, playerWidth, playerHeight);
     }
 
     /**
      * A method checks, if any of the projectiles in ArrayList..
+     * 
      * @param projectiles is hit by any of the projectiles.
      */
     public void checkProjectiles(ProjectilesArrayList projectiles) {
         for (int i = 0; i < enemies.size(); i++) {
             Enemy next = enemies.get(i);
-            if (projectiles.areBulletsHitting(next.enemyX, next.enemyY, height)) {
+            if (projectiles.areBulletsHitting(next.enemyX, next.enemyY, width, height)) {
                 next.removeLifePoint();
             }
         }
@@ -89,5 +100,25 @@ public class EnemiesArrayList {
                 enemies.remove(i);
             }
         }
+    }
+
+    /**
+     * .
+     */
+    public void handleEnemyProjectiles() {
+        for (var i = 0; i < enemies.size(); i++) {
+            enemies.get(i).shoot();
+            enemies.get(i).moveProjectiles();
+        }
+    }
+
+    public int checkPlayerCollisions(int playerX, int playerY, int playerWidth, int playerHeight) {
+        int playerCollisionCount = 0;
+        for (var i = 0; i < enemies.size(); i++) {
+            if (enemies.get(i).checkPlayerCollision(playerX, playerY, playerWidth, playerHeight)) {
+                playerCollisionCount++;
+            }
+        }
+        return playerCollisionCount;
     }
 }
