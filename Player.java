@@ -13,7 +13,7 @@ import javax.swing.*;
 public class Player implements Drawable {
     public static final int MOVEMENT_SPEED = 5;
     public final int playerWidth = 100;
-    public final int playerHeight = 100;
+    public final int playerHeight = 120;
     int playerHealth = 3;
 
     public int playerShotDelay = 40;
@@ -48,14 +48,18 @@ public class Player implements Drawable {
         for (int i = 0; i < enemies.size(); i++) {
             ProjectilesArrayList nextProjectileList = enemies.get(i).enemyProjectiles;
             if (nextProjectileList.areBulletsHitting(playerX, playerY, playerWidth, playerHeight)) {
-                playerHealth--;
-                if (playerHealth <= 0) {
-                    DisplayGraphics.endGame();
-                }
+                loseHealth();
             }
 
         }
 
+    }
+
+    public void loseHealth() {
+        playerHealth--;
+        if (playerHealth <= 0) {
+            DisplayGraphics.endGame();
+        }
     }
 
     @Override

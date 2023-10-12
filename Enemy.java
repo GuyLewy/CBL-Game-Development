@@ -57,4 +57,14 @@ public class Enemy extends JPanel implements Drawable {
             projectileDelayCounter++;
         }
     }
+
+    public boolean checkPlayerCollision(int playerX, int playerY, int playerWidth, int playerHeight) {
+        if (enemyX <= playerX + playerWidth && enemyX + ENEMY_WIDTH >= playerX + ENEMY_HEIGHT
+                && enemyY >= playerY && enemyY <= playerY + playerHeight) {
+            lifePointsLeft = 0;
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

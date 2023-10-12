@@ -48,12 +48,14 @@ public class EnemiesArrayList {
      * A method checks if any of the enemies is hit by a projectile,
      * has no life points left and then moves the enemies.
      */
-    public void updateEnemies(ProjectilesArrayList projectiles) {
+    public int updateEnemies(ProjectilesArrayList projectiles, int playerX, int playerY, int playerWidth,
+            int playerHeight) {
         enemyKilled = false;
         checkProjectiles(projectiles);
         checkLifePoints();
         handleEnemyProjectiles();
         moveEnemies();
+        return checkPlayerCollisions(playerX, playerY, playerWidth, playerHeight);
     }
 
     /**
@@ -100,11 +102,23 @@ public class EnemiesArrayList {
         }
     }
 
+    /**
+     * .
+     */
     public void handleEnemyProjectiles() {
         for (var i = 0; i < enemies.size(); i++) {
             enemies.get(i).shoot();
             enemies.get(i).moveProjectiles();
-
         }
+    }
+
+    public int checkPlayerCollisions(int playerX, int playerY, int playerWidth, int playerHeight) {
+        int playerCollisionCount = 0;
+        for (var i = 0; i < enemies.size(); i++) {
+            if (enemies.get(i).checkPlayerCollision(playerX, playerY, playerWidth, playerHeight)) {
+                playerCollisionCount++;
+            }
+        }
+        return playerCollisionCount;
     }
 }
