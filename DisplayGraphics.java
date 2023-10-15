@@ -152,13 +152,13 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         }
     }
 
-    public static void main(String[] args) {
-        JFrame mainWindow = new JFrame();
-        mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainWindow.setSize(2000, 1000);
-        windowDimensions = mainWindow.getBounds();
+    public static void startGame() {
+        JFrame gameWindow = new JFrame();
+        gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        gameWindow.setSize(2000, 1000);
+        windowDimensions = gameWindow.getBounds();
         DisplayGraphics graphics = new DisplayGraphics();
-        mainWindow.add(graphics);
-        mainWindow.setVisible(true);
+        gameWindow.add(graphics);
+        gameWindow.setVisible(true);
     }
 }

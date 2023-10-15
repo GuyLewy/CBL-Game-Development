@@ -4,10 +4,11 @@ import javax.swing.*;
 
 public class MainMenu extends JPanel {
 
-    private static JButton startGameButton;
+    private JButton startGameButton;
+    private JFrame mainWindow;
 
     public MainMenu() {
-        JFrame mainWindow = new JFrame();
+        mainWindow = new JFrame();
         startGameButton = new JButton("Start");
         startGameButton.setFont(new Font("Arial", Font.PLAIN, 40));
         startGameButton.setBounds(200, 400, 600, 100);
@@ -27,6 +28,8 @@ public class MainMenu extends JPanel {
     private class ButtonClickListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == startGameButton) {
+                mainWindow.dispose();
+                DisplayGraphics.startGame();
             }
         }
     }
