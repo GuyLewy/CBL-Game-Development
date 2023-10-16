@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import javax.swing.*;
 
 /**
@@ -21,22 +22,56 @@ public class DisplayGraphics extends JPanel implements KeyListener {
     int enemySpawnDelayCounter;
     int enemySpawnDelay = 65;
     int playerShotDelayCounter = player.playerShotDelay;
+    JFrame gameWindow = new JFrame();
+    Timer timer = new Timer(5, new TimerListener());
 
     /**
      * Constructor method to initialize a timer and set the DisplayGraphics object
      * as focusable so that keystrokes can be recorded.
      */
     public DisplayGraphics() {
+        startGame();
         gameRunning = true;
-        new Timer(5, new TimerListener()).start();
         addKeyListener(this);
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
         playerBar.playerBarSetup(player.playerShotDelay);
+        timer.start();
     }
 
-    public static void endGame() {
+    /**
+     * .
+     * 
+     * @param enemiesArrayList .
+     */
+    public void checkEnemyProjectiles(EnemiesArrayList enemiesArrayList) {
+        ArrayList<Enemy> enemies = enemiesArrayList.enemies;
+        for (int i = 0; i < enemies.size(); i++) {
+            ProjectilesArrayList nextProjectileList = enemies.get(i).enemyProjectiles;
+            if (nextProjectileList.areBulletsHitting(player.playerX, player.playerY,
+                    player.playerWidth, player.playerHeight)) {
+                playerLoseHealth();
+            }
+        }
+    }
+
+    public void playerLoseHealth() {
+        player.playerHealth--;
+        if (player.playerHealth <= 0) {
+            endGame();
+        }
+    }
+
+    public void endGame() {
         gameRunning = false;
+        new RestartMenu(score.gameScore);
+        gameWindow.setVisible(false);
+        player.playerHealth = 3;
+        player.playerX = 0;
+        player.playerY = 0;
+        score.gameScore = 0;
+        enemies.deleteAllEnemies();
+        timer.stop();
     }
 
     /**
@@ -127,9 +162,9 @@ public class DisplayGraphics extends JPanel implements KeyListener {
                 int playerDamage = enemies.updateEnemies(playerProjectiles, player.playerX,
                         player.playerY, player.playerWidth, player.playerHeight);
                 for (int i = 0; i < playerDamage; i++) {
-                    player.loseHealth();
+                    playerLoseHealth();
                 }
-                player.checkProjectiles(enemies);
+                checkEnemyProjectiles(enemies);
 
                 if (enemySpawnDelayCounter >= enemySpawnDelay) {
                     enemies.generateEnemy(0, 0);
@@ -152,13 +187,11 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         }
     }
 
-    public static void startGame() {
-        JFrame gameWindow = new JFrame();
+    public void startGame() {
         gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameWindow.setSize(2000, 1000);
         windowDimensions = gameWindow.getBounds();
-        DisplayGraphics graphics = new DisplayGraphics();
-        gameWindow.add(graphics);
+        gameWindow.add(this);
         gameWindow.setVisible(true);
     }
 }
