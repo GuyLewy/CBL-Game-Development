@@ -15,6 +15,7 @@ public class EnemiesArrayList {
     int height = Enemy.ENEMY_HEIGHT;
     int enemyAnimationCounter = 0;
     int textureIndex = 0;
+    public static int animationRate = 30;
 
     public BufferedImage[] textures = new BufferedImage[4];
 
@@ -77,7 +78,7 @@ public class EnemiesArrayList {
      * every 30 calls of updateTextures method.
      */
     public void updateTextures() {
-        if (enemyAnimationCounter < 30) {
+        if (enemyAnimationCounter < animationRate) {
             enemyAnimationCounter++;
         } else {
             enemyAnimationCounter = 0;
