@@ -18,7 +18,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
     boolean downPressed = false;
     boolean blockNextShot = false;
     int enemySpawnDelayCounter;
-    int enemySpawnDelay = 65;
+    int enemySpawnDelay = 80;
     int playerShotDelayCounter = player.playerShotDelay;
 
     /**

@@ -13,7 +13,7 @@ public class Player extends JPanel implements Drawable {
     public final int playerWidth = 100;
     public final int playerHeight = 100;
 
-    public int playerShotDelay = 40;
+    public int playerShotDelay = 60;
     public int playerY = 100;
     public int playerX = 100;
     public Projectile playerProjectiles;
