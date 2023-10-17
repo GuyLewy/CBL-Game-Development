@@ -51,12 +51,18 @@ public class Enemy extends JPanel implements Drawable {
         lifePointsLeft--;
     }
 
+    /**
+     * .
+     */
     public void moveProjectiles() {
         for (var i = 0; i < enemyProjectiles.projectiles.size(); i++) {
             enemyProjectiles.projectiles.get(i).moveProjectile(-10);
         }
     }
 
+    /**
+     * .
+     */
     public void shoot() {
         if (projectileDelayCounter >= PROJECTILE_DELAY) {
             enemyProjectiles.addProjectile(enemyX, enemyY + 50);
@@ -66,7 +72,11 @@ public class Enemy extends JPanel implements Drawable {
         }
     }
 
-    public boolean checkPlayerCollision(int playerX, int playerY, int playerWidth, int playerHeight) {
+    /**
+     * .
+     */
+    public boolean checkPlayerCollision(int playerX, int playerY, 
+        int playerWidth, int playerHeight) {
         if (enemyX <= playerX + playerWidth && enemyX + ENEMY_WIDTH >= playerX + ENEMY_HEIGHT
                 && enemyY >= playerY && enemyY <= playerY + playerHeight) {
             lifePointsLeft = 0;

@@ -2,9 +2,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
-
 import javax.imageio.ImageIO;
-import javax.swing.*;
 
 /**
  * Enemy class includes all of the player details such as speed and position as
@@ -60,6 +58,9 @@ public class Player implements Drawable {
 
     }
 
+    /**
+     *.
+     */
     public void loseHealth() {
         playerHealth--;
         if (playerHealth <= 0) {

@@ -124,7 +124,8 @@ public class DisplayGraphics extends JPanel implements KeyListener {
             if (gameRunning) {
                 player.move(upPressed, downPressed);
                 playerProjectiles.moveProjectiles(5);
-                int playerDamage = enemies.updateEnemies(playerProjectiles, player.playerX, player.playerY,
+                int playerDamage = enemies.updateEnemies(playerProjectiles, 
+                    player.playerX, player.playerY,
                         player.playerWidth, player.playerHeight);
                 for (int i = 0; i < playerDamage; i++) {
                     player.loseHealth();

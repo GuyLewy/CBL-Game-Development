@@ -63,6 +63,9 @@ public class EnemiesArrayList {
         }
     }
 
+    /**
+     * Draws enemy projectiles.
+     */
     public void drawEnemyProjectiles(Graphics g) {
         for (var i = 0; i < enemies.size(); i++) {
             enemies.get(i).drawProjectiles(g);
@@ -73,7 +76,8 @@ public class EnemiesArrayList {
      * A method checks if any of the enemies is hit by a projectile,
      * has no life points left and then moves the enemies.
      */
-    public int updateEnemies(ProjectilesArrayList projectiles, int playerX, int playerY, int playerWidth,
+    public int updateEnemies(ProjectilesArrayList projectiles, 
+        int playerX, int playerY, int playerWidth,
             int playerHeight) {
         enemyKilled = false;
         checkProjectiles(projectiles);
@@ -153,7 +157,11 @@ public class EnemiesArrayList {
         }
     }
 
-    public int checkPlayerCollisions(int playerX, int playerY, int playerWidth, int playerHeight) {
+    /**
+     * Checks, if player is hit by any of the enemy projectiles.
+     */
+    public int checkPlayerCollisions(int playerX, int playerY, 
+        int playerWidth, int playerHeight) {
         int playerCollisionCount = 0;
         for (var i = 0; i < enemies.size(); i++) {
             if (enemies.get(i).checkPlayerCollision(playerX, playerY, playerWidth, playerHeight)) {
