@@ -74,6 +74,14 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         timer.stop();
     }
 
+    public void startGame() {
+        gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        gameWindow.setSize(2000, 1000);
+        windowDimensions = gameWindow.getBounds();
+        gameWindow.add(this);
+        gameWindow.setVisible(true);
+    }
+
     /**
      * Method to determine whether a key on the keyboard was pressed and get the
      * keycode of the key, it is used to control the actions that the player
@@ -185,13 +193,5 @@ public class DisplayGraphics extends JPanel implements KeyListener {
                 repaint();
             }
         }
-    }
-
-    public void startGame() {
-        gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        gameWindow.setSize(2000, 1000);
-        windowDimensions = gameWindow.getBounds();
-        gameWindow.add(this);
-        gameWindow.setVisible(true);
     }
 }
