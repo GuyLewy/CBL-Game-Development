@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import javax.swing.*;
 
 /**
@@ -6,23 +7,30 @@ import javax.swing.*;
  * speed and position as well as the sprite to display.
  */
 public class Enemy extends JPanel implements Drawable {
-    public static final int ENEMY_WIDTH = 100;
-    public static final int ENEMY_HEIGHT = 100;
+    public static final int ENEMY_WIDTH = 128;
+    public static final int ENEMY_HEIGHT = 128;
     public static final int ENEMY_LIFE_POINTS = 1;
     static final int ENEMY_SPEED = 4;
+
+    public BufferedImage texture;
 
     public int lifePointsLeft = ENEMY_LIFE_POINTS;
     public int enemyX = DisplayGraphics.windowDimensions.width;
     public int enemyY;
+    int textureIndex;
+    
 
+    /**
+     * Initialize the enemy with y position and the image.
+     */
     Enemy(int yPos) {
         this.enemyY = yPos;
     }
 
     @Override
     public void draw(Graphics g) {
-        g.setColor(Color.red);
-        g.fillRect(this.enemyX, this.enemyY, ENEMY_WIDTH, ENEMY_HEIGHT);
+        Graphics2D g2D = (Graphics2D) g;
+        g2D.drawImage(texture, null, enemyX, enemyY);
     }
 
     /**
