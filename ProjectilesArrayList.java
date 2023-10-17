@@ -7,13 +7,10 @@ import java.util.*;
 public class ProjectilesArrayList implements Drawable {
     public ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 
-    public int projectileX;
-    public int projectileY;
-
     /**
      * .
      */
-    public void addProjectile() {
+    public void addProjectile(int projectileX, int projectileY) {
         Projectile p = new Projectile();
         p.givePosition(projectileX, projectileY);
         projectiles.add(p);
@@ -22,29 +19,22 @@ public class ProjectilesArrayList implements Drawable {
     /**
      * .
      */
-    public void setPosition(int x, int y) {
-        projectileX = x;
-        projectileY = y;
+    public void moveProjectiles(int speed) {
+        for (int i = 0; i < projectiles.size(); i++) {
+            Projectile next = projectiles.get(i);
+            next.moveProjectile(speed);
+        }
     }
 
     /**
      * .
-     */
-    public void moveProjectiles() {
-        for (int i = 0; i < projectiles.size(); i++) {
-            Projectile next = projectiles.get(i);
-            next.moveProjectile();
-        }
-    }
-
-    /**.
      * 
      */
-    public boolean areBulletsHitting(int x, int y, int enemyHeight) {
+    public boolean areBulletsHitting(int x, int y, int targetWidth, int targetHeight) {
         for (int i = 0; i < projectiles.size(); i++) {
             Projectile next = projectiles.get(i);
-            if (x - next.projectileX <= 0 &&  next.projectileY - y >= 0
-                && y + enemyHeight - next.projectileY >= 0) {
+            if (next.projectileX < x + targetWidth && next.projectileX > x && next.projectileY > y
+                    && next.projectileY < y + targetHeight) {
                 next.disappear = true;
                 return true;
             }

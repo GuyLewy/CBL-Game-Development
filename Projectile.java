@@ -17,7 +17,7 @@ public class Projectile extends JPanel implements Drawable {
 
     int projectileX;
     int projectileY;
-    public static final int PROJECTILE_SPEED = 5;
+    public static final int PROJECTILE_SPEED = 1;
     boolean disappear = false;
 
     Projectile() {
@@ -46,9 +46,9 @@ public class Projectile extends JPanel implements Drawable {
     /**
      * .
      */
-    public void moveProjectile() {
-        if (projectileX < RANGE) {
-            projectileX += PROJECTILE_SPEED;
+    public void moveProjectile(int projectileSpeed) {
+        if (projectileX < RANGE && projectileX > 0) {
+            projectileX += projectileSpeed;
         } else {
             disappear = true;
         }
