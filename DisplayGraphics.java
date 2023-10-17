@@ -54,9 +54,8 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         } else if (code == KeyEvent.VK_DOWN) {
             downPressed = true;
         } else if (code == KeyEvent.VK_SPACE && !blockNextShot) {
-            projectiles.setPosition((int) (player.playerX + 95),
+            playerProjectiles.addProjectile((int) (player.playerX + 95),
                  (int) (player.playerY + 72));
-            projectiles.addProjectile();
             blockNextShot = true;
             playerShotDelayCounter = 0;
         }
