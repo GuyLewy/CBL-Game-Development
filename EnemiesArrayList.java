@@ -1,6 +1,9 @@
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+import javax.imageio.ImageIO;
 
 /**
  * EnemyArrayList, used to go through all available enemies and update them.
@@ -11,6 +14,27 @@ public class EnemiesArrayList {
     Random random = new Random();
     int height = Enemy.ENEMY_HEIGHT;
     int width = Enemy.ENEMY_WIDTH;
+  
+    int enemyAnimationCounter = 0;
+    int textureIndex = 0;
+    public static int animationRate = 30;
+
+    public BufferedImage[] textures = new BufferedImage[4];
+
+    /**
+     * Initialize the array list with the enemies textures.
+     */
+    public EnemiesArrayList() {
+        try {
+            for (int i = 1; i < 5; i++) {
+                String path = "textures/enemies/pirateShip1/pirateShip1_" + i + ".png";
+                textures[i - 1] = ImageIO.read(getClass().getResourceAsStream(path));
+            }
+            
+        } catch (IOException e) {
+            ;
+        }
+    }
 
     /**
      * A method to create a new enemy then add it to the ArrayList of all existing
@@ -34,6 +58,7 @@ public class EnemiesArrayList {
      */
     public void draw(Graphics g) {
         for (var i = 0; i < enemies.size(); i++) {
+            enemies.get(i).texture = textures[textureIndex];
             enemies.get(i).draw(g);
         }
     }
@@ -55,9 +80,25 @@ public class EnemiesArrayList {
         checkLifePoints();
         handleEnemyProjectiles();
         moveEnemies();
+        updateTextures();
         return checkPlayerCollisions(playerX, playerY, playerWidth, playerHeight);
+
     }
 
+    /**
+     * Going through four enemy textures changing to the next one 
+     * every 30 calls of updateTextures method.
+     */
+    public void updateTextures() {
+        if (enemyAnimationCounter < animationRate) {
+            enemyAnimationCounter++;
+        } else {
+            enemyAnimationCounter = 0;
+            textureIndex++; //Change to the next texture.
+            textureIndex %= 4; //If index is equal to four, go back to the index 0.
+        }
+    }
+    
     /**
      * A method checks, if any of the projectiles in ArrayList..
      * 
