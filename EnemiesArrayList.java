@@ -193,7 +193,5 @@ public class EnemiesArrayList {
         for (var i = 0; i < enemies.size(); i++) {
             enemies.get(i).lifePointsLeft = 0;
         }
-
-        checkLifePoints();
     }
 }
