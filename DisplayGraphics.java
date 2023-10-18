@@ -16,6 +16,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
     private PlayerShotBar playerBar = new PlayerShotBar();
     private ScoreCounter score = new ScoreCounter();
     private Wallet playerWallet = new Wallet();
+    private HealthBar playerHealthBar = new HealthBar(player.playerHealth);
     private Sound sound = new Sound();
     private Sound soundtrack = new Sound();
     public static boolean gameRunning;
@@ -163,6 +164,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         playerWallet.draw(g);
         enemies.drawEnemyProjectiles(g);
         enemies.drawMoneyDropTexts(g);
+        playerHealthBar.draw(g);
     }
 
     /**
@@ -211,6 +213,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
 
                 score.updateScore(enemies);
                 playerBar.updateBar(playerShotDelayCounter);
+                playerHealthBar.updateHealtBar(player.playerHealth);
 
                 repaint();
             }
