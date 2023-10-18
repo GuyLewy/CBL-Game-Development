@@ -1,7 +1,11 @@
 import java.awt.*;
 
 /**
- * .
+ * A MoneyDropText is a short String which appears after an enemy was killed.
+ * It takes the form: "+X$", where X is the ammount of money gained from a particular enemy.
+ * The MoneyDropText stays on the screen for a particular ammount of time, slowly moving up
+ * and decreasing its opacity.
+ * Then it disappears.
  */
 public class MoneyDropText implements Drawable {
     String moneyString;
@@ -11,10 +15,10 @@ public class MoneyDropText implements Drawable {
     public int opacity;
 
     /**
-     * .
+     * Creating a new MoneyDropText with maximal opacity and specified.:
      * @param ammountOfMoney .
-     * @param x .
-     * @param y .
+     * @param x - x position.
+     * @param y - starting y position.
      */
     public MoneyDropText(int ammountOfMoney, int x, int y, int time) {
         moneyString = "+" + Integer.toString(ammountOfMoney) + "$";
@@ -25,7 +29,7 @@ public class MoneyDropText implements Drawable {
     }
 
     /**
-     * .
+     * Drawing MoneyDropText.
     */
     public void draw(Graphics g) {
         Font  f2  = new Font(Font.SANS_SERIF,  Font.BOLD, 25);

@@ -12,7 +12,7 @@ public class Wallet implements Drawable {
     }
 
     /**
-     * .
+     * Drawing the money counter.
      */
     public void draw(Graphics g) {
         g.setColor(new Color(200, 160, 50));

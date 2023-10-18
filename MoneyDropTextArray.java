@@ -2,13 +2,14 @@ import java.awt.*;
 import java.util.*;
 
 /**
- * .
+ * Array stores all visible MoneyDropTexts.
  */
 public class MoneyDropTextArray implements Drawable {
     ArrayList<MoneyDropText> texts = new ArrayList<MoneyDropText>(); 
     
     /**
-     * .
+     * Move each MoneyDropText one pixel up, decrease its opacity and timeLeftOnScreen.
+     * If the time is left - remove.
      */
     public void updateTexts() {
         for (int i = 0; i < texts.size(); i++) {
@@ -24,7 +25,7 @@ public class MoneyDropTextArray implements Drawable {
     }
 
     /**
-     * .
+     * Draw all MoneyDropTexts.
      */
     public void draw(Graphics g) {
         for (int i = 0; i < texts.size(); i++) {

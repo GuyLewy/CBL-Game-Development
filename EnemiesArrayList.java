@@ -131,7 +131,8 @@ public class EnemiesArrayList {
 
     /**
      * Method checks, if any of the enemies has no life points left.
-     * In that case, it removes that enemy.
+     * In that case, it creates a related MoneyDropText, adds money to the wallet 
+     * and removes that enemy.
      */
     public void manageDamage(Wallet wallet) {
         for (int i = 0; i < enemies.size(); i++) {
