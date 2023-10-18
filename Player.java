@@ -38,30 +38,6 @@ public class Player implements Drawable {
         }
     }
 
-    /**
-     * .
-     * 
-     * @param enemiesArrayList .
-     */
-    public void checkProjectiles(EnemiesArrayList enemiesArrayList) {
-        ArrayList<Enemy> enemies = enemiesArrayList.enemies;
-        for (int i = 0; i < enemies.size(); i++) {
-            ProjectilesArrayList nextProjectileList = enemies.get(i).enemyProjectiles;
-            if (nextProjectileList.areBulletsHitting(playerX, playerY, playerWidth, playerHeight)) {
-                loseHealth();
-            }
-
-        }
-
-    }
-
-    public void loseHealth() {
-        playerHealth--;
-        if (playerHealth <= 0) {
-            DisplayGraphics.endGame();
-        }
-    }
-
     @Override
     public void draw(Graphics g) {
         Graphics2D g2D = (Graphics2D) g;
