@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.*;
 import javax.swing.*;
 
 /**
@@ -13,13 +14,16 @@ public class Enemy extends JPanel implements Drawable {
     int enemySpeed;
     int projectileDelay;
 
+    Random rand = new Random();
+
     public BufferedImage texture;
 
     int lifePointsLeft = 1;
     int enemyX = DisplayGraphics.windowDimensions.width;
     int enemyY;
     int textureIndex;
-    int projectileDelayCounter = 0;
+    int moneyCarried;
+    int projectileDelayCounter;
 
     public ProjectilesArrayList enemyProjectiles = new ProjectilesArrayList();
 
@@ -30,6 +34,7 @@ public class Enemy extends JPanel implements Drawable {
         lifePointsLeft = 1;
         projectileDelay = 200;
         enemySpeed = 4;
+        moneyCarried = rand.nextInt(3) + 1;
         enemyY = yPos;
 
     }

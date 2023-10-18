@@ -9,9 +9,14 @@ import javax.imageio.ImageIO;
  * EnemyArrayList, used to go through all available enemies and update them.
  */
 public class EnemiesArrayList {
-    public boolean enemyKilled = false;
     public ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+
+    private MoneyDropTextArray moneyDropTexts = new MoneyDropTextArray();
+    static final int MONEY_TEXT_DURATION = 40;
+
     Random random = new Random();
+
+    public int enemiesKilled = 0;
     int height = Enemy.ENEMY_HEIGHT;
     int width = Enemy.ENEMY_WIDTH;
 
@@ -19,7 +24,9 @@ public class EnemiesArrayList {
     int textureIndex = 0;
     public static int animationRate = 30;
 
-    public BufferedImage[] textures = new BufferedImage[4];
+    BufferedImage[] textures = new BufferedImage[4];
+
+    Random rand = new Random();
 
     /**
      * Initialize the array list with the enemies textures.
@@ -80,6 +87,7 @@ public class EnemiesArrayList {
             enemies.get(i).texture = textures[textureIndex];
             enemies.get(i).draw(g);
         }
+
     }
 
     /**
@@ -91,16 +99,20 @@ public class EnemiesArrayList {
         }
     }
 
+    public void drawMoneyDropTexts(Graphics g) {
+        moneyDropTexts.draw(g);
+    }
+
     /**
      * A method checks if any of the enemies is hit by a projectile,
      * has no life points left and then moves the enemies.
      */
-    public int updateEnemies(ProjectilesArrayList projectiles,
+    public int updateEnemies(ProjectilesArrayList projectiles, Wallet wallet,
             int playerX, int playerY, int playerWidth,
             int playerHeight) {
-        enemyKilled = false;
         checkProjectiles(projectiles);
-        checkLifePoints();
+        manageDamage(wallet);
+        moneyDropTexts.updateTexts();
         handleEnemyProjectiles();
         moveEnemies();
         updateTextures();
@@ -138,15 +150,21 @@ public class EnemiesArrayList {
 
     /**
      * Method checks, if any of the enemies has no life points left.
-     * In that case, it removes that enemy.
+     * In that case, it creates a related MoneyDropText, adds money to the wallet
+     * and removes that enemy.
      */
-    public void checkLifePoints() {
+    public void manageDamage(Wallet wallet) {
         for (int i = 0; i < enemies.size(); i++) {
             Enemy next = enemies.get(i);
 
             if (next.lifePointsLeft <= 0) {
+                MoneyDropText nextText = new MoneyDropText(next.moneyCarried,
+                        next.enemyX, next.enemyY, MONEY_TEXT_DURATION);
+                wallet.money += next.moneyCarried;
+                moneyDropTexts.texts.add(nextText);
+
                 enemies.remove(i);
-                enemyKilled = true;
+                enemiesKilled++;
             }
         }
     }
@@ -201,7 +219,5 @@ public class EnemiesArrayList {
         for (var i = 0; i < enemies.size(); i++) {
             enemies.get(i).lifePointsLeft = 0;
         }
-
-        checkLifePoints();
     }
 }
