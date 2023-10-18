@@ -16,6 +16,8 @@ public class DisplayGraphics extends JPanel implements KeyListener {
     private PlayerShotBar playerBar = new PlayerShotBar();
     private ScoreCounter score = new ScoreCounter();
     private Wallet playerWallet = new Wallet();
+    private Sound sound = new Sound();
+    private Sound soundtrack = new Sound();
     public static boolean gameRunning;
     boolean upPressed = false;
     boolean downPressed = false;
@@ -23,6 +25,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
     int enemySpawnDelayCounter;
     int enemySpawnDelay = 80;
     int playerShotDelayCounter = player.playerShotDelay;
+    float soundtrackVolume = -10.0f;
     JFrame gameWindow = new JFrame();
     Timer timer = new Timer(5, new TimerListener());
 
@@ -57,6 +60,8 @@ public class DisplayGraphics extends JPanel implements KeyListener {
     }
 
     public void playerLoseHealth() {
+        sound.setSoundEffect(2);
+        sound.play();
         player.playerHealth--;
         if (player.playerHealth <= 0) {
             endGame();
@@ -65,6 +70,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
 
     public void endGame() {
         gameRunning = false;
+        soundtrack.stop();
         new RestartMenu(score.gameScore);
         gameWindow.setVisible(false);
         player.playerHealth = 3;
@@ -81,6 +87,10 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         windowDimensions = gameWindow.getBounds();
         gameWindow.add(this);
         gameWindow.setVisible(true);
+        soundtrack.setSoundEffect(3);
+        soundtrack.play();
+        soundtrack.setVolume(soundtrackVolume);
+        soundtrack.loop();
     }
 
     /**
@@ -98,6 +108,8 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         } else if (code == KeyEvent.VK_DOWN) {
             downPressed = true;
         } else if (code == KeyEvent.VK_SPACE && !blockNextShot) {
+            sound.setSoundEffect(0);
+            sound.play();
             playerProjectiles.addProjectile((int) (player.playerX + 95),
                  (int) (player.playerY + 72));
             blockNextShot = true;
@@ -170,6 +182,11 @@ public class DisplayGraphics extends JPanel implements KeyListener {
             if (gameRunning) {
                 player.move(upPressed, downPressed);
                 playerProjectiles.moveProjectiles(5);
+                if (playerProjectiles.bulletInTarget) {
+                    sound.setSoundEffect(1);
+                    sound.play();
+                    playerProjectiles.bulletInTarget = false;
+                }
 
                 int playerDamage = enemies.updateEnemies(playerProjectiles, playerWallet,
                     player.playerX, player.playerY, player.playerWidth, player.playerHeight);
@@ -178,7 +195,6 @@ public class DisplayGraphics extends JPanel implements KeyListener {
                     playerLoseHealth();
                 }
                 checkEnemyProjectiles(enemies);
-
 
                 if (enemySpawnDelayCounter >= enemySpawnDelay) {
                     enemies.generateEnemy(0, 0);

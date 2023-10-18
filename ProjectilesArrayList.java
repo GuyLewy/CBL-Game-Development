@@ -7,6 +7,8 @@ import java.util.*;
 public class ProjectilesArrayList implements Drawable {
     public ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 
+    public boolean bulletInTarget = false;
+
     /**
      * .
      */
@@ -40,6 +42,7 @@ public class ProjectilesArrayList implements Drawable {
             if (next.projectileX < x + targetWidth && next.projectileX > x && next.projectileY > y
                     && next.projectileY < y + targetHeight) {
                 next.disappear = true;
+                bulletInTarget = true;
                 return true;
             }
         }
