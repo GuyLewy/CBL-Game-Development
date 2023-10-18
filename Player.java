@@ -20,8 +20,8 @@ public class Player implements Drawable {
     public int playerDirection = 0;
     public Projectile playerProjectiles;
 
-    public BufferedImage playerUp;
-    public BufferedImage playerDown;
+    BufferedImage playerUp;
+    BufferedImage playerDown;
 
     public Player() {
         getPlayerImage();

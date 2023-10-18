@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.*;
 import javax.swing.*;
 
 /**
@@ -12,6 +13,10 @@ public class Enemy extends JPanel implements Drawable {
     public static final int ENEMY_LIFE_POINTS = 1;
     static final int ENEMY_SPEED = 4;
     static final int PROJECTILE_DELAY = 200;
+    static final int MONEY_UPPER_BOUND = 5;
+    
+    Random rand = new Random();
+    public int moneyCarried = rand.nextInt(MONEY_UPPER_BOUND - 1) + 1;
 
     public BufferedImage texture;
 
