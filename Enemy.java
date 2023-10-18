@@ -27,11 +27,11 @@ public class Enemy extends JPanel implements Drawable {
      * Initialize the enemy with y position and the image.
      */
     Enemy(int yPos) {
-        this.lifePointsLeft = 1;
-        this.projectileDelay = 200;
-        this.enemySpeed = 4;
+        lifePointsLeft = 1;
+        projectileDelay = 200;
+        enemySpeed = 4;
+        enemyY = yPos;
 
-        this.enemyY = yPos;
     }
 
     @Override

@@ -40,13 +40,32 @@ public class EnemiesArrayList {
      * A method to create a new enemy then add it to the ArrayList of all existing
      * enemies.
      * 
-     * @param xPos      the initial x position of the enemy
-     * @param enemyType an integer that determines the characteristics of the enemy
-     *                  such as health, speed and damage
+     * @param xPos the initial x position of the enemy
      */
-    public void generateEnemy(int xPos, int enemyType) {
+    public void generateEnemy(int xPos) {
         int yPos = random.nextInt(DisplayGraphics.windowDimensions.height - 400) + 75;
-        Enemy newEnemy = new EnemyTank(yPos);
+        int enemyType = random.nextInt(3);
+
+        Enemy newEnemy;
+
+        switch (enemyType) {
+            case 0:
+                newEnemy = new Enemy(yPos);
+                break;
+
+            case 1:
+                newEnemy = new EnemyTank(yPos);
+                break;
+
+            case 2:
+                newEnemy = new EnemyScout(yPos);
+                break;
+
+            default:
+                newEnemy = new Enemy(yPos);
+                break;
+        }
+
         enemies.add(newEnemy);
     }
 

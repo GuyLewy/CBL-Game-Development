@@ -175,7 +175,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
                 checkEnemyProjectiles(enemies);
 
                 if (enemySpawnDelayCounter >= enemySpawnDelay) {
-                    enemies.generateEnemy(0, 0);
+                    enemies.generateEnemy(0);
                     enemySpawnDelayCounter = 0;
                 }
 
