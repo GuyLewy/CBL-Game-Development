@@ -188,4 +188,12 @@ public class EnemiesArrayList {
         }
         return playerCollisionCount;
     }
+
+    public void deleteAllEnemies() {
+        for (var i = 0; i < enemies.size(); i++) {
+            enemies.get(i).lifePointsLeft = 0;
+        }
+
+        checkLifePoints();
+    }
 }
