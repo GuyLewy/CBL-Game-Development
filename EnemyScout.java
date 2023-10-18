@@ -14,6 +14,7 @@ public class EnemyScout extends Enemy {
         super(yPos);
         lifePointsLeft = 1;
         enemySpeed = 6;
+        moneyCarried = rand.nextInt(1) + 1; // Set bound to the max value that should be given
     }
 
     /**

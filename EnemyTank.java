@@ -15,5 +15,6 @@ public class EnemyTank extends Enemy {
         lifePointsLeft = 3;
         enemySpeed = 2;
         projectileDelay = 300;
+        moneyCarried = rand.nextInt(5) + 1; // Set bound to the max value that should be given
     }
 }
