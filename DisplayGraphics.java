@@ -25,7 +25,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
     int enemySpawnDelayCounter;
     int enemySpawnDelay = 80;
     int playerShotDelayCounter = player.playerShotDelay;
-    float soundtrackVolume = -10.0f;
+    float soundtrackVolume = -15.0f;
     JFrame gameWindow = new JFrame();
     Timer timer = new Timer(5, new TimerListener());
 

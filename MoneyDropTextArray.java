@@ -16,7 +16,7 @@ public class MoneyDropTextArray implements Drawable {
             MoneyDropText next = texts.get(i);
             next.textY--;
             next.timeLeftOnScreen--;
-            next.opacity--;;
+            next.opacity -= 5;;
 
             if (next.timeLeftOnScreen <= 0) {
                 texts.remove(i);

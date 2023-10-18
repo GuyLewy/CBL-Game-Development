@@ -12,7 +12,7 @@ public class EnemiesArrayList {
     public ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 
     private MoneyDropTextArray moneyDropTexts = new MoneyDropTextArray();
-    static final int MONEY_TEXT_DURATION = 40;
+    static final int MONEY_TEXT_DURATION = 50;
 
     Random random = new Random();
 

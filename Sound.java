@@ -13,6 +13,8 @@ public class Sound {
         soundEffectPath[1] = "/sound/enemyHit.wav";
         soundEffectPath[2] = "/sound/playerHit.wav";
         soundEffectPath[3] = "/sound/Soundtrack.wav";
+        soundEffectPath[4] = "/sound/startMenu.wav";
+        soundEffectPath[5] = "/sound/startGame.wav";
     }
 
     public void setSoundEffect(int i) {
