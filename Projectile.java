@@ -13,7 +13,7 @@ public class Projectile extends JPanel implements Drawable {
     public static final int PROJECTILE_WIDTH = 15;
     public static final int PROJECTILE_HEIGHT = 15;
 
-    public BufferedImage bullet;
+    BufferedImage bullet;
 
     int projectileX;
     int projectileY;

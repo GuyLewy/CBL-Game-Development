@@ -14,6 +14,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
     private EnemiesArrayList enemies = new EnemiesArrayList();
     private PlayerShotBar playerBar = new PlayerShotBar();
     private ScoreCounter score = new ScoreCounter();
+    private Wallet playerWallet = new Wallet();
     public static boolean gameRunning;
     boolean upPressed = false;
     boolean downPressed = false;
@@ -104,7 +105,9 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         enemies.draw(g);
         playerBar.draw(g);
         score.draw(g);
+        playerWallet.draw(g);
         enemies.drawEnemyProjectiles(g);
+        enemies.drawMoneyDropTexts(g);
     }
 
     /**
@@ -124,13 +127,14 @@ public class DisplayGraphics extends JPanel implements KeyListener {
             if (gameRunning) {
                 player.move(upPressed, downPressed);
                 playerProjectiles.moveProjectiles(5);
-                int playerDamage = enemies.updateEnemies(playerProjectiles, 
+                int playerDamage = enemies.updateEnemies(playerProjectiles, playerWallet,
                     player.playerX, player.playerY,
                         player.playerWidth, player.playerHeight);
                 for (int i = 0; i < playerDamage; i++) {
                     player.loseHealth();
                 }
                 player.checkProjectiles(enemies);
+
 
                 if (enemySpawnDelayCounter >= enemySpawnDelay) {
                     enemies.generateEnemy(0, 0);
@@ -145,8 +149,8 @@ public class DisplayGraphics extends JPanel implements KeyListener {
 
                 enemySpawnDelayCounter++;
 
-                playerBar.updateBar(playerShotDelayCounter);
                 score.updateScore(enemies);
+                playerBar.updateBar(playerShotDelayCounter);
 
                 repaint();
             }
