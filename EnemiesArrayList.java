@@ -46,7 +46,7 @@ public class EnemiesArrayList {
      */
     public void generateEnemy(int xPos, int enemyType) {
         int yPos = random.nextInt(DisplayGraphics.windowDimensions.height - 400) + 75;
-        Enemy newEnemy = new Enemy(yPos);
+        Enemy newEnemy = new EnemyTank(yPos);
         enemies.add(newEnemy);
     }
 
@@ -148,7 +148,8 @@ public class EnemiesArrayList {
     }
 
     /**
-     * .
+     * Iterate accross all of the enemies and check wether they should shoot
+     * (handled in the shoot() method) and move their projectiles.
      */
     public void handleEnemyProjectiles() {
         for (var i = 0; i < enemies.size(); i++) {
@@ -158,7 +159,8 @@ public class EnemiesArrayList {
     }
 
     /**
-     * Checks, if player is hit by any of the enemy projectiles.
+     * Iterates across all of the enemies and checks if the player is hit by any of
+     * the enemy projectiles.
      */
     public int checkPlayerCollisions(int playerX, int playerY,
             int playerWidth, int playerHeight) {
@@ -171,6 +173,11 @@ public class EnemiesArrayList {
         return playerCollisionCount;
     }
 
+    /**
+     * Iterates across all of the enemies and lowers their life points to zero, this
+     * should be run when the game is restarted or if the player has an ability that
+     * kills all of the enemies on screen.
+     */
     public void deleteAllEnemies() {
         for (var i = 0; i < enemies.size(); i++) {
             enemies.get(i).lifePointsLeft = 0;

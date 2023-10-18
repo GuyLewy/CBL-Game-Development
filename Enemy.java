@@ -56,7 +56,8 @@ public class Enemy extends JPanel implements Drawable {
     }
 
     /**
-     * .
+     * Iterates across all projectiles in the enemyProjectiles arrayList and moves
+     * them all a certain value to the left.
      */
     public void moveProjectiles() {
         for (var i = 0; i < enemyProjectiles.projectiles.size(); i++) {
@@ -65,7 +66,9 @@ public class Enemy extends JPanel implements Drawable {
     }
 
     /**
-     * .
+     * Iterates the projectileDelayCounter while the counter is smaller than the
+     * delay otherwise it adds another projectile to the enemyProjectiles array list
+     * at the position of the enemy cannon and resets the counter.
      */
     public void shoot() {
         if (projectileDelayCounter >= projectileDelay) {
@@ -77,7 +80,16 @@ public class Enemy extends JPanel implements Drawable {
     }
 
     /**
-     * .
+     * Checks wether the enemy is colliding with the player through the use of
+     * Axis-Aligned Bound Box collision detection, if colliding it will remove all
+     * of the enemy's life points.
+     * 
+     * @param playerX      The x position of the player as an int
+     * @param playerY      The y position of the player as an int
+     * @param playerWidth  The width in the x direction of the player as an int
+     * @param playerHeight The height in the y direction of the player as an int
+     * @return a boolean value of true or fules wether the player collides with the
+     *         enemy
      */
     public boolean checkPlayerCollision(int playerX, int playerY,
             int playerWidth, int playerHeight) {
