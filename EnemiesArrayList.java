@@ -14,7 +14,7 @@ public class EnemiesArrayList {
     Random random = new Random();
     int height = Enemy.ENEMY_HEIGHT;
     int width = Enemy.ENEMY_WIDTH;
-  
+
     int enemyAnimationCounter = 0;
     int textureIndex = 0;
     public static int animationRate = 30;
@@ -30,9 +30,9 @@ public class EnemiesArrayList {
                 String path = "textures/enemies/pirateShip1/pirateShip1_" + i + ".png";
                 textures[i - 1] = ImageIO.read(getClass().getResourceAsStream(path));
             }
-            
+
         } catch (IOException e) {
-            ;
+            System.out.println(e);
         }
     }
 
@@ -76,8 +76,8 @@ public class EnemiesArrayList {
      * A method checks if any of the enemies is hit by a projectile,
      * has no life points left and then moves the enemies.
      */
-    public int updateEnemies(ProjectilesArrayList projectiles, 
-        int playerX, int playerY, int playerWidth,
+    public int updateEnemies(ProjectilesArrayList projectiles,
+            int playerX, int playerY, int playerWidth,
             int playerHeight) {
         enemyKilled = false;
         checkProjectiles(projectiles);
@@ -90,7 +90,7 @@ public class EnemiesArrayList {
     }
 
     /**
-     * Going through four enemy textures changing to the next one 
+     * Going through four enemy textures changing to the next one
      * every 30 calls of updateTextures method.
      */
     public void updateTextures() {
@@ -98,11 +98,11 @@ public class EnemiesArrayList {
             enemyAnimationCounter++;
         } else {
             enemyAnimationCounter = 0;
-            textureIndex++; //Change to the next texture.
-            textureIndex %= 4; //If index is equal to four, go back to the index 0.
+            textureIndex++; // Change to the next texture.
+            textureIndex %= 4; // If index is equal to four, go back to the index 0.
         }
     }
-    
+
     /**
      * A method checks, if any of the projectiles in ArrayList..
      * 
@@ -160,8 +160,8 @@ public class EnemiesArrayList {
     /**
      * Checks, if player is hit by any of the enemy projectiles.
      */
-    public int checkPlayerCollisions(int playerX, int playerY, 
-        int playerWidth, int playerHeight) {
+    public int checkPlayerCollisions(int playerX, int playerY,
+            int playerWidth, int playerHeight) {
         int playerCollisionCount = 0;
         for (var i = 0; i < enemies.size(); i++) {
             if (enemies.get(i).checkPlayerCollision(playerX, playerY, playerWidth, playerHeight)) {
