@@ -2,9 +2,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
-
 import javax.imageio.ImageIO;
-import javax.swing.*;
 
 /**
  * Enemy class includes all of the player details such as speed and position as
@@ -12,16 +10,18 @@ import javax.swing.*;
  */
 public class Player implements Drawable {
     public static final int MOVEMENT_SPEED = 5;
-    public final int playerWidth = 100;
-    public final int playerHeight = 120;
+    public final int playerWidth = 128;
+    public final int playerHeight = 128;
     int playerHealth = 3;
 
-    public int playerShotDelay = 40;
+    public int playerShotDelay = 60;
     public int playerY = 100;
     public int playerX = 100;
+    public int playerDirection = 0;
     public Projectile playerProjectiles;
 
-    public BufferedImage player;
+    public BufferedImage playerUp;
+    public BufferedImage playerDown;
 
     public Player() {
         getPlayerImage();
@@ -32,7 +32,10 @@ public class Player implements Drawable {
      */
     public void getPlayerImage() {
         try {
-            player = ImageIO.read(getClass().getResourceAsStream("/player/player.png"));
+            playerDown = ImageIO.read(getClass()
+            .getResourceAsStream("textures/player/player2.png"));
+            playerUp = ImageIO.read(getClass()
+            .getResourceAsStream("textures/player/player1.png"));
         } catch (IOException e) {
             ;
         }
@@ -41,7 +44,11 @@ public class Player implements Drawable {
     @Override
     public void draw(Graphics g) {
         Graphics2D g2D = (Graphics2D) g;
-        g2D.drawImage(player, null, playerX, playerY);
+        if (playerDirection == 1) {
+            g2D.drawImage(playerUp, null, playerX, playerY);
+        } else {
+            g2D.drawImage(playerDown, null, playerX, playerY);
+        }
     }
 
     /**
@@ -52,11 +59,19 @@ public class Player implements Drawable {
      * @param downPressed a boolean stating whether the down arrow is pressed
      */
     public void move(boolean upPressed, boolean downPressed) {
-        if (upPressed && playerY > 0) {
-            playerY -= MOVEMENT_SPEED;
+        if (upPressed) {
+            playerDirection = 1;
+            if (playerY > 0) {
+                playerY -= MOVEMENT_SPEED;
+            }
         }
-        if (downPressed && playerY + 135 < DisplayGraphics.windowDimensions.height) {
-            playerY += MOVEMENT_SPEED;
-        }
+        if (downPressed) {
+            playerDirection = 0;
+            if (playerY + 2 * playerHeight < DisplayGraphics
+                .windowDimensions.height) {
+                playerY += MOVEMENT_SPEED;
+            }
+        } 
+        
     }
 }

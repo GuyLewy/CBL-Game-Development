@@ -28,7 +28,11 @@ public class ProjectilesArrayList implements Drawable {
 
     /**
      * .
-     * 
+     * @param x .
+     * @param y .
+     * @param targetWidth .
+     * @param targetHeight .
+     * @return .
      */
     public boolean areBulletsHitting(int x, int y, int targetWidth, int targetHeight) {
         for (int i = 0; i < projectiles.size(); i++) {
