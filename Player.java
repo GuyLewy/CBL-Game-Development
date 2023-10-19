@@ -33,9 +33,9 @@ public class Player implements Drawable {
     public void getPlayerImage() {
         try {
             playerDown = ImageIO.read(getClass()
-            .getResourceAsStream("textures/player/player2.png"));
+                    .getResourceAsStream("textures/player/player2.png"));
             playerUp = ImageIO.read(getClass()
-            .getResourceAsStream("textures/player/player1.png"));
+                    .getResourceAsStream("textures/player/player1.png"));
         } catch (IOException e) {
             ;
         }
@@ -67,11 +67,10 @@ public class Player implements Drawable {
         }
         if (downPressed) {
             playerDirection = 0;
-            if (playerY + 2 * playerHeight < DisplayGraphics
-                .windowDimensions.height) {
+            if (playerY + 2 * playerHeight < DisplayGraphics.windowDimensions.height) {
                 playerY += MOVEMENT_SPEED;
             }
-        } 
-        
+        }
+
     }
 }

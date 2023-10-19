@@ -8,31 +8,35 @@ import javax.swing.*;
  * speed and position as well as the sprite to display.
  */
 public class Enemy extends JPanel implements Drawable {
-    public static final int ENEMY_WIDTH = 128;
-    public static final int ENEMY_HEIGHT = 128;
-    public static final int ENEMY_LIFE_POINTS = 1;
-    static final int ENEMY_SPEED = 4;
-    static final int PROJECTILE_DELAY = 200;
-    static final int MONEY_UPPER_BOUND = 5;
-    
+    static final int ENEMY_WIDTH = 128;
+    static final int ENEMY_HEIGHT = 128;
+
+    int enemySpeed;
+    int projectileDelay;
+
     Random rand = new Random();
-    public int moneyCarried = rand.nextInt(MONEY_UPPER_BOUND - 1) + 1;
 
     public BufferedImage texture;
 
-    public int lifePointsLeft = ENEMY_LIFE_POINTS;
-    public int enemyX = DisplayGraphics.windowDimensions.width;
-    public int enemyY;
+    int lifePointsLeft = 1;
+    int enemyX = DisplayGraphics.windowDimensions.width;
+    int enemyY;
     int textureIndex;
-    int projectileDelayCounter = 0;
-  
+    int moneyCarried;
+    int projectileDelayCounter;
+
     public ProjectilesArrayList enemyProjectiles = new ProjectilesArrayList();
 
     /**
      * Initialize the enemy with y position and the image.
      */
     Enemy(int yPos) {
-        this.enemyY = yPos;
+        lifePointsLeft = 1;
+        projectileDelay = 200;
+        enemySpeed = 4;
+        moneyCarried = rand.nextInt(3) + 1; // Set bound to the max value that should be given
+        enemyY = yPos;
+
     }
 
     @Override
@@ -49,7 +53,7 @@ public class Enemy extends JPanel implements Drawable {
      * Moves enemy to the left based on its movement speed.
      */
     public void moveEnemy() {
-        enemyX -= ENEMY_SPEED;
+        enemyX -= this.enemySpeed;
     }
 
     public void removeLifePoint() {
@@ -57,7 +61,8 @@ public class Enemy extends JPanel implements Drawable {
     }
 
     /**
-     * .
+     * Iterates across all projectiles in the enemyProjectiles arrayList and moves
+     * them all a certain value to the left.
      */
     public void moveProjectiles() {
         for (var i = 0; i < enemyProjectiles.projectiles.size(); i++) {
@@ -66,10 +71,12 @@ public class Enemy extends JPanel implements Drawable {
     }
 
     /**
-     * .
+     * Iterates the projectileDelayCounter while the counter is smaller than the
+     * delay otherwise it adds another projectile to the enemyProjectiles array list
+     * at the position of the enemy cannon and resets the counter.
      */
     public void shoot() {
-        if (projectileDelayCounter >= PROJECTILE_DELAY) {
+        if (projectileDelayCounter >= projectileDelay) {
             enemyProjectiles.addProjectile(enemyX, enemyY + 50);
             projectileDelayCounter = 0;
         } else {
@@ -78,10 +85,19 @@ public class Enemy extends JPanel implements Drawable {
     }
 
     /**
-     * .
+     * Checks wether the enemy is colliding with the player through the use of
+     * Axis-Aligned Bound Box collision detection, if colliding it will remove all
+     * of the enemy's life points.
+     * 
+     * @param playerX      The x position of the player as an int
+     * @param playerY      The y position of the player as an int
+     * @param playerWidth  The width in the x direction of the player as an int
+     * @param playerHeight The height in the y direction of the player as an int
+     * @return a boolean value of true or fules wether the player collides with the
+     *         enemy
      */
-    public boolean checkPlayerCollision(int playerX, int playerY, 
-        int playerWidth, int playerHeight) {
+    public boolean checkPlayerCollision(int playerX, int playerY,
+            int playerWidth, int playerHeight) {
         if (enemyX <= playerX + playerWidth && enemyX + ENEMY_WIDTH >= playerX + ENEMY_HEIGHT
                 && enemyY >= playerY && enemyY <= playerY + playerHeight) {
             lifePointsLeft = 0;

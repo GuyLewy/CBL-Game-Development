@@ -99,7 +99,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
             downPressed = true;
         } else if (code == KeyEvent.VK_SPACE && !blockNextShot) {
             playerProjectiles.addProjectile((int) (player.playerX + 95),
-                 (int) (player.playerY + 72));
+                    (int) (player.playerY + 72));
             blockNextShot = true;
             playerShotDelayCounter = 0;
         }
@@ -172,16 +172,16 @@ public class DisplayGraphics extends JPanel implements KeyListener {
                 playerProjectiles.moveProjectiles(5);
 
                 int playerDamage = enemies.updateEnemies(playerProjectiles, playerWallet,
-                    player.playerX, player.playerY, player.playerWidth, player.playerHeight);
+                        player.playerX, player.playerY, player.playerWidth, player.playerHeight);
+
 
                 for (int i = 0; i < playerDamage; i++) {
                     playerLoseHealth();
                 }
                 checkEnemyProjectiles(enemies);
 
-
                 if (enemySpawnDelayCounter >= enemySpawnDelay) {
-                    enemies.generateEnemy(0, 0);
+                    enemies.generateEnemy(0);
                     enemySpawnDelayCounter = 0;
                 }
 

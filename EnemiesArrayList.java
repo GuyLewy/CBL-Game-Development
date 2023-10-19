@@ -19,7 +19,7 @@ public class EnemiesArrayList {
     public int enemiesKilled = 0;
     int height = Enemy.ENEMY_HEIGHT;
     int width = Enemy.ENEMY_WIDTH;
-    
+
     int enemyAnimationCounter = 0;
     int textureIndex = 0;
     public static int animationRate = 30;
@@ -37,9 +37,9 @@ public class EnemiesArrayList {
                 String path = "textures/enemies/pirateShip1/pirateShip1_" + i + ".png";
                 textures[i - 1] = ImageIO.read(getClass().getResourceAsStream(path));
             }
-            
+
         } catch (IOException e) {
-            ;
+            System.out.println(e);
         }
     }
 
@@ -47,13 +47,32 @@ public class EnemiesArrayList {
      * A method to create a new enemy then add it to the ArrayList of all existing
      * enemies.
      * 
-     * @param xPos      the initial x position of the enemy
-     * @param enemyType an integer that determines the characteristics of the enemy
-     *                  such as health, speed and damage
+     * @param xPos the initial x position of the enemy
      */
-    public void generateEnemy(int xPos, int enemyType) {
+    public void generateEnemy(int xPos) {
         int yPos = random.nextInt(DisplayGraphics.windowDimensions.height - 400) + 75;
-        Enemy newEnemy = new Enemy(yPos);
+        int enemyType = random.nextInt(3);
+
+        Enemy newEnemy;
+
+        switch (enemyType) {
+            case 0:
+                newEnemy = new Enemy(yPos);
+                break;
+
+            case 1:
+                newEnemy = new EnemyTank(yPos);
+                break;
+
+            case 2:
+                newEnemy = new EnemyScout(yPos);
+                break;
+
+            default:
+                newEnemy = new Enemy(yPos);
+                break;
+        }
+
         enemies.add(newEnemy);
     }
 
@@ -89,8 +108,8 @@ public class EnemiesArrayList {
      * has no life points left and then moves the enemies.
      */
     public int updateEnemies(ProjectilesArrayList projectiles, Wallet wallet, 
-        int playerX, int playerY, int playerWidth,
-            int playerHeight) {
+        int playerX, int playerY, int playerWidth, int playerHeight) {
+      
         checkProjectiles(projectiles);
         manageDamage(wallet);
         moneyDropTexts.updateTexts();
@@ -102,7 +121,7 @@ public class EnemiesArrayList {
     }
 
     /**
-     * Going through four enemy textures changing to the next one 
+     * Going through four enemy textures changing to the next one
      * every 30 calls of updateTextures method.
      */
     public void updateTextures() {
@@ -110,11 +129,11 @@ public class EnemiesArrayList {
             enemyAnimationCounter++;
         } else {
             enemyAnimationCounter = 0;
-            textureIndex++; //Change to the next texture.
-            textureIndex %= 4; //If index is equal to four, go back to the index 0.
+            textureIndex++; // Change to the next texture.
+            textureIndex %= 4; // If index is equal to four, go back to the index 0.
         }
     }
-    
+
     /**
      * A method checks, if any of the projectiles in ArrayList..
      * 
@@ -131,7 +150,7 @@ public class EnemiesArrayList {
 
     /**
      * Method checks, if any of the enemies has no life points left.
-     * In that case, it creates a related MoneyDropText, adds money to the wallet 
+     * In that case, it creates a related MoneyDropText, adds money to the wallet
      * and removes that enemy.
      */
     public void manageDamage(Wallet wallet) {
@@ -141,6 +160,7 @@ public class EnemiesArrayList {
             if (next.lifePointsLeft <= 0) {
                 MoneyDropText nextText = new MoneyDropText(next.moneyCarried,
                     next.enemyX, next.enemyY, MONEY_TEXT_DURATION);
+              
                 wallet.money += next.moneyCarried;
                 moneyDropTexts.texts.add(nextText);
 
@@ -166,7 +186,8 @@ public class EnemiesArrayList {
     }
 
     /**
-     * .
+     * Iterate accross all of the enemies and check wether they should shoot
+     * (handled in the shoot() method) and move their projectiles.
      */
     public void handleEnemyProjectiles() {
         for (var i = 0; i < enemies.size(); i++) {
@@ -176,10 +197,11 @@ public class EnemiesArrayList {
     }
 
     /**
-     * Checks, if player is hit by any of the enemy projectiles.
+     * Iterates across all of the enemies and checks if the player is hit by any of
+     * the enemy projectiles.
      */
-    public int checkPlayerCollisions(int playerX, int playerY, 
-        int playerWidth, int playerHeight) {
+    public int checkPlayerCollisions(int playerX, int playerY,
+            int playerWidth, int playerHeight) {
         int playerCollisionCount = 0;
         for (var i = 0; i < enemies.size(); i++) {
             if (enemies.get(i).checkPlayerCollision(playerX, playerY, playerWidth, playerHeight)) {
@@ -189,6 +211,11 @@ public class EnemiesArrayList {
         return playerCollisionCount;
     }
 
+    /**
+     * Iterates across all of the enemies and lowers their life points to zero, this
+     * should be run when the game is restarted or if the player has an ability that
+     * kills all of the enemies on screen.
+     */
     public void deleteAllEnemies() {
         for (var i = 0; i < enemies.size(); i++) {
             enemies.get(i).lifePointsLeft = 0;
