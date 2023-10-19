@@ -1,12 +1,11 @@
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 
 class HealthHeart implements Drawable {
-    private static int HEART_WIDTH = 32;
-    private static int HEART_HEIGHT = 32;
+    //private static int HEART_WIDTH = 32;
+    //private static int HEART_HEIGHT = 32;
     private int heartX;
     private int heartY;
 
@@ -16,12 +15,20 @@ class HealthHeart implements Drawable {
 
     public int heartState = 2; //2 - full; 1 - half; 0 - empty
 
+    /**
+     * Create a heart at coordinates.
+     * @param x .
+     * @param y .
+     */
     public HealthHeart(int x, int y) {
         heartX = x;
         heartY = y;
         getImages();
     }
 
+    /**
+     * Read heart textures.
+     */
     public void getImages() {
         try {
             fullHeart = ImageIO.read(getClass()
@@ -34,6 +41,10 @@ class HealthHeart implements Drawable {
             ;
         }
     }
+
+    /**
+     * Draw a heart in correct state.
+     */
     public void draw(Graphics g) {
         if (heartState == 2) {
             g.drawImage(fullHeart, heartX, heartY, null);

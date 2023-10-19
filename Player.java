@@ -10,7 +10,7 @@ import javax.imageio.ImageIO;
 public class Player implements Drawable {
     public static final int MOVEMENT_SPEED = 5;
     public static final int PLAYER_MAX_HEALTH = 6;
-    public final int playerWidth = 128;
+    public final int playerWidth = 100;
     public final int playerHeight = 128;
     int playerHealth = PLAYER_MAX_HEALTH;
 
