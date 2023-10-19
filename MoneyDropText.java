@@ -33,7 +33,7 @@ public class MoneyDropText implements Drawable {
     */
     public void draw(Graphics g) {
         Font  f2  = new Font(Font.SANS_SERIF,  Font.BOLD, 25);
-        g.setColor(new Color(200, 160, 50, opacity));
+        g.setColor(new Color(175, 140, 45, opacity));
         g.setFont(f2);
         g.drawString(moneyString, textX, textY);
     }

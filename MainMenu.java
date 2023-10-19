@@ -11,6 +11,8 @@ public class MainMenu extends JPanel {
     private JButton startGameButton;
     private JFrame mainWindow;
 
+    Sound sound = new Sound();
+
     /**
      * Sets up the frame to have a button and add an action listener to the button.
      */
@@ -26,6 +28,10 @@ public class MainMenu extends JPanel {
         mainWindow.setSize(1000, 560);
         mainWindow.setLayout(null);
         mainWindow.setVisible(true);
+
+        sound.setSoundEffect(4);
+        sound.play();
+        sound.loop();
     }
 
     public static void main(String[] args) {
@@ -39,6 +45,9 @@ public class MainMenu extends JPanel {
     private class ButtonClickListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == startGameButton) {
+                sound.stop();
+                sound.setSoundEffect(5);
+                sound.play();
                 new DisplayGraphics();
                 mainWindow.dispose();
             }

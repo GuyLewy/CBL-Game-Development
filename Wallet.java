@@ -15,7 +15,7 @@ public class Wallet implements Drawable {
      * Drawing the money counter.
      */
     public void draw(Graphics g) {
-        g.setColor(new Color(200, 160, 50));
+        g.setColor(new Color(175, 140, 45));
         g.setFont(f2);
         g.drawString("Money: %d".formatted(money), 
             (int) (0.64 * DisplayGraphics.windowDimensions.getWidth()), 90);

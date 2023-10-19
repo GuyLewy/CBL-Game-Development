@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
 import javax.imageio.ImageIO;
 
 /**
@@ -10,9 +9,10 @@ import javax.imageio.ImageIO;
  */
 public class Player implements Drawable {
     public static final int MOVEMENT_SPEED = 5;
-    public final int playerWidth = 128;
+    public static final int PLAYER_MAX_HEALTH = 6;
+    public final int playerWidth = 100;
     public final int playerHeight = 128;
-    int playerHealth = 3;
+    int playerHealth = PLAYER_MAX_HEALTH;
 
     public int playerShotDelay = 60;
     public int playerY = 100;
