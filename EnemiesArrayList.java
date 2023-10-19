@@ -107,9 +107,9 @@ public class EnemiesArrayList {
      * A method checks if any of the enemies is hit by a projectile,
      * has no life points left and then moves the enemies.
      */
-    public int updateEnemies(ProjectilesArrayList projectiles, Wallet wallet,
-            int playerX, int playerY, int playerWidth,
-            int playerHeight) {
+    public int updateEnemies(ProjectilesArrayList projectiles, Wallet wallet, 
+        int playerX, int playerY, int playerWidth, int playerHeight) {
+      
         checkProjectiles(projectiles);
         manageDamage(wallet);
         moneyDropTexts.updateTexts();
@@ -159,7 +159,8 @@ public class EnemiesArrayList {
 
             if (next.lifePointsLeft <= 0) {
                 MoneyDropText nextText = new MoneyDropText(next.moneyCarried,
-                        next.enemyX, next.enemyY, MONEY_TEXT_DURATION);
+                    next.enemyX, next.enemyY, MONEY_TEXT_DURATION);
+              
                 wallet.money += next.moneyCarried;
                 moneyDropTexts.texts.add(nextText);
 

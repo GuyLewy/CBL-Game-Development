@@ -174,6 +174,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
                 int playerDamage = enemies.updateEnemies(playerProjectiles, playerWallet,
                         player.playerX, player.playerY, player.playerWidth, player.playerHeight);
 
+
                 for (int i = 0; i < playerDamage; i++) {
                     playerLoseHealth();
                 }
