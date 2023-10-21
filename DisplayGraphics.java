@@ -29,7 +29,10 @@ public class DisplayGraphics extends JPanel implements KeyListener {
     int playerShotDelayCounter = player.playerShotDelay;
     float soundtrackVolume = -15.0f;
     JFrame gameWindow = new JFrame();
-    Timer timer = new Timer(1000 / FRAMES_PER_SECOND, new TimerListener());
+    // Timer timer = new Timer(5, new TimerListener());
+
+    private final int UPS = 120; // Updates per second
+    private final int FPS = 60; // Frames per second
 
     /**
      * Constructor method to initialize a timer and set the DisplayGraphics object
@@ -37,12 +40,13 @@ public class DisplayGraphics extends JPanel implements KeyListener {
      */
     public DisplayGraphics() {
         startGame();
-        gameRunning = true;
         addKeyListener(this);
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
         playerBar.playerBarSetup(player.playerShotDelay);
-        timer.start();
+        // timer.start();
+        // paintComponent(getGraphics());
+        startGameLoop();
     }
 
     /**
@@ -80,7 +84,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         player.playerY = 0;
         score.gameScore = 0;
         enemies.deleteAllEnemies();
-        timer.stop();
+        // timer.stop();
     }
 
     public void startGame() {
@@ -93,6 +97,80 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         soundtrack.play();
         soundtrack.setVolume(soundtrackVolume);
         soundtrack.loop();
+        gameRunning = true;
+    }
+
+    public void startGameLoop() {
+
+        long initialTime = System.nanoTime();
+        final double timeUPS = 1000000000 / UPS;
+        final double timeFPS = 1000000000 / FPS;
+        double deltaUPS = 0, deltaFPS = 0;
+        int frames = 0, ticks = 0;
+        long timer = System.currentTimeMillis();
+
+        while (gameRunning) {
+            long currentTime = System.nanoTime();
+
+            deltaUPS += (currentTime - initialTime) / timeUPS;
+            deltaFPS += (currentTime - initialTime) / timeFPS;
+            initialTime = currentTime;
+
+            if (deltaUPS >= 1) {
+                this.updateGame();
+                ticks++;
+                deltaUPS--;
+            }
+
+            if (deltaFPS >= 1) {
+                paintImmediately(0, 0, 2000, 1000);
+                frames++;
+                deltaFPS--;
+            }
+
+            if (System.currentTimeMillis() - timer > 1000) {
+                System.out.println(String.format("UPS: %s, FPS: %s", ticks, frames));
+                frames = 0;
+                ticks = 0;
+                timer += 1000;
+            }
+
+        }
+    }
+
+    private void updateGame() {
+        player.move(upPressed, downPressed);
+        playerProjectiles.moveProjectiles(5);
+        if (playerProjectiles.bulletInTarget) {
+            sound.setSoundEffect(1);
+            sound.play();
+            playerProjectiles.bulletInTarget = false;
+        }
+
+        int playerDamage = enemies.updateEnemies(playerProjectiles, playerWallet,
+                player.playerX, player.playerY, player.playerWidth, player.playerHeight);
+
+        for (int i = 0; i < playerDamage; i++) {
+            playerLoseHealth();
+        }
+        checkEnemyProjectiles(enemies);
+
+        if (enemySpawnDelayCounter >= enemySpawnDelay) {
+            enemies.generateEnemy(0);
+            enemySpawnDelayCounter = 0;
+        }
+
+        if (playerShotDelayCounter >= player.playerShotDelay) {
+            blockNextShot = false;
+        } else {
+            playerShotDelayCounter++;
+        }
+
+        enemySpawnDelayCounter++;
+
+        score.updateScore(enemies);
+        playerBar.updateBar(playerShotDelayCounter);
+        playerHealthBar.updateHealtBar(player.playerHealth);
     }
 
     /**
@@ -154,7 +232,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
      * @param g a Graphics object that is painted to the screen
      */
     @Override
-    protected void paintComponent(Graphics g) {
+    public void paintComponent(Graphics g) {
         super.paintComponent(g);
         this.setBackground(new Color(95, 175, 250));
         player.draw(g);
@@ -166,58 +244,5 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         enemies.drawEnemyProjectiles(g);
         enemies.drawMoneyDropTexts(g);
         playerHealthBar.draw(g);
-    }
-
-    /**
-     * A class that is used to determine when a certain amount of time has passed in
-     * order to update positions and redraw objects.
-     */
-    private class TimerListener implements ActionListener {
-
-        /**
-         * The method that updates after the time has passed, game logic, player
-         * movement and enemy spawning is all handled in this method.
-         * 
-         * @param e an ActionEvent object used to determine the event
-         */
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if (gameRunning) {
-                player.move(upPressed, downPressed);
-                playerProjectiles.moveProjectiles(5);
-                if (playerProjectiles.bulletInTarget) {
-                    sound.setSoundEffect(1);
-                    sound.play();
-                    playerProjectiles.bulletInTarget = false;
-                }
-
-                int playerDamage = enemies.updateEnemies(playerProjectiles, playerWallet,
-                        player.playerX, player.playerY, player.playerWidth, player.playerHeight);
-
-                for (int i = 0; i < playerDamage; i++) {
-                    playerLoseHealth();
-                }
-                checkEnemyProjectiles(enemies);
-
-                if (enemySpawnDelayCounter >= enemySpawnDelay) {
-                    enemies.generateEnemy(0);
-                    enemySpawnDelayCounter = 0;
-                }
-
-                if (playerShotDelayCounter >= player.playerShotDelay) {
-                    blockNextShot = false;
-                } else {
-                    playerShotDelayCounter++;
-                }
-
-                enemySpawnDelayCounter++;
-
-                score.updateScore(enemies);
-                playerBar.updateBar(playerShotDelayCounter);
-                playerHealthBar.updateHealtBar(player.playerHealth);
-
-                repaint();
-            }
-        }
     }
 }
