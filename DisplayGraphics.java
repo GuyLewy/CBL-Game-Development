@@ -9,7 +9,6 @@ import javax.swing.*;
  */
 public class DisplayGraphics extends JPanel implements KeyListener {
 
-    private static final int FRAMES_PER_SECOND = 120;
     public static Rectangle windowDimensions;
     private Player player = new Player();
     private ProjectilesArrayList playerProjectiles = new ProjectilesArrayList();
@@ -42,11 +41,11 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         startGame();
         addKeyListener(this);
         setFocusable(true);
+        requestFocus();
         setFocusTraversalKeysEnabled(false);
         playerBar.playerBarSetup(player.playerShotDelay);
-        // timer.start();
-        // paintComponent(getGraphics());
-        startGameLoop();
+        Thread gameLoopThread = new Thread(this::startGameLoop);
+        gameLoopThread.start();
     }
 
     /**
@@ -74,19 +73,24 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         }
     }
 
+    /**
+     * Run at the end of a game, deletes all enemies, resets
+     * player positon and opens up the restart menu.
+     */
     public void endGame() {
         gameRunning = false;
         soundtrack.stop();
         new RestartMenu(score.gameScore);
         gameWindow.setVisible(false);
-        player.playerHealth = 3;
         player.playerX = 0;
         player.playerY = 0;
         score.gameScore = 0;
         enemies.deleteAllEnemies();
-        // timer.stop();
     }
 
+    /**
+     * Sets up the window and starts music to the game.
+     */
     public void startGame() {
         gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameWindow.setSize(2000, 1000);
@@ -100,13 +104,19 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         gameRunning = true;
     }
 
+    /**
+     * Sets up a game loop timer with discrete FPS (frames per second) and UPS
+     * (updates per second) values so that the game works equally as fast on
+     * different hardware as well as saving on some resources by not drawing to the
+     * screen every update.
+     */
     public void startGameLoop() {
 
         long initialTime = System.nanoTime();
         final double timeUPS = 1000000000 / UPS;
         final double timeFPS = 1000000000 / FPS;
-        double deltaUPS = 0, deltaFPS = 0;
-        int frames = 0, ticks = 0;
+        double deltaUPS = 0;
+        double deltaFPS = 0;
         long timer = System.currentTimeMillis();
 
         while (gameRunning) {
@@ -117,27 +127,29 @@ public class DisplayGraphics extends JPanel implements KeyListener {
             initialTime = currentTime;
 
             if (deltaUPS >= 1) {
-                this.updateGame();
-                ticks++;
+                // Update all game logic
+                updateGame();
                 deltaUPS--;
             }
 
             if (deltaFPS >= 1) {
-                paintImmediately(0, 0, 2000, 1000);
-                frames++;
+                // Update all sprites and graphics
+                repaint();
                 deltaFPS--;
             }
 
             if (System.currentTimeMillis() - timer > 1000) {
-                System.out.println(String.format("UPS: %s, FPS: %s", ticks, frames));
-                frames = 0;
-                ticks = 0;
                 timer += 1000;
             }
 
         }
     }
 
+    /**
+     * Method that handles all of the logic of the game including player movement,
+     * enemy and player collisions as well as damage and awarding money for
+     * killing an enemy.
+     */
     private void updateGame() {
         player.move(upPressed, downPressed);
         playerProjectiles.moveProjectiles(5);
@@ -174,6 +186,26 @@ public class DisplayGraphics extends JPanel implements KeyListener {
     }
 
     /**
+     * The method used to draw all graphics objects and elements onto the screen.
+     * 
+     * @param g a Graphics object that is painted to the screen
+     */
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        this.setBackground(new Color(95, 175, 250));
+        player.draw(g);
+        playerProjectiles.draw(g);
+        enemies.draw(g);
+        playerBar.draw(g);
+        score.draw(g);
+        playerWallet.draw(g);
+        enemies.drawEnemyProjectiles(g);
+        enemies.drawMoneyDropTexts(g);
+        playerHealthBar.draw(g);
+    }
+
+    /**
      * Method to determine whether a key on the keyboard was pressed and get the
      * keycode of the key, it is used to control the actions that the player
      * chooses.
@@ -199,9 +231,8 @@ public class DisplayGraphics extends JPanel implements KeyListener {
 
     /**
      * Method used to determen whether a key on the keyboard was released and get
-     * the
-     * keykoad of the key, this is used to determine when the player wants to stop
-     * moving.
+     * the keykoad of the key, this is used to determine when the player wants to
+     * stop moving.
      * 
      * @param e A KeyEvent used to determine what key is released
      */
@@ -224,25 +255,5 @@ public class DisplayGraphics extends JPanel implements KeyListener {
      */
     @Override
     public void keyTyped(KeyEvent e) {
-    }
-
-    /**
-     * The method used to draw all graphics objects and elements onto the screen.
-     * 
-     * @param g a Graphics object that is painted to the screen
-     */
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        this.setBackground(new Color(95, 175, 250));
-        player.draw(g);
-        playerProjectiles.draw(g);
-        enemies.draw(g);
-        playerBar.draw(g);
-        score.draw(g);
-        playerWallet.draw(g);
-        enemies.drawEnemyProjectiles(g);
-        enemies.drawMoneyDropTexts(g);
-        playerHealthBar.draw(g);
     }
 }
