@@ -49,9 +49,10 @@ public class DisplayGraphics extends JPanel implements KeyListener {
     }
 
     /**
-     * .
+     * Iterates across the enemiesArrayList and checks if any of their projectiles
+     * hit the player.
      * 
-     * @param enemiesArrayList .
+     * @param enemiesArrayList array list containing all of the enemies in the game
      */
     public void checkEnemyProjectiles(EnemiesArrayList enemiesArrayList) {
         ArrayList<Enemy> enemies = enemiesArrayList.enemies;
@@ -64,6 +65,10 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         }
     }
 
+    /**
+     * Lowers the players health and plays a sound when run, additionally it checks
+     * if the player's health goes to 0 and if it does then it ends the game.
+     */
     public void playerLoseHealth() {
         sound.setSoundEffect(2);
         sound.play();
