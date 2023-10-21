@@ -9,6 +9,7 @@ import javax.swing.*;
  */
 public class DisplayGraphics extends JPanel implements KeyListener {
 
+    private static final int FRAMES_PER_SECOND = 120;
     public static Rectangle windowDimensions;
     private Player player = new Player();
     private ProjectilesArrayList playerProjectiles = new ProjectilesArrayList();
@@ -28,7 +29,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
     int playerShotDelayCounter = player.playerShotDelay;
     float soundtrackVolume = -15.0f;
     JFrame gameWindow = new JFrame();
-    Timer timer = new Timer(5, new TimerListener());
+    Timer timer = new Timer(1000 / FRAMES_PER_SECOND, new TimerListener());
 
     /**
      * Constructor method to initialize a timer and set the DisplayGraphics object
@@ -192,7 +193,6 @@ public class DisplayGraphics extends JPanel implements KeyListener {
 
                 int playerDamage = enemies.updateEnemies(playerProjectiles, playerWallet,
                         player.playerX, player.playerY, player.playerWidth, player.playerHeight);
-
 
                 for (int i = 0; i < playerDamage; i++) {
                     playerLoseHealth();
