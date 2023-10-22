@@ -8,11 +8,12 @@ import javax.imageio.ImageIO;
  * well as the sprite to display.
  */
 public class Player implements Drawable {
-    public static final int MOVEMENT_SPEED = 5;
+    public static final int BASE_MOVEMENT_SPEED = 5;
     public static final int PLAYER_MAX_HEALTH = 6;
     public final int playerWidth = 100;
     public final int playerHeight = 128;
     int playerHealth = PLAYER_MAX_HEALTH;
+    private int movementSpeed = BASE_MOVEMENT_SPEED;
 
     public int playerShotDelay = 60;
     public int playerY = 100;
@@ -62,14 +63,34 @@ public class Player implements Drawable {
         if (upPressed) {
             playerDirection = 1;
             if (playerY > 0) {
-                playerY -= MOVEMENT_SPEED;
+                playerY -= movementSpeed;
             }
         }
         if (downPressed) {
             playerDirection = 0;
             if (playerY + 2 * playerHeight < DisplayGraphics.windowDimensions.height) {
-                playerY += MOVEMENT_SPEED;
+                playerY += movementSpeed;
             }
+        }
+
+    }
+
+    public void upgradeStat(int stat) {
+
+        switch (stat) {
+            default:
+                break;
+
+            case 1:
+                this.playerShotDelay -= 10;
+                break;
+
+            case 2:
+                this.playerHealth += 2;
+                break;
+
+            case 3:
+                this.movementSpeed++;
         }
 
     }

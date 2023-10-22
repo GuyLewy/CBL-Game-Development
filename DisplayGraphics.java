@@ -19,6 +19,8 @@ public class DisplayGraphics extends JPanel implements KeyListener {
     private HealthBar playerHealthBar = new HealthBar(player.playerHealth);
     private Sound sound = new Sound();
     private Sound soundtrack = new Sound();
+
+    private boolean statUpgraded;
     public static boolean gameRunning;
     boolean upPressed = false;
     boolean downPressed = false;
@@ -31,7 +33,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
     // Timer timer = new Timer(5, new TimerListener());
 
     private final int UPS = 120; // Updates per second
-    private final int FPS = 60; // Frames per second
+    private final int FPS = 120; // Frames per second
 
     /**
      * Constructor method to initialize a timer and set the DisplayGraphics object
@@ -224,13 +226,26 @@ public class DisplayGraphics extends JPanel implements KeyListener {
             upPressed = true;
         } else if (code == KeyEvent.VK_DOWN) {
             downPressed = true;
-        } else if (code == KeyEvent.VK_SPACE && !blockNextShot) {
+        }
+
+        if (code == KeyEvent.VK_SPACE && !blockNextShot) {
             sound.setSoundEffect(0);
             sound.play();
             playerProjectiles.addProjectile((int) (player.playerX + 95),
                     (int) (player.playerY + 72));
             blockNextShot = true;
             playerShotDelayCounter = 0;
+        }
+
+        if (code == KeyEvent.VK_Z && !statUpgraded) {
+            player.upgradeStat(1);
+            statUpgraded = true;
+        } else if (code == KeyEvent.VK_X && !statUpgraded) {
+            player.upgradeStat(2);
+            statUpgraded = true;
+        } else if (code == KeyEvent.VK_C && !statUpgraded) {
+            player.upgradeStat(3);
+            statUpgraded = true;
         }
     }
 
@@ -250,6 +265,11 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         } else if (code == KeyEvent.VK_DOWN) {
             downPressed = false;
         }
+
+        if (code == KeyEvent.VK_Z || code == KeyEvent.VK_X || code == KeyEvent.VK_C) {
+            statUpgraded = false;
+        }
+
     }
 
     /**
