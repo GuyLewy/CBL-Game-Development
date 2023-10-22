@@ -28,7 +28,10 @@ public class DisplayGraphics extends JPanel implements KeyListener {
     int playerShotDelayCounter = player.playerShotDelay;
     float soundtrackVolume = -15.0f;
     JFrame gameWindow = new JFrame();
-    Timer timer = new Timer(5, new TimerListener());
+    // Timer timer = new Timer(5, new TimerListener());
+
+    private final int UPS = 120; // Updates per second
+    private final int FPS = 60; // Frames per second
 
     /**
      * Constructor method to initialize a timer and set the DisplayGraphics object
@@ -36,18 +39,20 @@ public class DisplayGraphics extends JPanel implements KeyListener {
      */
     public DisplayGraphics() {
         startGame();
-        gameRunning = true;
         addKeyListener(this);
         setFocusable(true);
+        requestFocus();
         setFocusTraversalKeysEnabled(false);
         playerBar.playerBarSetup(player.playerShotDelay);
-        timer.start();
+        Thread gameLoopThread = new Thread(this::startGameLoop);
+        gameLoopThread.start();
     }
 
     /**
-     * .
+     * Iterates across the enemiesArrayList and checks if any of their projectiles
+     * hit the player.
      * 
-     * @param enemiesArrayList .
+     * @param enemiesArrayList array list containing all of the enemies in the game
      */
     public void checkEnemyProjectiles(EnemiesArrayList enemiesArrayList) {
         ArrayList<Enemy> enemies = enemiesArrayList.enemies;
@@ -60,6 +65,10 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         }
     }
 
+    /**
+     * Lowers the players health and plays a sound when run, additionally it checks
+     * if the player's health goes to 0 and if it does then it ends the game.
+     */
     public void playerLoseHealth() {
         sound.setSoundEffect(2);
         sound.play();
@@ -69,19 +78,24 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         }
     }
 
+    /**
+     * Run at the end of a game, deletes all enemies, resets
+     * player positon and opens up the restart menu.
+     */
     public void endGame() {
         gameRunning = false;
         soundtrack.stop();
         new RestartMenu(score.gameScore);
         gameWindow.setVisible(false);
-        player.playerHealth = 3;
         player.playerX = 0;
         player.playerY = 0;
         score.gameScore = 0;
         enemies.deleteAllEnemies();
-        timer.stop();
     }
 
+    /**
+     * Sets up the window and starts music to the game.
+     */
     public void startGame() {
         gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameWindow.setSize(2000, 1000);
@@ -92,6 +106,108 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         soundtrack.play();
         soundtrack.setVolume(soundtrackVolume);
         soundtrack.loop();
+        gameRunning = true;
+    }
+
+    /**
+     * Sets up a game loop timer with discrete FPS (frames per second) and UPS
+     * (updates per second) values so that the game works equally as fast on
+     * different hardware as well as saving on some resources by not drawing to the
+     * screen every update.
+     */
+    public void startGameLoop() {
+
+        long initialTime = System.nanoTime();
+        final double timeUPS = 1000000000 / UPS;
+        final double timeFPS = 1000000000 / FPS;
+        double deltaUPS = 0;
+        double deltaFPS = 0;
+        long timer = System.currentTimeMillis();
+
+        while (gameRunning) {
+            long currentTime = System.nanoTime();
+
+            deltaUPS += (currentTime - initialTime) / timeUPS;
+            deltaFPS += (currentTime - initialTime) / timeFPS;
+            initialTime = currentTime;
+
+            if (deltaUPS >= 1) {
+                // Update all game logic
+                updateGame();
+                deltaUPS--;
+            }
+
+            if (deltaFPS >= 1) {
+                // Update all sprites and graphics
+                repaint();
+                deltaFPS--;
+            }
+
+            if (System.currentTimeMillis() - timer > 1000) {
+                timer += 1000;
+            }
+
+        }
+    }
+
+    /**
+     * Method that handles all of the logic of the game including player movement,
+     * enemy and player collisions as well as damage and awarding money for
+     * killing an enemy.
+     */
+    private void updateGame() {
+        player.move(upPressed, downPressed);
+        playerProjectiles.moveProjectiles(5);
+        if (playerProjectiles.bulletInTarget) {
+            sound.setSoundEffect(1);
+            sound.play();
+            playerProjectiles.bulletInTarget = false;
+        }
+
+        int playerDamage = enemies.updateEnemies(playerProjectiles, playerWallet,
+                player.playerX, player.playerY, player.playerWidth, player.playerHeight);
+
+        for (int i = 0; i < playerDamage; i++) {
+            playerLoseHealth();
+        }
+        checkEnemyProjectiles(enemies);
+
+        if (enemySpawnDelayCounter >= enemySpawnDelay) {
+            enemies.generateEnemy(0);
+            enemySpawnDelayCounter = 0;
+        }
+
+        if (playerShotDelayCounter >= player.playerShotDelay) {
+            blockNextShot = false;
+        } else {
+            playerShotDelayCounter++;
+        }
+
+        enemySpawnDelayCounter++;
+
+        score.updateScore(enemies);
+        playerBar.updateBar(playerShotDelayCounter);
+        playerHealthBar.updateHealtBar(player.playerHealth);
+    }
+
+    /**
+     * The method used to draw all graphics objects and elements onto the screen.
+     * 
+     * @param g a Graphics object that is painted to the screen
+     */
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        this.setBackground(new Color(95, 175, 250));
+        player.draw(g);
+        playerProjectiles.draw(g);
+        enemies.draw(g);
+        playerBar.draw(g);
+        score.draw(g);
+        playerWallet.draw(g);
+        enemies.drawEnemyProjectiles(g);
+        enemies.drawMoneyDropTexts(g);
+        playerHealthBar.draw(g);
     }
 
     /**
@@ -120,9 +236,8 @@ public class DisplayGraphics extends JPanel implements KeyListener {
 
     /**
      * Method used to determen whether a key on the keyboard was released and get
-     * the
-     * keykoad of the key, this is used to determine when the player wants to stop
-     * moving.
+     * the keykoad of the key, this is used to determine when the player wants to
+     * stop moving.
      * 
      * @param e A KeyEvent used to determine what key is released
      */
@@ -145,79 +260,5 @@ public class DisplayGraphics extends JPanel implements KeyListener {
      */
     @Override
     public void keyTyped(KeyEvent e) {
-    }
-
-    /**
-     * The method used to draw all graphics objects and elements onto the screen.
-     * 
-     * @param g a Graphics object that is painted to the screen
-     */
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        this.setBackground(new Color(95, 175, 250));
-        player.draw(g);
-        playerProjectiles.draw(g);
-        enemies.draw(g);
-        playerBar.draw(g);
-        score.draw(g);
-        playerWallet.draw(g);
-        enemies.drawEnemyProjectiles(g);
-        enemies.drawMoneyDropTexts(g);
-        playerHealthBar.draw(g);
-    }
-
-    /**
-     * A class that is used to determine when a certain amount of time has passed in
-     * order to update positions and redraw objects.
-     */
-    private class TimerListener implements ActionListener {
-
-        /**
-         * The method that updates after the time has passed, game logic, player
-         * movement and enemy spawning is all handled in this method.
-         * 
-         * @param e an ActionEvent object used to determine the event
-         */
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if (gameRunning) {
-                player.move(upPressed, downPressed);
-                playerProjectiles.moveProjectiles(5);
-                if (playerProjectiles.bulletInTarget) {
-                    sound.setSoundEffect(1);
-                    sound.play();
-                    playerProjectiles.bulletInTarget = false;
-                }
-
-                int playerDamage = enemies.updateEnemies(playerProjectiles, playerWallet,
-                        player.playerX, player.playerY, player.playerWidth, player.playerHeight);
-
-
-                for (int i = 0; i < playerDamage; i++) {
-                    playerLoseHealth();
-                }
-                checkEnemyProjectiles(enemies);
-
-                if (enemySpawnDelayCounter >= enemySpawnDelay) {
-                    enemies.generateEnemy(0);
-                    enemySpawnDelayCounter = 0;
-                }
-
-                if (playerShotDelayCounter >= player.playerShotDelay) {
-                    blockNextShot = false;
-                } else {
-                    playerShotDelayCounter++;
-                }
-
-                enemySpawnDelayCounter++;
-
-                score.updateScore(enemies);
-                playerBar.updateBar(playerShotDelayCounter);
-                playerHealthBar.updateHealtBar(player.playerHealth);
-
-                repaint();
-            }
-        }
     }
 }
