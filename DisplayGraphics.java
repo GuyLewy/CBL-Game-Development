@@ -30,7 +30,9 @@ public class DisplayGraphics extends JPanel implements KeyListener {
     int playerShotDelayCounter = player.playerShotDelay;
     float soundtrackVolume = -15.0f;
     JFrame gameWindow = new JFrame();
-    // Timer timer = new Timer(5, new TimerListener());
+
+    private int fireRateUpgradePrices[] = { 20, 30, 40, 50 };
+    private int movementSpeedUpgradePrices[] = { 10, 15, 20, 25 };
 
     private final int UPS = 120; // Updates per second
     private final int FPS = 120; // Frames per second
@@ -237,13 +239,21 @@ public class DisplayGraphics extends JPanel implements KeyListener {
             playerShotDelayCounter = 0;
         }
 
-        if (code == KeyEvent.VK_Z && !statUpgraded) {
+        if (code == KeyEvent.VK_Z && !statUpgraded
+                && player.fireRateUpgrades <= fireRateUpgradePrices.length
+                && playerWallet.money >= fireRateUpgradePrices[player.fireRateUpgrades]) {
+            playerWallet.money -= fireRateUpgradePrices[player.fireRateUpgrades];
             player.upgradeStat(1);
             statUpgraded = true;
-        } else if (code == KeyEvent.VK_X && !statUpgraded) {
+        } else if (code == KeyEvent.VK_X && !statUpgraded
+                && player.speedUpgrades <= movementSpeedUpgradePrices.length
+                && playerWallet.money >= movementSpeedUpgradePrices[player.speedUpgrades]) {
+            playerWallet.money -= movementSpeedUpgradePrices[player.speedUpgrades];
             player.upgradeStat(2);
             statUpgraded = true;
-        } else if (code == KeyEvent.VK_C && !statUpgraded) {
+        } else if (code == KeyEvent.VK_C && !statUpgraded
+                && playerWallet.money >= 8 * player.healthUpgrades) {
+            playerWallet.money -= 8 * player.healthUpgrades;
             player.upgradeStat(3);
             statUpgraded = true;
         }

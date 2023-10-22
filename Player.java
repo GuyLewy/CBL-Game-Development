@@ -12,6 +12,10 @@ public class Player implements Drawable {
     public static final int PLAYER_MAX_HEALTH = 6;
     public final int playerWidth = 100;
     public final int playerHeight = 128;
+    public int speedUpgrades;
+    public int fireRateUpgrades;
+    public int healthUpgrades;
+
     int playerHealth = PLAYER_MAX_HEALTH;
     private int movementSpeed = BASE_MOVEMENT_SPEED;
 
@@ -83,14 +87,19 @@ public class Player implements Drawable {
 
             case 1:
                 this.playerShotDelay -= 10;
+                fireRateUpgrades++;
                 break;
 
             case 2:
-                this.playerHealth += 2;
+                this.movementSpeed++;
+                speedUpgrades++;
                 break;
 
             case 3:
-                this.movementSpeed++;
+                this.playerHealth += 2;
+                healthUpgrades++;
+                break;
+
         }
 
     }
