@@ -7,7 +7,7 @@ import javax.swing.*;
  * DisplayGraphics class acts as the main window, implementing all timing logics
  * and drawing functionality as well as well as Swing window creation.
  */
-public class DisplayGraphics extends JPanel implements KeyListener {
+public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
 
     public static Rectangle windowDimensions;
     private Player player = new Player();
@@ -31,17 +31,18 @@ public class DisplayGraphics extends JPanel implements KeyListener {
     float soundtrackVolume = -15.0f;
     JFrame gameWindow = new JFrame();
 
-    private int fireRateUpgradePrices[] = { 20, 30, 40, 50 };
-    private int movementSpeedUpgradePrices[] = { 10, 15, 20, 25 };
+    private int[] fireRateUpgradePrices = { 20, 30, 40, 50 };
+    private int[] movementSpeedUpgradePrices = { 10, 15, 20, 25 };
 
-    private final int UPS = 120; // Updates per second
-    private final int FPS = 120; // Frames per second
+    private final int ups = 120; // Updates per second
+    private final int fps = 120; // Frames per second
 
     /**
      * Constructor method to initialize a timer and set the DisplayGraphics object
      * as focusable so that keystrokes can be recorded.
      */
     public DisplayGraphics() {
+        this.setLayout(new BorderLayout());
         startGame();
         addKeyListener(this);
         setFocusable(true);
@@ -122,8 +123,8 @@ public class DisplayGraphics extends JPanel implements KeyListener {
     public void startGameLoop() {
 
         long initialTime = System.nanoTime();
-        final double timeUPS = 1000000000 / UPS;
-        final double timeFPS = 1000000000 / FPS;
+        final double timeUPS = 1000000000 / ups;
+        final double timeFPS = 1000000000 / fps;
         double deltaUPS = 0;
         double deltaFPS = 0;
         long timer = System.currentTimeMillis();
@@ -212,6 +213,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         enemies.drawEnemyProjectiles(g);
         enemies.drawMoneyDropTexts(g);
         playerHealthBar.draw(g);
+        this.draw(g);
     }
 
     /**
@@ -276,9 +278,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
             downPressed = false;
         }
 
-        if (code == KeyEvent.VK_Z || code == KeyEvent.VK_X || code == KeyEvent.VK_C) {
-            statUpgraded = false;
-        }
+        statUpgraded = (!(code == KeyEvent.VK_Z || code == KeyEvent.VK_X || code == KeyEvent.VK_C));
 
     }
 
@@ -290,5 +290,23 @@ public class DisplayGraphics extends JPanel implements KeyListener {
      */
     @Override
     public void keyTyped(KeyEvent e) {
+    }
+
+    /**
+     * Draws the upgrade details on the top of the screen, including the price of
+     * the upgrade and what button should be pressed for the upgrade.
+     * 
+     * @param g Graphics object that the graphics should be added to
+     */
+    @Override
+    public void draw(Graphics g) {
+        g.setColor(new Color(0, 0, 0, 255));
+        g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 25));
+        g.drawString(
+                "Firerate (z): $%d    Speed (x): $%d    Heal (c): $%d".formatted(
+                        fireRateUpgradePrices[player.fireRateUpgrades],
+                        movementSpeedUpgradePrices[player.speedUpgrades],
+                        8 * player.healthUpgrades),
+                (int) (0.2 * DisplayGraphics.windowDimensions.getWidth()), 30);
     }
 }

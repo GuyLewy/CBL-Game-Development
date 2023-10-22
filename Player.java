@@ -14,7 +14,7 @@ public class Player implements Drawable {
     public final int playerHeight = 128;
     public int speedUpgrades;
     public int fireRateUpgrades;
-    public int healthUpgrades;
+    public int healthUpgrades = 1;
 
     int playerHealth = PLAYER_MAX_HEALTH;
     private int movementSpeed = BASE_MOVEMENT_SPEED;
@@ -79,6 +79,14 @@ public class Player implements Drawable {
 
     }
 
+    /**
+     * Method used to upgrade the abilities of the player depending on the requested
+     * ability. Note this method does not check if user has enough money nor does it
+     * remove the money from the user's wallet, this must be done seperately when
+     * calling this method.
+     * 
+     * @param stat integer that determines what stat is being upgraded
+     */
     public void upgradeStat(int stat) {
 
         switch (stat) {
@@ -97,6 +105,11 @@ public class Player implements Drawable {
 
             case 3:
                 this.playerHealth += 2;
+
+                if (playerHealth > PLAYER_MAX_HEALTH) {
+                    playerHealth = PLAYER_MAX_HEALTH;
+                }
+
                 healthUpgrades++;
                 break;
 
