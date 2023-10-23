@@ -302,10 +302,25 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
     public void draw(Graphics g) {
         g.setColor(new Color(0, 0, 0, 255));
         g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 25));
+        String fireString;
+        String speedString;
+
+        if (player.fireRateUpgrades < fireRateUpgradePrices.length) {
+            fireString = "$" + fireRateUpgradePrices[player.fireRateUpgrades];
+        } else {
+            fireString = "MAX LEVEL";
+        }
+
+        if (player.speedUpgrades < movementSpeedUpgradePrices.length) {
+            speedString = "$" + movementSpeedUpgradePrices[player.speedUpgrades];
+        } else {
+            speedString = "MAX LEVEL";
+        }
+
         g.drawString(
-                "Firerate (z): $%d    Speed (x): $%d    Heal (c): $%d".formatted(
-                        fireRateUpgradePrices[player.fireRateUpgrades],
-                        movementSpeedUpgradePrices[player.speedUpgrades],
+                "Firerate (z): %s    Speed (x): %s    Heal (c): $%d".formatted(
+                        fireString,
+                        speedString,
                         8 * player.healthUpgrades),
                 (int) (0.2 * DisplayGraphics.windowDimensions.getWidth()), 30);
     }
