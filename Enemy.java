@@ -24,8 +24,11 @@ public class Enemy extends JPanel implements Drawable {
     int textureIndex;
     int moneyCarried;
     int projectileDelayCounter;
+    int projectileSpeed = -7;
+    boolean doesShoot = true;
 
-    public ProjectilesArrayList enemyProjectiles = new ProjectilesArrayList();
+    //public ProjectilesArrayList enemyProjectiles = new ProjectilesArrayList();
+
 
     /**
      * Initialize the enemy with y position and the image.
@@ -33,7 +36,7 @@ public class Enemy extends JPanel implements Drawable {
     Enemy(int yPos) {
         lifePointsLeft = 1;
         projectileDelay = 200;
-        enemySpeed = 4;
+        enemySpeed = 3;
         moneyCarried = rand.nextInt(3) + 1; // Set bound to the max value that should be given
         enemyY = yPos;
 
@@ -45,10 +48,6 @@ public class Enemy extends JPanel implements Drawable {
         g2D.drawImage(texture, null, enemyX, enemyY);
     }
 
-    public void drawProjectiles(Graphics g) {
-        enemyProjectiles.draw(g);
-    }
-
     /**
      * Moves enemy to the left based on its movement speed.
      */
@@ -58,30 +57,6 @@ public class Enemy extends JPanel implements Drawable {
 
     public void removeLifePoint() {
         lifePointsLeft--;
-    }
-
-    /**
-     * Iterates across all projectiles in the enemyProjectiles arrayList and moves
-     * them all a certain value to the left.
-     */
-    public void moveProjectiles() {
-        for (var i = 0; i < enemyProjectiles.projectiles.size(); i++) {
-            enemyProjectiles.projectiles.get(i).moveProjectile(-10);
-        }
-    }
-
-    /**
-     * Iterates the projectileDelayCounter while the counter is smaller than the
-     * delay otherwise it adds another projectile to the enemyProjectiles array list
-     * at the position of the enemy cannon and resets the counter.
-     */
-    public void shoot() {
-        if (projectileDelayCounter >= projectileDelay) {
-            enemyProjectiles.addProjectile(enemyX, enemyY + 50);
-            projectileDelayCounter = 0;
-        } else {
-            projectileDelayCounter++;
-        }
     }
 
     /**

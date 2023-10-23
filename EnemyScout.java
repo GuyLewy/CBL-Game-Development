@@ -13,14 +13,8 @@ public class EnemyScout extends Enemy {
     EnemyScout(int yPos) {
         super(yPos);
         lifePointsLeft = 1;
-        enemySpeed = 6;
+        enemySpeed = 4;
         moneyCarried = rand.nextInt(1) + 1; // Set bound to the max value that should be given
-    }
-
-    /**
-     * Removes the scout's ability to shoot.
-     */
-    @Override
-    public void shoot() {
+        doesShoot = false;
     }
 }

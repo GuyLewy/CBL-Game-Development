@@ -7,7 +7,13 @@ import java.util.*;
 public class ProjectilesArrayList implements Drawable {
     public ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 
+    int projectileSpeed;
+
     public boolean bulletInTarget = false;
+
+    public ProjectilesArrayList(int speed) {
+        projectileSpeed = speed;
+    }
 
     /**
      * .
@@ -21,10 +27,10 @@ public class ProjectilesArrayList implements Drawable {
     /**
      * .
      */
-    public void moveProjectiles(int speed) {
+    public void moveProjectiles() {
         for (int i = 0; i < projectiles.size(); i++) {
             Projectile next = projectiles.get(i);
-            next.moveProjectile(speed);
+            next.moveProjectile(projectileSpeed);
         }
     }
 
