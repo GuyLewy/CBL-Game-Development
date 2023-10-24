@@ -27,11 +27,12 @@ public class Enemy extends JPanel implements Drawable {
     int projectileSpeed = -7;
     boolean doesShoot = true;
 
-    //public ProjectilesArrayList enemyProjectiles = new ProjectilesArrayList();
-
+    // public ProjectilesArrayList enemyProjectiles = new ProjectilesArrayList();
 
     /**
      * Initialize the enemy with y position and the image.
+     * 
+     * @param yPos The y position of the enemy as an int
      */
     Enemy(int yPos) {
         lifePointsLeft = 1;
@@ -73,8 +74,8 @@ public class Enemy extends JPanel implements Drawable {
      */
     public boolean checkPlayerCollision(int playerX, int playerY,
             int playerWidth, int playerHeight) {
-        if (enemyX <= playerX + playerWidth && enemyX + ENEMY_WIDTH >= playerX + ENEMY_HEIGHT
-                && enemyY >= playerY && enemyY <= playerY + playerHeight) {
+        if (enemyX <= playerX + playerWidth && enemyX + ENEMY_WIDTH >= playerX
+                && enemyY + ENEMY_HEIGHT >= playerY && enemyY <= playerY + playerHeight) {
             lifePointsLeft = 0;
             return true;
         } else {

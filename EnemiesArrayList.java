@@ -23,8 +23,7 @@ public class EnemiesArrayList {
     int width = Enemy.ENEMY_WIDTH;
     int enemyAnimationCounter = 0;
     int textureIndex = 0;
-    int[] bounderies = new int[]{30, 60};
-    
+    int[] bounderies = new int[] { 30, 60 };
 
     BufferedImage[] textures = new BufferedImage[4];
 
@@ -47,9 +46,7 @@ public class EnemiesArrayList {
 
     /**
      * A method to create a new enemy then add it to the ArrayList of all existing
-     * enemies.
-     * 
-     * @param xPos the initial x position of the enemy
+     * enemies. The enemy type and position is determined randomly.
      */
     public void generateEnemy() {
         int yPos = random.nextInt(DisplayGraphics.windowDimensions.height - 400) + 75;
@@ -81,14 +78,14 @@ public class EnemiesArrayList {
         enemiesProjectiles.draw(g);
         moneyDropTexts.draw(g);
     }
-    
+
     /**
      * A method checks if any of the enemies is hit by a projectile,
      * has no life points left and then moves the enemies.
      */
-    public int updateEnemies(ProjectilesArrayList projectiles, Wallet wallet, 
-        int playerX, int playerY, int playerWidth, int playerHeight, int bound) {
-      
+    public int updateEnemies(ProjectilesArrayList projectiles, Wallet wallet,
+            int playerX, int playerY, int playerWidth, int playerHeight, int bound) {
+
         checkProjectiles(projectiles);
         manageDamage(wallet);
         moneyDropTexts.updateTexts();
@@ -138,8 +135,8 @@ public class EnemiesArrayList {
 
             if (next.lifePointsLeft <= 0) {
                 MoneyDropText nextText = new MoneyDropText(next.moneyCarried,
-                    next.enemyX, next.enemyY, MONEY_TEXT_DURATION);
-              
+                        next.enemyX, next.enemyY, MONEY_TEXT_DURATION);
+
                 wallet.money += next.moneyCarried;
                 moneyDropTexts.texts.add(nextText);
 
@@ -194,6 +191,7 @@ public class EnemiesArrayList {
             }
         }
     }
+
     /**
      * Iterates across all of the enemies and checks if the player is hit by any of
      * the enemy projectiles.
