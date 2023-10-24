@@ -7,10 +7,10 @@ import javax.swing.*;
  * DisplayGraphics class acts as the main window, implementing all timing logics
  * and drawing functionality as well as well as Swing window creation.
  */
-public class DisplayGraphics extends JPanel implements KeyListener {
+public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
 
     double difficultyLevel = 1;
-    double startDifficulty = 0.1; 
+    double startDifficulty = 0.1;
     double difficultyCoefficient = startDifficulty;
     double dLog = Math.log(1 / startDifficulty - 1);
 
@@ -25,6 +25,8 @@ public class DisplayGraphics extends JPanel implements KeyListener {
     private HealthBar playerHealthBar = new HealthBar(player.playerHealth);
     private Sound sound = new Sound();
     private Sound soundtrack = new Sound();
+
+    private boolean statUpgraded;
     public static boolean gameRunning;
     boolean upPressed = false;
     boolean downPressed = false;
@@ -36,10 +38,12 @@ public class DisplayGraphics extends JPanel implements KeyListener {
     int playerShotDelayCounter = player.playerShotDelay;
     float soundtrackVolume = -25.0f;
     JFrame gameWindow = new JFrame();
-    // Timer timer = new Timer(5, new TimerListener());
 
-    private final int UPS = 120; // Updates per second
-    private final int FPS = 60; // Frames per second
+    private int[] fireRateUpgradePrices = { 20, 30, 40, 50 };
+    private int[] movementSpeedUpgradePrices = { 10, 15, 20, 25 };
+
+    private final int ups = 120; // Updates per second
+    private final int fps = 120; // Frames per second
     private int timeInSeconds = 0;
 
     /**
@@ -47,6 +51,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
      * as focusable so that keystrokes can be recorded.
      */
     public DisplayGraphics() {
+        this.setLayout(new BorderLayout());
         startGame();
         addKeyListener(this);
         setFocusable(true);
@@ -59,13 +64,14 @@ public class DisplayGraphics extends JPanel implements KeyListener {
 
     /**
      * Updates the difficulty of the game.
+     * 
      * @param timeInMinutes is a time passed from the beggining of the game.
      */
     void updateDC(double timeInSeconds) {
-        difficultyCoefficient = 1 / (1 + Math.pow(Math.E, 
-            -difficultyLevel * timeInSeconds / 60 + dLog));
+        difficultyCoefficient = 1 / (1 + Math.pow(Math.E,
+                -difficultyLevel * timeInSeconds / 60 + dLog));
         enemySpawnDelay = (int) (enemyInitialSpawnDelay
-            - 150 * difficultyCoefficient);
+                - 150 * difficultyCoefficient);
         numberOfEnemiesBound = (int) (difficultyCoefficient * 2.1) + 1;
     }
 
@@ -135,8 +141,10 @@ public class DisplayGraphics extends JPanel implements KeyListener {
     public void startGameLoop() {
         long initialTime = System.nanoTime();
         long secondCounter = 0;
-        final double timeUPS = 1000000000 / UPS;
-        final double timeFPS = 1000000000 / FPS;
+
+        final double timeUPS = 1000000000 / ups;
+        final double timeFPS = 1000000000 / fps;
+
         double deltaUPS = 0;
         double deltaFPS = 0;
         long timer = System.currentTimeMillis();
@@ -146,9 +154,9 @@ public class DisplayGraphics extends JPanel implements KeyListener {
 
             deltaUPS += (currentTime - initialTime) / timeUPS;
             deltaFPS += (currentTime - initialTime) / timeFPS;
-            secondCounter +=  (currentTime - initialTime);
+            secondCounter += (currentTime - initialTime);
             initialTime = currentTime;
-            
+
             if (secondCounter >= 1000000000) {
                 timeInSeconds++;
                 secondCounter = 0;
@@ -179,7 +187,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
      * killing an enemy.
      */
     private void updateGame() {
-        updateDC(timeInSeconds); //Update difficulty coefficient; time in minutes.
+        updateDC(timeInSeconds); // Update difficulty coefficient; time in minutes.
         player.move(upPressed, downPressed);
         player.playerProjectiles.moveProjectiles();
         checkEnemyProjectiles(enemies);
@@ -190,7 +198,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         }
 
         int playerDamage = enemies.updateEnemies(player.playerProjectiles, playerWallet,
-                player.playerX, player.playerY, player.playerWidth, player.playerHeight, 
+                player.playerX, player.playerY, player.playerWidth, player.playerHeight,
                 (int) (100 * difficultyCoefficient));
 
         for (int i = 0; i < playerDamage; i++) {
@@ -198,14 +206,13 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         }
 
         enemySpawnDelayCounter++;
-        
+
         if (enemySpawnDelayCounter >= enemySpawnDelay) {
             for (int i = 0; i < rand.nextInt(numberOfEnemiesBound) + 1; i++) {
                 enemies.generateEnemy();
             }
             enemySpawnDelayCounter = 0;
         }
-
 
         if (playerShotDelayCounter >= player.playerShotDelay) {
             blockNextShot = false;
@@ -233,6 +240,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         score.draw(g);
         playerWallet.draw(g);
         playerHealthBar.draw(g);
+        this.draw(g);
     }
 
     /**
@@ -249,13 +257,34 @@ public class DisplayGraphics extends JPanel implements KeyListener {
             upPressed = true;
         } else if (code == KeyEvent.VK_DOWN) {
             downPressed = true;
-        } else if (code == KeyEvent.VK_SPACE && !blockNextShot) {
+        }
+
+        if (code == KeyEvent.VK_SPACE && !blockNextShot) {
             sound.setSoundEffect(0);
             sound.play();
             player.playerProjectiles.addProjectile((int) (player.playerX + 95),
                     (int) (player.playerY + 72));
             blockNextShot = true;
             playerShotDelayCounter = 0;
+        }
+
+        if (code == KeyEvent.VK_Z && !statUpgraded
+                && player.fireRateUpgrades <= fireRateUpgradePrices.length
+                && playerWallet.money >= fireRateUpgradePrices[player.fireRateUpgrades]) {
+            playerWallet.money -= fireRateUpgradePrices[player.fireRateUpgrades];
+            player.upgradeStat(1);
+            statUpgraded = true;
+        } else if (code == KeyEvent.VK_X && !statUpgraded
+                && player.speedUpgrades <= movementSpeedUpgradePrices.length
+                && playerWallet.money >= movementSpeedUpgradePrices[player.speedUpgrades]) {
+            playerWallet.money -= movementSpeedUpgradePrices[player.speedUpgrades];
+            player.upgradeStat(2);
+            statUpgraded = true;
+        } else if (code == KeyEvent.VK_C && !statUpgraded
+                && playerWallet.money >= 8 * player.healthUpgrades) {
+            playerWallet.money -= 8 * player.healthUpgrades;
+            player.upgradeStat(3);
+            statUpgraded = true;
         }
     }
 
@@ -275,6 +304,9 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         } else if (code == KeyEvent.VK_DOWN) {
             downPressed = false;
         }
+
+        statUpgraded = (!(code == KeyEvent.VK_Z || code == KeyEvent.VK_X || code == KeyEvent.VK_C));
+
     }
 
     /**
@@ -285,5 +317,38 @@ public class DisplayGraphics extends JPanel implements KeyListener {
      */
     @Override
     public void keyTyped(KeyEvent e) {
+    }
+
+    /**
+     * Draws the upgrade details on the top of the screen, including the price of
+     * the upgrade and what button should be pressed for the upgrade.
+     * 
+     * @param g Graphics object that the graphics should be added to
+     */
+    @Override
+    public void draw(Graphics g) {
+        g.setColor(new Color(0, 0, 0, 255));
+        g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 25));
+        String fireString;
+        String speedString;
+
+        if (player.fireRateUpgrades < fireRateUpgradePrices.length) {
+            fireString = "$" + fireRateUpgradePrices[player.fireRateUpgrades];
+        } else {
+            fireString = "MAX LEVEL";
+        }
+
+        if (player.speedUpgrades < movementSpeedUpgradePrices.length) {
+            speedString = "$" + movementSpeedUpgradePrices[player.speedUpgrades];
+        } else {
+            speedString = "MAX LEVEL";
+        }
+
+        g.drawString(
+                "Firerate (z): %s    Speed (x): %s    Heal (c): $%d".formatted(
+                        fireString,
+                        speedString,
+                        8 * player.healthUpgrades),
+                (int) (0.2 * DisplayGraphics.windowDimensions.getWidth()), 30);
     }
 }
