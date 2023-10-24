@@ -10,7 +10,7 @@ import javax.swing.*;
 public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
 
     double difficultyLevel = 1;
-    double startDifficulty = 0.1; 
+    double startDifficulty = 0.1;
     double difficultyCoefficient = startDifficulty;
     double dLog = Math.log(1 / startDifficulty - 1);
 
@@ -64,13 +64,14 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
 
     /**
      * Updates the difficulty of the game.
+     * 
      * @param timeInMinutes is a time passed from the beggining of the game.
      */
     void updateDC(double timeInSeconds) {
-        difficultyCoefficient = 1 / (1 + Math.pow(Math.E, 
-            -difficultyLevel * timeInSeconds / 60 + dLog));
+        difficultyCoefficient = 1 / (1 + Math.pow(Math.E,
+                -difficultyLevel * timeInSeconds / 60 + dLog));
         enemySpawnDelay = (int) (enemyInitialSpawnDelay
-            - 150 * difficultyCoefficient);
+                - 150 * difficultyCoefficient);
         numberOfEnemiesBound = (int) (difficultyCoefficient * 2.1) + 1;
     }
 
@@ -140,10 +141,10 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
     public void startGameLoop() {
         long initialTime = System.nanoTime();
         long secondCounter = 0;
-      
-        final double timeUPS = 1000000000 / UPS;
-        final double timeFPS = 1000000000 / FPS;
-      
+
+        final double timeUPS = 1000000000 / ups;
+        final double timeFPS = 1000000000 / ups;
+
         double deltaUPS = 0;
         double deltaFPS = 0;
         long timer = System.currentTimeMillis();
@@ -153,9 +154,9 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
 
             deltaUPS += (currentTime - initialTime) / timeUPS;
             deltaFPS += (currentTime - initialTime) / timeFPS;
-            secondCounter +=  (currentTime - initialTime);
+            secondCounter += (currentTime - initialTime);
             initialTime = currentTime;
-            
+
             if (secondCounter >= 1000000000) {
                 timeInSeconds++;
                 secondCounter = 0;
@@ -186,7 +187,7 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
      * killing an enemy.
      */
     private void updateGame() {
-        updateDC(timeInSeconds); //Update difficulty coefficient; time in minutes.
+        updateDC(timeInSeconds); // Update difficulty coefficient; time in minutes.
         player.move(upPressed, downPressed);
         player.playerProjectiles.moveProjectiles();
         checkEnemyProjectiles(enemies);
@@ -197,7 +198,7 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
         }
 
         int playerDamage = enemies.updateEnemies(player.playerProjectiles, playerWallet,
-                player.playerX, player.playerY, player.playerWidth, player.playerHeight, 
+                player.playerX, player.playerY, player.playerWidth, player.playerHeight,
                 (int) (100 * difficultyCoefficient));
 
         for (int i = 0; i < playerDamage; i++) {
@@ -205,14 +206,13 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
         }
 
         enemySpawnDelayCounter++;
-        
+
         if (enemySpawnDelayCounter >= enemySpawnDelay) {
             for (int i = 0; i < rand.nextInt(numberOfEnemiesBound) + 1; i++) {
                 enemies.generateEnemy();
             }
             enemySpawnDelayCounter = 0;
         }
-
 
         if (playerShotDelayCounter >= player.playerShotDelay) {
             blockNextShot = false;
