@@ -13,8 +13,8 @@ public class EnemyTank extends Enemy {
     EnemyTank(int yPos) {
         super(yPos);
         lifePointsLeft = 3;
-        enemySpeed = 2;
-        projectileDelay = 300;
+        enemySpeed = 1;
+        projectileDelay = 400;
         moneyCarried = rand.nextInt(5) + 1; // Set bound to the max value that should be given
     }
 }

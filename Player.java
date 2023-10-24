@@ -18,7 +18,7 @@ public class Player implements Drawable {
     public int playerY = 100;
     public int playerX = 100;
     public int playerDirection = 0;
-    public Projectile playerProjectiles;
+    public ProjectilesArrayList playerProjectiles = new ProjectilesArrayList(5);
 
     BufferedImage playerUp;
     BufferedImage playerDown;
@@ -49,6 +49,7 @@ public class Player implements Drawable {
         } else {
             g2D.drawImage(playerDown, null, playerX, playerY);
         }
+        playerProjectiles.draw(g);
     }
 
     /**
@@ -71,6 +72,5 @@ public class Player implements Drawable {
                 playerY += MOVEMENT_SPEED;
             }
         }
-
     }
 }

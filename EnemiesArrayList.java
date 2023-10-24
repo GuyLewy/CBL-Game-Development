@@ -10,19 +10,21 @@ import javax.imageio.ImageIO;
  */
 public class EnemiesArrayList {
     public ArrayList<Enemy> enemies = new ArrayList<Enemy>();
-
+    public ProjectilesArrayList enemiesProjectiles = new ProjectilesArrayList(-7);
     private MoneyDropTextArray moneyDropTexts = new MoneyDropTextArray();
     static final int MONEY_TEXT_DURATION = 50;
+    public static int animationRate = 30;
 
     Random random = new Random();
 
     public int enemiesKilled = 0;
+    public int randomBound;
     int height = Enemy.ENEMY_HEIGHT;
     int width = Enemy.ENEMY_WIDTH;
-
     int enemyAnimationCounter = 0;
     int textureIndex = 0;
-    public static int animationRate = 30;
+    int[] bounderies = new int[]{30, 60};
+    
 
     BufferedImage[] textures = new BufferedImage[4];
 
@@ -49,28 +51,17 @@ public class EnemiesArrayList {
      * 
      * @param xPos the initial x position of the enemy
      */
-    public void generateEnemy(int xPos) {
+    public void generateEnemy() {
         int yPos = random.nextInt(DisplayGraphics.windowDimensions.height - 400) + 75;
-        int enemyType = random.nextInt(3);
-
+        int enemyRand = random.nextInt(randomBound);
         Enemy newEnemy;
 
-        switch (enemyType) {
-            case 0:
-                newEnemy = new Enemy(yPos);
-                break;
-
-            case 1:
-                newEnemy = new EnemyTank(yPos);
-                break;
-
-            case 2:
-                newEnemy = new EnemyScout(yPos);
-                break;
-
-            default:
-                newEnemy = new Enemy(yPos);
-                break;
+        if (enemyRand < bounderies[0]) {
+            newEnemy = new Enemy(yPos);
+        } else if (enemyRand < bounderies[1]) {
+            newEnemy = new EnemyScout(yPos);
+        } else {
+            newEnemy = new EnemyTank(yPos);
         }
 
         enemies.add(newEnemy);
@@ -87,28 +78,16 @@ public class EnemiesArrayList {
             enemies.get(i).texture = textures[textureIndex];
             enemies.get(i).draw(g);
         }
-
-    }
-
-    /**
-     * Draws enemy projectiles.
-     */
-    public void drawEnemyProjectiles(Graphics g) {
-        for (var i = 0; i < enemies.size(); i++) {
-            enemies.get(i).drawProjectiles(g);
-        }
-    }
-
-    public void drawMoneyDropTexts(Graphics g) {
+        enemiesProjectiles.draw(g);
         moneyDropTexts.draw(g);
     }
-
+    
     /**
      * A method checks if any of the enemies is hit by a projectile,
      * has no life points left and then moves the enemies.
      */
     public int updateEnemies(ProjectilesArrayList projectiles, Wallet wallet, 
-        int playerX, int playerY, int playerWidth, int playerHeight) {
+        int playerX, int playerY, int playerWidth, int playerHeight, int bound) {
       
         checkProjectiles(projectiles);
         manageDamage(wallet);
@@ -116,8 +95,8 @@ public class EnemiesArrayList {
         handleEnemyProjectiles();
         moveEnemies();
         updateTextures();
+        randomBound = bound;
         return checkPlayerCollisions(playerX, playerY, playerWidth, playerHeight);
-
     }
 
     /**
@@ -190,12 +169,31 @@ public class EnemiesArrayList {
      * (handled in the shoot() method) and move their projectiles.
      */
     public void handleEnemyProjectiles() {
+        shoot();
+        moveProjectiles();
+    }
+
+    public void shoot() {
         for (var i = 0; i < enemies.size(); i++) {
-            enemies.get(i).shoot();
-            enemies.get(i).moveProjectiles();
+            Enemy next = enemies.get(i);
+            if (next.projectileDelayCounter >= next.projectileDelay && next.doesShoot) {
+                enemiesProjectiles.addProjectile(next.enemyX, next.enemyY + 50);
+                next.projectileDelayCounter = 0;
+            } else if (next.projectileDelayCounter < next.projectileDelay) {
+                next.projectileDelayCounter++;
+            }
         }
     }
 
+    public void moveProjectiles() {
+        enemiesProjectiles.moveProjectiles();
+        for (var i = 0; i < enemiesProjectiles.projectiles.size(); i++) {
+            Projectile next = enemiesProjectiles.projectiles.get(i);
+            if (next.projectileX <= 0) {
+                enemiesProjectiles.projectiles.remove(i);
+            }
+        }
+    }
     /**
      * Iterates across all of the enemies and checks if the player is hit by any of
      * the enemy projectiles.

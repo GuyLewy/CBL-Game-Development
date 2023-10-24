@@ -1,6 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.util.ArrayList;
+import java.util.*;
 import javax.swing.*;
 
 /**
@@ -9,9 +9,15 @@ import javax.swing.*;
  */
 public class DisplayGraphics extends JPanel implements KeyListener {
 
+    double difficultyLevel = 1;
+    double startDifficulty = 0.1; 
+    double difficultyCoefficient = startDifficulty;
+    double dLog = Math.log(1 / startDifficulty - 1);
+
+    Random rand = new Random();
+
     public static Rectangle windowDimensions;
     private Player player = new Player();
-    private ProjectilesArrayList playerProjectiles = new ProjectilesArrayList();
     private EnemiesArrayList enemies = new EnemiesArrayList();
     private PlayerShotBar playerBar = new PlayerShotBar();
     private ScoreCounter score = new ScoreCounter();
@@ -23,15 +29,18 @@ public class DisplayGraphics extends JPanel implements KeyListener {
     boolean upPressed = false;
     boolean downPressed = false;
     boolean blockNextShot = false;
+    int enemyInitialSpawnDelay = 350;
     int enemySpawnDelayCounter;
-    int enemySpawnDelay = 80;
+    int enemySpawnDelay = enemyInitialSpawnDelay;
+    int numberOfEnemiesBound = 1;
     int playerShotDelayCounter = player.playerShotDelay;
-    float soundtrackVolume = -15.0f;
+    float soundtrackVolume = -25.0f;
     JFrame gameWindow = new JFrame();
     // Timer timer = new Timer(5, new TimerListener());
 
     private final int UPS = 120; // Updates per second
     private final int FPS = 60; // Frames per second
+    private int timeInSeconds = 0;
 
     /**
      * Constructor method to initialize a timer and set the DisplayGraphics object
@@ -49,19 +58,27 @@ public class DisplayGraphics extends JPanel implements KeyListener {
     }
 
     /**
+     * Updates the difficulty of the game.
+     * @param timeInMinutes is a time passed from the beggining of the game.
+     */
+    void updateDC(double timeInSeconds) {
+        difficultyCoefficient = 1 / (1 + Math.pow(Math.E, 
+            -difficultyLevel * timeInSeconds / 60 + dLog));
+        enemySpawnDelay = (int) (enemyInitialSpawnDelay
+            - 150 * difficultyCoefficient);
+        numberOfEnemiesBound = (int) (difficultyCoefficient * 2.1) + 1;
+    }
+
+    /**
      * Iterates across the enemiesArrayList and checks if any of their projectiles
      * hit the player.
      * 
      * @param enemiesArrayList array list containing all of the enemies in the game
      */
     public void checkEnemyProjectiles(EnemiesArrayList enemiesArrayList) {
-        ArrayList<Enemy> enemies = enemiesArrayList.enemies;
-        for (int i = 0; i < enemies.size(); i++) {
-            ProjectilesArrayList nextProjectileList = enemies.get(i).enemyProjectiles;
-            if (nextProjectileList.areBulletsHitting(player.playerX, player.playerY,
-                    player.playerWidth, player.playerHeight)) {
-                playerLoseHealth();
-            }
+        if (enemiesArrayList.enemiesProjectiles.areBulletsHitting(player.playerX, player.playerY,
+                player.playerWidth, player.playerHeight)) {
+            playerLoseHealth();
         }
     }
 
@@ -116,8 +133,8 @@ public class DisplayGraphics extends JPanel implements KeyListener {
      * screen every update.
      */
     public void startGameLoop() {
-
         long initialTime = System.nanoTime();
+        long secondCounter = 0;
         final double timeUPS = 1000000000 / UPS;
         final double timeFPS = 1000000000 / FPS;
         double deltaUPS = 0;
@@ -129,7 +146,13 @@ public class DisplayGraphics extends JPanel implements KeyListener {
 
             deltaUPS += (currentTime - initialTime) / timeUPS;
             deltaFPS += (currentTime - initialTime) / timeFPS;
+            secondCounter +=  (currentTime - initialTime);
             initialTime = currentTime;
+            
+            if (secondCounter >= 1000000000) {
+                timeInSeconds++;
+                secondCounter = 0;
+            }
 
             if (deltaUPS >= 1) {
                 // Update all game logic
@@ -156,34 +179,39 @@ public class DisplayGraphics extends JPanel implements KeyListener {
      * killing an enemy.
      */
     private void updateGame() {
+        updateDC(timeInSeconds); //Update difficulty coefficient; time in minutes.
         player.move(upPressed, downPressed);
-        playerProjectiles.moveProjectiles(5);
-        if (playerProjectiles.bulletInTarget) {
+        player.playerProjectiles.moveProjectiles();
+        checkEnemyProjectiles(enemies);
+        if (player.playerProjectiles.bulletInTarget) {
             sound.setSoundEffect(1);
             sound.play();
-            playerProjectiles.bulletInTarget = false;
+            player.playerProjectiles.bulletInTarget = false;
         }
 
-        int playerDamage = enemies.updateEnemies(playerProjectiles, playerWallet,
-                player.playerX, player.playerY, player.playerWidth, player.playerHeight);
+        int playerDamage = enemies.updateEnemies(player.playerProjectiles, playerWallet,
+                player.playerX, player.playerY, player.playerWidth, player.playerHeight, 
+                (int) (100 * difficultyCoefficient));
 
         for (int i = 0; i < playerDamage; i++) {
             playerLoseHealth();
         }
-        checkEnemyProjectiles(enemies);
 
+        enemySpawnDelayCounter++;
+        
         if (enemySpawnDelayCounter >= enemySpawnDelay) {
-            enemies.generateEnemy(0);
+            for (int i = 0; i < rand.nextInt(numberOfEnemiesBound) + 1; i++) {
+                enemies.generateEnemy();
+            }
             enemySpawnDelayCounter = 0;
         }
+
 
         if (playerShotDelayCounter >= player.playerShotDelay) {
             blockNextShot = false;
         } else {
             playerShotDelayCounter++;
         }
-
-        enemySpawnDelayCounter++;
 
         score.updateScore(enemies);
         playerBar.updateBar(playerShotDelayCounter);
@@ -200,13 +228,10 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         super.paintComponent(g);
         this.setBackground(new Color(95, 175, 250));
         player.draw(g);
-        playerProjectiles.draw(g);
         enemies.draw(g);
         playerBar.draw(g);
         score.draw(g);
         playerWallet.draw(g);
-        enemies.drawEnemyProjectiles(g);
-        enemies.drawMoneyDropTexts(g);
         playerHealthBar.draw(g);
     }
 
@@ -227,7 +252,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
         } else if (code == KeyEvent.VK_SPACE && !blockNextShot) {
             sound.setSoundEffect(0);
             sound.play();
-            playerProjectiles.addProjectile((int) (player.playerX + 95),
+            player.playerProjectiles.addProjectile((int) (player.playerX + 95),
                     (int) (player.playerY + 72));
             blockNextShot = true;
             playerShotDelayCounter = 0;
