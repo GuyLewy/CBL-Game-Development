@@ -9,7 +9,7 @@ import javax.swing.*;
  */
 public class DisplayGraphics extends JPanel implements KeyListener {
 
-    double difficultyLevel = 1;
+    double difficultyLevel = 2;
     double startDifficulty = 0.1; 
     double difficultyCoefficient = startDifficulty;
     double dLog = Math.log(1 / startDifficulty - 1);
@@ -19,6 +19,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
     public static Rectangle windowDimensions;
     private Player player = new Player();
     private EnemiesArrayList enemies = new EnemiesArrayList();
+    private WavesArrayList waves = new WavesArrayList();
     private PlayerShotBar playerBar = new PlayerShotBar();
     private ScoreCounter score = new ScoreCounter();
     private Wallet playerWallet = new Wallet();
@@ -34,7 +35,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
     int enemySpawnDelay = enemyInitialSpawnDelay;
     int numberOfEnemiesBound = 1;
     int playerShotDelayCounter = player.playerShotDelay;
-    float soundtrackVolume = -25.0f;
+    float soundtrackVolume = -5.0f;
     JFrame gameWindow = new JFrame();
     // Timer timer = new Timer(5, new TimerListener());
 
@@ -213,6 +214,14 @@ public class DisplayGraphics extends JPanel implements KeyListener {
             playerShotDelayCounter++;
         }
 
+        if (waves.waveDelayCounter >= waves.waveDelay) {
+            waves.generateWave();
+            waves.waveDelayCounter = 0;
+        } else {
+            waves.waveDelayCounter++;
+        }
+
+        waves.updateWaves();
         score.updateScore(enemies);
         playerBar.updateBar(playerShotDelayCounter);
         playerHealthBar.updateHealtBar(player.playerHealth);
@@ -227,6 +236,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         this.setBackground(new Color(95, 175, 250));
+        waves.draw(g);
         player.draw(g);
         enemies.draw(g);
         playerBar.draw(g);

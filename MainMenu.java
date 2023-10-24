@@ -1,5 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 /**
@@ -10,6 +12,7 @@ public class MainMenu extends JPanel {
 
     private JButton startGameButton;
     private JFrame mainWindow;
+    private ImageIcon startButtonIcon;
 
     Sound sound = new Sound();
 
@@ -18,17 +21,18 @@ public class MainMenu extends JPanel {
      */
     public MainMenu() {
         mainWindow = new JFrame();
-        startGameButton = new JButton("Start");
-        startGameButton.setFont(new Font("Arial", Font.PLAIN, 40));
-        startGameButton.setBounds(200, 400, 600, 100);
+        getButtonImages();
+        startGameButton = new JButton(startButtonIcon);
+        startGameButton.setBounds(450, 400, 600, 100);
+        startGameButton.setBorderPainted(false);
         ButtonClickListener buttonClick = new ButtonClickListener();
         startGameButton.addActionListener(buttonClick);
         mainWindow.add(startGameButton);
         mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainWindow.setSize(1000, 560);
+        mainWindow.setSize(2000, 1000);
         mainWindow.setLayout(null);
         mainWindow.setVisible(true);
-
+        mainWindow.getContentPane().setBackground(new Color(86, 63, 53));
         sound.setSoundEffect(4);
         sound.play();
         sound.loop();
@@ -51,6 +55,15 @@ public class MainMenu extends JPanel {
                 new DisplayGraphics();
                 mainWindow.dispose();
             }
+        }
+    }
+
+    private void getButtonImages() {
+        try {
+            startButtonIcon = new ImageIcon(ImageIO
+            .read(getClass().getResourceAsStream("textures/buttons/startGameButton.png")));
+        } catch (IOException e) {
+            ;
         }
     }
 }

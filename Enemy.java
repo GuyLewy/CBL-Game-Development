@@ -17,7 +17,7 @@ public class Enemy extends JPanel implements Drawable {
     Random rand = new Random();
 
     public BufferedImage texture;
-
+    public int enemyType = 1;
     int lifePointsLeft = 1;
     int enemyX = DisplayGraphics.windowDimensions.width;
     int enemyY;

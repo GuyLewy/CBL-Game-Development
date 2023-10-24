@@ -23,10 +23,10 @@ public class EnemiesArrayList {
     int width = Enemy.ENEMY_WIDTH;
     int enemyAnimationCounter = 0;
     int textureIndex = 0;
-    int[] bounderies = new int[]{30, 60};
+    int[] bounderies = new int[]{10, 30};
     
 
-    BufferedImage[] textures = new BufferedImage[4];
+    BufferedImage[] textures = new BufferedImage[8];
 
     Random rand = new Random();
 
@@ -35,11 +35,16 @@ public class EnemiesArrayList {
      */
     public EnemiesArrayList() {
         try {
-            for (int i = 1; i < 5; i++) {
-                String path = "textures/enemies/pirateShip1/pirateShip1_" + i + ".png";
-                textures[i - 1] = ImageIO.read(getClass().getResourceAsStream(path));
+            for (int i = 1; i < 9; i++) {
+                if (i <= 4) {
+                    String path = "textures/enemies/pirateShip1/pirateShip1_" + i + ".png";
+                    textures[i - 1] = ImageIO.read(getClass().getResourceAsStream(path));
+                } else {
+                    String path = "textures/enemies/pirateShip2/pirateShip2_" + (i - 4) + ".png";
+                    textures[i - 1] = ImageIO.read(getClass().getResourceAsStream(path));
+                }
+                
             }
-
         } catch (IOException e) {
             System.out.println(e);
         }
@@ -75,7 +80,11 @@ public class EnemiesArrayList {
      */
     public void draw(Graphics g) {
         for (var i = 0; i < enemies.size(); i++) {
-            enemies.get(i).texture = textures[textureIndex];
+            if (enemies.get(i).enemyType == 1) {
+                enemies.get(i).texture = textures[textureIndex];
+            } else if (enemies.get(i).enemyType == 2) {
+                enemies.get(i).texture = textures[textureIndex + 4];
+            }
             enemies.get(i).draw(g);
         }
         enemiesProjectiles.draw(g);
