@@ -6,12 +6,12 @@ import javax.imageio.ImageIO;
 
 public class WavesArrayList implements Drawable {
     public ArrayList<Wave> waves = new ArrayList<Wave>();
-    public int waveDelay = 150;
+    public int waveDelay = 100;
     public int waveDelayCounter = 0;
     public int textureIndex = 0;
     static int animationRate = 20;
     int waveAnimationCounter = 0;
-    int waveSpeed = -3;
+    int waveSpeed = -2;
 
     int waveLifeTime = 7 * animationRate;
 
