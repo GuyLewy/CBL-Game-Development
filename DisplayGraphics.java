@@ -143,7 +143,7 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
         long secondCounter = 0;
 
         final double timeUPS = 1000000000 / ups;
-        final double timeFPS = 1000000000 / ups;
+        final double timeFPS = 1000000000 / fps;
 
         double deltaUPS = 0;
         double deltaFPS = 0;
