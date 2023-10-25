@@ -203,7 +203,9 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
                 (int) (100 * difficultyCoefficient));
 
         for (int i = 0; i < playerDamage; i++) {
-            playerLoseHealth();
+            if (player.playerHealth > 0) {
+                playerLoseHealth();
+            }
         }
 
         enemySpawnDelayCounter++;
