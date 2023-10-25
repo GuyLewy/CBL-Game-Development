@@ -236,12 +236,12 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
         super.paintComponent(g);
         this.setBackground(new Color(95, 175, 250));
         player.draw(g);
+        dock.draw(g);
         enemies.draw(g);
         playerBar.draw(g);
         score.draw(g);
         playerWallet.draw(g);
         playerHealthBar.draw(g);
-        dock.draw(g);
         this.draw(g);
     }
 
