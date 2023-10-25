@@ -22,6 +22,7 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
     private PlayerShotBar playerBar = new PlayerShotBar();
     private ScoreCounter score = new ScoreCounter();
     private Wallet playerWallet = new Wallet();
+    private Dock dock = new Dock(1000);
     private HealthBar playerHealthBar = new HealthBar(player.playerHealth);
     private Sound sound = new Sound();
     private Sound soundtrack = new Sound();
@@ -240,6 +241,7 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
         score.draw(g);
         playerWallet.draw(g);
         playerHealthBar.draw(g);
+        dock.draw(g);
         this.draw(g);
     }
 
