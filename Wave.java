@@ -1,7 +1,5 @@
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.*;
-import javax.swing.*;
 
 public class Wave implements Drawable {
     int waveX;

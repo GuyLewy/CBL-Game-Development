@@ -1,6 +1,7 @@
 import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
+import java.io.IOException;
 
 /**
  * Creates a frame with a button that can be pressed to start an instance of the
@@ -8,18 +9,21 @@ import java.awt.event.*;
  */
 public class MainMenu extends JPanel implements KeyListener {
     private boolean menuRunning;
-    private JFrame menuWindow = new JFrame();
-    private MainMenuBoard board = new MainMenuBoard();
+    JFrame menuWindow = new JFrame();
+    public MainMenuBoard board = new MainMenuBoard();
 
     public static Rectangle windowDimensions;
 
-    int menuBounceDelay = 73;
-    int menuBounceCounter = 17;
+    int menuBounceDelay = 76;
+    int menuBounceCounter = 1;
+
+    public int highScore;
 
     private final int UPS = 120; // Updates per second
     private final int FPS = 60; // Frames per second
 
     Sound sound = new Sound();
+    Sound background = new Sound();
 
     /**
      * Sets up the frame to have a button and add an action listener to the button.
@@ -95,9 +99,9 @@ public class MainMenu extends JPanel implements KeyListener {
         menuWindow.add(this);
         windowDimensions = menuWindow.getBounds();
         menuWindow.setVisible(true);
-        sound.setSoundEffect(4);
-        sound.play();
-        sound.loop();
+        background.setSoundEffect(4);
+        background.play();
+        background.loop();
         menuRunning = true;
     }
     
@@ -113,14 +117,28 @@ public class MainMenu extends JPanel implements KeyListener {
         } else if (code == KeyEvent.VK_DOWN) {
             board.arrowPosition++;
         }
-        board.arrowPosition %= 4;
+        board.arrowPosition %= 3;
         if (board.arrowPosition < 0) {
-            board.arrowPosition = 3;
+            board.arrowPosition = 2;
         }
 
         if (code == KeyEvent.VK_SPACE) {
             sound.setSoundEffect(5);
             sound.play();
+            if (board.scoreVisible) {
+                board.scoreVisible = false;
+            } else {
+                if (board.arrowPosition == 0) {
+                    background.stop();
+                    startGame();
+                } else if (board.arrowPosition == 1) {
+                    board.scoreVisible = true;
+                } else if (board.arrowPosition == 2) {
+                    menuWindow.dispose();
+                    System.exit(0);
+                }
+            }
+            
         }
     }
 
@@ -131,19 +149,9 @@ public class MainMenu extends JPanel implements KeyListener {
     public void keyTyped(KeyEvent e) {
         ;
     }
-    /**
-     * Checks if start game button is pressed and if it is then the method will
-     * create a new instance of the game and close the main menu.
-     */
-    /*private class ButtonClickListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            if (e.getSource() == startGameButton) {
-                sound.stop();
-                sound.setSoundEffect(5);
-                sound.play();
-                new DisplayGraphics();
-                mainWindow.dispose();
-            }
-        }
-    } */
+
+    public void startGame() {
+        new DisplayGraphics();
+        menuWindow.dispose();
+    }
 }

@@ -72,6 +72,10 @@ public class EnemiesArrayList {
         enemies.add(newEnemy);
     }
 
+    public void addEnemy(Enemy enemy) {
+        enemies.add(enemy);
+    }
+
     /**
      * A method to add all enemies to a graphics object so that they can be painted
      * to the screen.
@@ -208,7 +212,7 @@ public class EnemiesArrayList {
      * the enemy projectiles.
      */
     public int checkPlayerCollisions(int playerX, int playerY,
-            int playerWidth, int playerHeight) {
+        int playerWidth, int playerHeight) {
         int playerCollisionCount = 0;
         for (var i = 0; i < enemies.size(); i++) {
             if (enemies.get(i).checkPlayerCollision(playerX, playerY, playerWidth, playerHeight)) {

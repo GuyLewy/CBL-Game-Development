@@ -1,23 +1,67 @@
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 public class MainMenuBoard implements Drawable {
     int boardX = 550;
-    int boardY = 100;
+    int boardY = 200;
     int boardWidth = 400;
     int boardHeight = 500;
     int arrowPosition = 0;
     boolean up = false;
+    boolean scoreVisible = false;
+
+    BufferedImage boardTexture;
+    BufferedImage pointerTexture;
+    BufferedImage titleTexture;
+    BufferedImage[] digits = new BufferedImage[10];
+    public int highScore;
+    int[] scoreDigits = new int[3];
+
+    public ScoreMenu score = new ScoreMenu(boardX + 380, boardY + 100);
+
+    public MainMenuBoard() {
+        getScore();
+        getTextures();
+    }
+
+    public void getScore() {
+        for (int i = 0; i < 3; i++) {
+            scoreDigits[i] = highScore % 10;
+            highScore /= 10;
+        }
+    }
+
+    public void getTextures() {
+        try {
+            boardTexture = ImageIO.read(getClass().getResourceAsStream(
+                "textures/menu/board.png"));
+            pointerTexture = ImageIO.read(getClass().getResourceAsStream(
+                "textures/menu/pointer.png"));
+            titleTexture = ImageIO.read(getClass().getResourceAsStream(
+                "textures/menu/title.png"));
+
+            for (int i = 0; i < 10; i++) {
+                digits[i] = ImageIO.read(getClass().getResourceAsStream(
+                "textures/menu/digits/" + i + ".png"));
+            }
+            
+        } catch (IOException e) {
+            ;
+        }
+    }
 
     public void draw(Graphics g) {
-        g.setColor(Color.black);
-        g.fillRect(boardX, boardY, boardWidth, boardHeight);
-        g.setColor(Color.blue);
-        g.fillRect(boardX + 5, boardY + 5, boardWidth - 10, 80);
-        g.setColor(Color.white);
-        g.fillRect(boardX + 30, boardY + (arrowPosition + 1) * 100 + 20, 40, 40);
-        g.setColor(Color.red);
-        for (int i = 0; i < 4; i++) {
-            g.fillRect(boardX + 100, boardY + (i + 1) * 100, boardWidth - 120, 80);
+        g.drawImage(boardTexture, boardX, boardY, null);
+        g.drawImage(pointerTexture, boardX + 20, 35 + boardY + (arrowPosition + 1) * 120, null);
+        g.drawImage(titleTexture, boardX - 90, boardY - 100, null);
+        if (scoreVisible) {
+            score.draw(g);
+            for (int i = 0; i < 3; i++) {
+                g.drawImage(digits[scoreDigits[2 - i]], score.menuX + 50 + 120 * i, 
+                    score.menuY + 170, null);
+            }
         }
     }
 
@@ -25,9 +69,11 @@ public class MainMenuBoard implements Drawable {
         if (up) {
             up = false;
             boardY -= 20;
+            score.menuY -= 20;
         } else {
             up = true;
             boardY += 20;
+            score.menuY += 20;
         }
     }
 }

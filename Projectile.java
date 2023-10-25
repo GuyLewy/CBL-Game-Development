@@ -7,7 +7,6 @@ import javax.swing.*;
 /**
  * .
  */
-
 public class Projectile extends JPanel implements Drawable {
     public static final int RANGE = DisplayGraphics.windowDimensions.width;
     public static final int PROJECTILE_WIDTH = 15;
