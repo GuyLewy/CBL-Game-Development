@@ -12,6 +12,9 @@ public class EnemyTank extends Enemy {
      */
     EnemyTank(int yPos) {
         super(yPos);
+        enemyType = 3;
+        enemyWidth = 180;
+        enemyHeight = 180;
         lifePointsLeft = 3;
         enemySpeed = 1;
         projectileDelay = 400;

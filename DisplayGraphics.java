@@ -8,8 +8,7 @@ import javax.swing.*;
  * and drawing functionality as well as well as Swing window creation.
  */
 public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
-
-    double difficultyLevel = 1;
+    double difficultyLevel = 1.5;
     double startDifficulty = 0.1;
     double difficultyCoefficient = startDifficulty;
     double dLog = Math.log(1 / startDifficulty - 1);
@@ -17,8 +16,10 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
     Random rand = new Random();
 
     public static Rectangle windowDimensions;
+    private ScoreManager scoreManager = new ScoreManager();
     private Player player = new Player();
     private EnemiesArrayList enemies = new EnemiesArrayList();
+    private WavesArrayList waves = new WavesArrayList();
     private PlayerShotBar playerBar = new PlayerShotBar();
     private ScoreCounter score = new ScoreCounter();
     private Wallet playerWallet = new Wallet();
@@ -37,7 +38,7 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
     int enemySpawnDelay = enemyInitialSpawnDelay;
     int numberOfEnemiesBound = 1;
     int playerShotDelayCounter = player.playerShotDelay;
-    float soundtrackVolume = -25.0f;
+    float soundtrackVolume = -5.0f;
     JFrame gameWindow = new JFrame();
 
     private int[] fireRateUpgradePrices = { 20, 30, 40, 50 };
@@ -54,6 +55,7 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
     public DisplayGraphics() {
         this.setLayout(new BorderLayout());
         startGame();
+        scoreManager.createScoreFile();
         addKeyListener(this);
         setFocusable(true);
         requestFocus();
@@ -109,6 +111,7 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
     public void endGame() {
         gameRunning = false;
         soundtrack.stop();
+        scoreManager.saveScore(score.gameScore);
         new RestartMenu(score.gameScore);
         gameWindow.setVisible(false);
         player.playerX = 0;
@@ -223,6 +226,14 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
             playerShotDelayCounter++;
         }
 
+        if (waves.waveDelayCounter >= waves.waveDelay) {
+            waves.generateWave();
+            waves.waveDelayCounter = 0;
+        } else {
+            waves.waveDelayCounter++;
+        }
+
+        waves.updateWaves();
         score.updateScore(enemies);
         playerBar.updateBar(playerShotDelayCounter);
         playerHealthBar.updateHealtBar(player.playerHealth);
@@ -237,6 +248,7 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         this.setBackground(new Color(95, 175, 250));
+        waves.draw(g);
         player.draw(g);
         dock.draw(g);
         enemies.draw(g);

@@ -8,8 +8,8 @@ import javax.swing.*;
  * speed and position as well as the sprite to display.
  */
 public class Enemy extends JPanel implements Drawable {
-    static final int ENEMY_WIDTH = 128;
-    static final int ENEMY_HEIGHT = 128;
+    public int enemyWidth = 128;
+    public int enemyHeight = 128;
 
     int enemySpeed;
     int projectileDelay;
@@ -17,7 +17,7 @@ public class Enemy extends JPanel implements Drawable {
     Random rand = new Random();
 
     public BufferedImage texture;
-
+    public int enemyType = 1;
     int lifePointsLeft = 1;
     int enemyX = DisplayGraphics.windowDimensions.width;
     int enemyY;
@@ -74,8 +74,8 @@ public class Enemy extends JPanel implements Drawable {
      */
     public boolean checkPlayerCollision(int playerX, int playerY,
             int playerWidth, int playerHeight) {
-        if (enemyX <= playerX + playerWidth && enemyX + ENEMY_WIDTH >= playerX
-                && enemyY + ENEMY_HEIGHT >= playerY && enemyY <= playerY + playerHeight) {
+        if (enemyX <= playerX + playerWidth && enemyX + enemyWidth >= playerX
+                && enemyY + enemyHeight >= playerY && enemyY <= playerY + playerHeight) {
             lifePointsLeft = 0;
             return true;
         } else {

@@ -19,13 +19,11 @@ public class EnemiesArrayList {
 
     public int enemiesKilled = 0;
     public int randomBound;
-    int height = Enemy.ENEMY_HEIGHT;
-    int width = Enemy.ENEMY_WIDTH;
     int enemyAnimationCounter = 0;
     int textureIndex = 0;
     int[] bounderies = new int[] { 30, 60 };
 
-    BufferedImage[] textures = new BufferedImage[4];
+    BufferedImage[] textures = new BufferedImage[12];
 
     Random rand = new Random();
 
@@ -34,11 +32,17 @@ public class EnemiesArrayList {
      */
     public EnemiesArrayList() {
         try {
-            for (int i = 1; i < 5; i++) {
-                String path = "textures/enemies/pirateShip1/pirateShip1_" + i + ".png";
+            for (int i = 1; i < 13; i++) {
+                String path = "";
+                if (i <= 4) {
+                    path = "textures/enemies/pirateShip1/pirateShip1_" + i + ".png";
+                } else if (i <= 8) {
+                    path = "textures/enemies/pirateShip2/pirateShip2_" + (i - 4) + ".png";
+                } else {
+                    path = "textures/enemies/pirateShip3/pirateShip3_" + (i - 8) + ".png";
+                }
                 textures[i - 1] = ImageIO.read(getClass().getResourceAsStream(path));
             }
-
         } catch (IOException e) {
             System.out.println(e);
         }
@@ -64,6 +68,10 @@ public class EnemiesArrayList {
         enemies.add(newEnemy);
     }
 
+    public void addEnemy(Enemy enemy) {
+        enemies.add(enemy);
+    }
+
     /**
      * A method to add all enemies to a graphics object so that they can be painted
      * to the screen.
@@ -72,7 +80,13 @@ public class EnemiesArrayList {
      */
     public void draw(Graphics g) {
         for (var i = 0; i < enemies.size(); i++) {
-            enemies.get(i).texture = textures[textureIndex];
+            if (enemies.get(i).enemyType == 1) {
+                enemies.get(i).texture = textures[textureIndex];
+            } else if (enemies.get(i).enemyType == 2) {
+                enemies.get(i).texture = textures[textureIndex + 4];
+            } else if (enemies.get(i).enemyType == 3) {
+                enemies.get(i).texture = textures[textureIndex + 8];
+            }
             enemies.get(i).draw(g);
         }
         enemiesProjectiles.draw(g);
@@ -122,7 +136,8 @@ public class EnemiesArrayList {
     public void checkProjectiles(ProjectilesArrayList projectiles) {
         for (int i = 0; i < enemies.size(); i++) {
             Enemy next = enemies.get(i);
-            if (projectiles.areBulletsHitting(next.enemyX, next.enemyY, width, height)) {
+            if (projectiles.areBulletsHitting(next.enemyX, next.enemyY,
+                next.enemyWidth, next.enemyHeight)) {
                 next.removeLifePoint();
             }
         }
@@ -213,7 +228,7 @@ public class EnemiesArrayList {
      * the enemy projectiles.
      */
     public int checkPlayerCollisions(int playerX, int playerY,
-            int playerWidth, int playerHeight) {
+        int playerWidth, int playerHeight) {
         int playerCollisionCount = 0;
         for (var i = 0; i < enemies.size(); i++) {
             if (enemies.get(i).checkPlayerCollision(playerX, playerY, playerWidth, playerHeight)) {
