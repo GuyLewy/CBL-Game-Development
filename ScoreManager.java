@@ -9,7 +9,7 @@ import java.util.Scanner;
  * high score.
  * 
  * @author Guy Lewy
- * @author Antoni Antoni Nowaczyk
+ * @author Antoni Nowaczyk
  */
 public class ScoreManager {
     File highScoreF = new File("highScore.txt");
@@ -20,9 +20,7 @@ public class ScoreManager {
      */
     public void createScoreFile() {
         try {
-            if (!highScoreF.createNewFile()) {
-                System.out.println("File already exists.");
-            }
+            highScoreF.createNewFile();
         } catch (IOException e) {
             System.out.println("An error accured");
         }
@@ -46,7 +44,7 @@ public class ScoreManager {
         } catch (FileNotFoundException e) {
             createScoreFile();
         }
-        System.out.println("read high score: " + highScore);
+
         return highScore;
     }
 
@@ -60,8 +58,6 @@ public class ScoreManager {
         try {
             if (score > highScore) {
                 FileWriter fw = new FileWriter("highScore.txt");
-                System.out.println(score);
-                System.out.println("New high score!");
                 fw.write(Integer.toString(score));
                 fw.close();
             }
