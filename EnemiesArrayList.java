@@ -46,7 +46,7 @@ public class EnemiesArrayList {
 
     /**
      * A method to create a new enemy then add it to the ArrayList of all existing
-     * enemies.
+     * enemies. The enemy type and position is determined randomly.
      */
     public void generateEnemy() {
         int yPos = random.nextInt(DisplayGraphics.windowDimensions.height - 400) + 75;
