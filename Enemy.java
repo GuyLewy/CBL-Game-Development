@@ -27,11 +27,12 @@ public class Enemy extends JPanel implements Drawable {
     int projectileSpeed = -7;
     boolean doesShoot = true;
 
-    //public ProjectilesArrayList enemyProjectiles = new ProjectilesArrayList();
-
+    // public ProjectilesArrayList enemyProjectiles = new ProjectilesArrayList();
 
     /**
      * Initialize the enemy with y position and the image.
+     * 
+     * @param yPos The y position of the enemy as an int
      */
     Enemy(int yPos) {
         lifePointsLeft = 1;

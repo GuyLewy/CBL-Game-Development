@@ -7,6 +7,7 @@ import java.io.IOException;
  * Creates a frame with a button that can be pressed to start an instance of the
  * game then closses the frame.
  */
+
 public class MainMenu extends JPanel implements KeyListener {
     private boolean menuRunning;
     private ScoreManager scoreManager = new ScoreManager();

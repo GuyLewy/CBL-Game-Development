@@ -21,8 +21,7 @@ public class EnemiesArrayList {
     public int randomBound;
     int enemyAnimationCounter = 0;
     int textureIndex = 0;
-    int[] bounderies = new int[]{10, 20};
-    
+    int[] bounderies = new int[] { 30, 60 };
 
     BufferedImage[] textures = new BufferedImage[12];
 
@@ -51,9 +50,7 @@ public class EnemiesArrayList {
 
     /**
      * A method to create a new enemy then add it to the ArrayList of all existing
-     * enemies.
-     * 
-     * @param xPos the initial x position of the enemy
+     * enemies. The enemy type and position is determined randomly.
      */
     public void generateEnemy() {
         int yPos = random.nextInt(DisplayGraphics.windowDimensions.height - 400) + 75;
@@ -95,22 +92,26 @@ public class EnemiesArrayList {
         enemiesProjectiles.draw(g);
         moneyDropTexts.draw(g);
     }
-    
+
     /**
      * A method checks if any of the enemies is hit by a projectile,
      * has no life points left and then moves the enemies.
      */
-    public int updateEnemies(ProjectilesArrayList projectiles, Wallet wallet, 
-        int playerX, int playerY, int playerWidth, int playerHeight, int bound) {
-      
+    public int updateEnemies(ProjectilesArrayList projectiles, Wallet wallet,
+            int playerX, int playerY, int playerWidth, int playerHeight, int bound) {
+
         checkProjectiles(projectiles);
         manageDamage(wallet);
         moneyDropTexts.updateTexts();
         handleEnemyProjectiles();
-        moveEnemies();
+        boolean enemyHitDock = moveEnemies();
         updateTextures();
         randomBound = bound;
-        return checkPlayerCollisions(playerX, playerY, playerWidth, playerHeight);
+        if (enemyHitDock) {
+            return (Player.PLAYER_MAX_HEALTH);
+        } else {
+            return checkPlayerCollisions(playerX, playerY, playerWidth, playerHeight);
+        }
     }
 
     /**
@@ -153,8 +154,8 @@ public class EnemiesArrayList {
 
             if (next.lifePointsLeft <= 0) {
                 MoneyDropText nextText = new MoneyDropText(next.moneyCarried,
-                    next.enemyX, next.enemyY, MONEY_TEXT_DURATION);
-              
+                        next.enemyX, next.enemyY, MONEY_TEXT_DURATION);
+
                 wallet.money += next.moneyCarried;
                 moneyDropTexts.texts.add(nextText);
 
@@ -169,14 +170,17 @@ public class EnemiesArrayList {
      * based on their movement speed, aditionally it despawns them if they hit the
      * edge of the screen.
      */
-    public void moveEnemies() {
+    public boolean moveEnemies() {
         for (var i = 0; i < enemies.size(); i++) {
-            if (enemies.get(i).enemyX > 0) {
+            if (enemies.get(i).enemyX > 50) {
                 enemies.get(i).moveEnemy();
             } else {
                 enemies.remove(i);
+                return true;
             }
         }
+
+        return false;
     }
 
     /**
@@ -188,6 +192,11 @@ public class EnemiesArrayList {
         moveProjectiles();
     }
 
+    /**
+     * Shoots projectiles from enemies that are set to shoot and have a delay
+     * counter that has reached the delay time. Adds the projectile to the
+     * enemiesProjectiles ArrayList.
+     */
     public void shoot() {
         for (var i = 0; i < enemies.size(); i++) {
             Enemy next = enemies.get(i);
@@ -200,6 +209,10 @@ public class EnemiesArrayList {
         }
     }
 
+    /**
+     * Moves the projectiles of the enemies and removes them if they go off the
+     * screen.
+     */
     public void moveProjectiles() {
         enemiesProjectiles.moveProjectiles();
         for (var i = 0; i < enemiesProjectiles.projectiles.size(); i++) {
@@ -209,6 +222,7 @@ public class EnemiesArrayList {
             }
         }
     }
+
     /**
      * Iterates across all of the enemies and checks if the player is hit by any of
      * the enemy projectiles.
