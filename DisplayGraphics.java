@@ -1,9 +1,5 @@
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.*;
 import javax.swing.*;
 
@@ -13,7 +9,7 @@ import javax.swing.*;
  */
 public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
     double difficultyLevel = 1.5;
-    double startDifficulty = 0.1; 
+    double startDifficulty = 0.1;
     double difficultyCoefficient = startDifficulty;
     double dLog = Math.log(1 / startDifficulty - 1);
 

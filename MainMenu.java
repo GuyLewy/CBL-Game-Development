@@ -1,7 +1,6 @@
 import java.awt.*;
-import javax.swing.*;
 import java.awt.event.*;
-import java.io.IOException;
+import javax.swing.*;
 
 /**
  * Creates a frame with a button that can be pressed to start an instance of the
@@ -21,8 +20,8 @@ public class MainMenu extends JPanel implements KeyListener {
 
     public int highScore;
 
-    private final int UPS = 120; // Updates per second
-    private final int FPS = 60; // Frames per second
+    private final int ups = 120; // Updates per second
+    private final int fps = 60; // Frames per second
 
     Sound sound = new Sound();
     Sound background = new Sound();
@@ -43,11 +42,14 @@ public class MainMenu extends JPanel implements KeyListener {
         menuLoopThread.start();
     }
 
+    /**
+     * Starts a clock that updates the menu fps times per second.
+     */
     public void startMenuLoop() {
         long initialTime = System.nanoTime();
         long secondCounter = 0;
-        final double timeUPS = 1000000000 / UPS;
-        final double timeFPS = 1000000000 / FPS;
+        final double timeUPS = 1000000000 / ups;
+        final double timeFPS = 1000000000 / fps;
         double deltaUPS = 0;
         double deltaFPS = 0;
         long timer = System.currentTimeMillis();
@@ -57,9 +59,9 @@ public class MainMenu extends JPanel implements KeyListener {
 
             deltaUPS += (currentTime - initialTime) / timeUPS;
             deltaFPS += (currentTime - initialTime) / timeFPS;
-            secondCounter +=  (currentTime - initialTime);
+            secondCounter += (currentTime - initialTime);
             initialTime = currentTime;
-            
+
             if (secondCounter >= 1000000000) {
                 secondCounter = 0;
             }
@@ -89,6 +91,9 @@ public class MainMenu extends JPanel implements KeyListener {
         board.draw(g);
     }
 
+    /**
+     * Moves the menu up and down with the beat of the music.
+     */
     public void updateMenu() {
         if (menuBounceCounter >= menuBounceDelay) {
             menuBounceCounter = 0;
@@ -98,6 +103,9 @@ public class MainMenu extends JPanel implements KeyListener {
         }
     }
 
+    /**
+     * Initialize the menu including makingthe frame and playing the music.
+     */
     public void setMenu() {
         menuWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         menuWindow.setSize(2000, 1000);
@@ -109,7 +117,7 @@ public class MainMenu extends JPanel implements KeyListener {
         background.loop();
         menuRunning = true;
     }
-    
+
     public static void main(String[] args) {
         new MainMenu();
     }
@@ -143,7 +151,7 @@ public class MainMenu extends JPanel implements KeyListener {
                     System.exit(0);
                 }
             }
-            
+
         }
     }
 
@@ -155,6 +163,9 @@ public class MainMenu extends JPanel implements KeyListener {
         ;
     }
 
+    /**
+     * Create a new DisplayGraphics object and dispose of the menu window.
+     */
     public void startGame() {
         new DisplayGraphics();
         menuWindow.dispose();
