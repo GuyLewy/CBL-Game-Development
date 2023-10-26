@@ -90,10 +90,14 @@ public class EnemiesArrayList {
         manageDamage(wallet);
         moneyDropTexts.updateTexts();
         handleEnemyProjectiles();
-        moveEnemies();
+        boolean enemyHitDock = moveEnemies();
         updateTextures();
         randomBound = bound;
-        return checkPlayerCollisions(playerX, playerY, playerWidth, playerHeight);
+        if (enemyHitDock) {
+            return (Player.PLAYER_MAX_HEALTH);
+        } else {
+            return checkPlayerCollisions(playerX, playerY, playerWidth, playerHeight);
+        }
     }
 
     /**
@@ -151,14 +155,17 @@ public class EnemiesArrayList {
      * based on their movement speed, aditionally it despawns them if they hit the
      * edge of the screen.
      */
-    public void moveEnemies() {
+    public boolean moveEnemies() {
         for (var i = 0; i < enemies.size(); i++) {
-            if (enemies.get(i).enemyX > 0) {
+            if (enemies.get(i).enemyX > 50) {
                 enemies.get(i).moveEnemy();
             } else {
                 enemies.remove(i);
+                return true;
             }
         }
+
+        return false;
     }
 
     /**
@@ -170,6 +177,11 @@ public class EnemiesArrayList {
         moveProjectiles();
     }
 
+    /**
+     * Shoots projectiles from enemies that are set to shoot and have a delay
+     * counter that has reached the delay time. Adds the projectile to the
+     * enemiesProjectiles ArrayList.
+     */
     public void shoot() {
         for (var i = 0; i < enemies.size(); i++) {
             Enemy next = enemies.get(i);
@@ -182,6 +194,10 @@ public class EnemiesArrayList {
         }
     }
 
+    /**
+     * Moves the projectiles of the enemies and removes them if they go off the
+     * screen.
+     */
     public void moveProjectiles() {
         enemiesProjectiles.moveProjectiles();
         for (var i = 0; i < enemiesProjectiles.projectiles.size(); i++) {

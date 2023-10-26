@@ -22,6 +22,7 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
     private PlayerShotBar playerBar = new PlayerShotBar();
     private ScoreCounter score = new ScoreCounter();
     private Wallet playerWallet = new Wallet();
+    private Dock dock = new Dock(1000);
     private HealthBar playerHealthBar = new HealthBar(player.playerHealth);
     private Sound sound = new Sound();
     private Sound soundtrack = new Sound();
@@ -202,7 +203,9 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
                 (int) (100 * difficultyCoefficient));
 
         for (int i = 0; i < playerDamage; i++) {
-            playerLoseHealth();
+            if (player.playerHealth > 0) {
+                playerLoseHealth();
+            }
         }
 
         enemySpawnDelayCounter++;
@@ -235,6 +238,7 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
         super.paintComponent(g);
         this.setBackground(new Color(95, 175, 250));
         player.draw(g);
+        dock.draw(g);
         enemies.draw(g);
         playerBar.draw(g);
         score.draw(g);
