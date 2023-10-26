@@ -27,16 +27,21 @@ public class MainMenuBoard implements Drawable {
     public int highScore;
     int[] scoreDigits = new int[3];
 
-    public ScoreMenu score = new ScoreMenu(boardX + 380, boardY + 100);
+    public ScoreMenu score;
 
     /**
      * Constructor for the main menu board that gets the textures from png files and
      * the high score from the previous game.
      * 
-     * @param score the score recieved from the previous game
+     * @param inputScore the score recieved from the previous game
      */
-    public MainMenuBoard(int score) {
-        highScore = score;
+    public MainMenuBoard(int inputScore, int screenWidth, int screenHeight) {
+        highScore = inputScore;
+        boardX = screenWidth / 2 - boardWidth / 2;
+        boardY = screenHeight * 2 / 3 - boardHeight / 2;
+        titleX = boardX - 90;
+        titleY = boardY - boardHeight / 2;
+        score = new ScoreMenu(boardX + 380, boardY + 100);
         getScore();
         getTextures();
     }

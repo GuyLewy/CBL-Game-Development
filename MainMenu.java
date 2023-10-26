@@ -13,7 +13,7 @@ public class MainMenu extends JPanel implements KeyListener {
     public JFrame menuWindow = new JFrame();
     public MainMenuBoard board;
 
-    public static Rectangle windowDimensions;
+    public static Dimension windowDimensions;
 
     int menuBounceDelay = 74;
     int menuBounceCounter = 5;
@@ -32,8 +32,9 @@ public class MainMenu extends JPanel implements KeyListener {
     public MainMenu() {
         scoreManager.createScoreFile();
         highScore = scoreManager.getHighScore();
-        board = new MainMenuBoard(highScore);
         setMenu();
+        System.out.println(windowDimensions.width + " " + windowDimensions.height);
+        board = new MainMenuBoard(highScore, windowDimensions.width, windowDimensions.height);
         addKeyListener(this);
         setFocusable(true);
         requestFocus();
@@ -88,7 +89,9 @@ public class MainMenu extends JPanel implements KeyListener {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         this.setBackground(new Color(95, 175, 250));
-        board.draw(g);
+        if (board != null) {
+            board.draw(g);
+        }
     }
 
     /**
@@ -108,9 +111,12 @@ public class MainMenu extends JPanel implements KeyListener {
      */
     public void setMenu() {
         menuWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        menuWindow.setSize(2000, 1000);
+        menuWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        menuWindow.setMinimumSize(windowDimensions);
+        menuWindow.setResizable(false);
         menuWindow.add(this);
-        windowDimensions = menuWindow.getBounds();
+        windowDimensions = Toolkit.getDefaultToolkit().getScreenSize();
+        setMaximumSize(windowDimensions);
         menuWindow.setVisible(true);
         background.setSoundEffect(4);
         background.play();
@@ -155,10 +161,12 @@ public class MainMenu extends JPanel implements KeyListener {
         }
     }
 
+    @Override
     public void keyReleased(KeyEvent e) {
         ;
     }
 
+    @Override
     public void keyTyped(KeyEvent e) {
         ;
     }
