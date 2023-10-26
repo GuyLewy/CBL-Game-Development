@@ -3,6 +3,12 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
+/**
+ * Class deals with all of the drawing of the main menu board.
+ * 
+ * @author Guy Lewy
+ * @author Antoni Nowaczyk
+ */
 public class MainMenuBoard implements Drawable {
     int boardX = 550;
     int boardY = 250;
@@ -23,12 +29,21 @@ public class MainMenuBoard implements Drawable {
 
     public ScoreMenu score = new ScoreMenu(boardX + 380, boardY + 100);
 
+    /**
+     * Constructor for the main menu board that gets the textures from png files and
+     * the high score from the previous game.
+     * 
+     * @param score the score recieved from the previous game
+     */
     public MainMenuBoard(int score) {
         highScore = score;
         getScore();
         getTextures();
     }
 
+    /**
+     * Sets the digits of the high scores and puts them in an array.
+     */
     public void getScore() {
         for (int i = 0; i < 3; i++) {
             scoreDigits[i] = highScore % 10;
@@ -36,25 +51,34 @@ public class MainMenuBoard implements Drawable {
         }
     }
 
+    /**
+     * Gets the textures from png files.
+     */
     public void getTextures() {
         try {
             boardTexture = ImageIO.read(getClass().getResourceAsStream(
-                "textures/menu/board.png"));
+                    "textures/menu/board.png"));
             pointerTexture = ImageIO.read(getClass().getResourceAsStream(
-                "textures/menu/pointer.png"));
+                    "textures/menu/pointer.png"));
             titleTexture = ImageIO.read(getClass().getResourceAsStream(
-                "textures/menu/title.png"));
+                    "textures/menu/title.png"));
 
             for (int i = 0; i < 10; i++) {
                 digits[i] = ImageIO.read(getClass().getResourceAsStream(
-                "textures/menu/digits/" + i + ".png"));
+                        "textures/menu/digits/" + i + ".png"));
             }
-            
+
         } catch (IOException e) {
             ;
         }
     }
 
+    /**
+     * Draws the main menu board to the screen changing the arrow position depending
+     * on the menu pointer position.
+     * 
+     * @param g graphics object for the board to be drawn to.
+     */
     public void draw(Graphics g) {
         g.drawImage(boardTexture, boardX, boardY, null);
         g.drawImage(pointerTexture, boardX + 20, 35 + boardY + arrowPosition * 120, null);
@@ -62,12 +86,15 @@ public class MainMenuBoard implements Drawable {
         if (scoreVisible) {
             score.draw(g);
             for (int i = 0; i < 3; i++) {
-                g.drawImage(digits[scoreDigits[2 - i]], score.menuX + 50 + 120 * i, 
-                    score.menuY + 170, null);
+                g.drawImage(digits[scoreDigits[2 - i]], score.menuX + 50 + 120 * i,
+                        score.menuY + 170, null);
             }
         }
     }
 
+    /**
+     * Bounces the board up and down depending on the value of the up boolean.
+     */
     public void bounce() {
         if (up) {
             up = false;
