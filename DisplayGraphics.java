@@ -1,5 +1,9 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 import javax.swing.*;
 
@@ -9,7 +13,7 @@ import javax.swing.*;
  */
 public class DisplayGraphics extends JPanel implements KeyListener {
 
-    double difficultyLevel = 2;
+    double difficultyLevel = 1.5;
     double startDifficulty = 0.1; 
     double difficultyCoefficient = startDifficulty;
     double dLog = Math.log(1 / startDifficulty - 1);
@@ -17,6 +21,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
     Random rand = new Random();
 
     public static Rectangle windowDimensions;
+    private ScoreManager scoreManager = new ScoreManager();
     private Player player = new Player();
     private EnemiesArrayList enemies = new EnemiesArrayList();
     private WavesArrayList waves = new WavesArrayList();
@@ -49,6 +54,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
      */
     public DisplayGraphics() {
         startGame();
+        scoreManager.createScoreFile();
         addKeyListener(this);
         setFocusable(true);
         requestFocus();
@@ -103,6 +109,7 @@ public class DisplayGraphics extends JPanel implements KeyListener {
     public void endGame() {
         gameRunning = false;
         soundtrack.stop();
+        scoreManager.saveScore(score.gameScore);
         new RestartMenu(score.gameScore);
         gameWindow.setVisible(false);
         player.playerX = 0;

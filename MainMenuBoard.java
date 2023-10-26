@@ -23,7 +23,8 @@ public class MainMenuBoard implements Drawable {
 
     public ScoreMenu score = new ScoreMenu(boardX + 380, boardY + 100);
 
-    public MainMenuBoard() {
+    public MainMenuBoard(int score) {
+        highScore = score;
         getScore();
         getTextures();
     }

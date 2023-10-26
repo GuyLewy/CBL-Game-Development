@@ -9,13 +9,14 @@ import java.io.IOException;
  */
 public class MainMenu extends JPanel implements KeyListener {
     private boolean menuRunning;
-    JFrame menuWindow = new JFrame();
-    public MainMenuBoard board = new MainMenuBoard();
+    private ScoreManager scoreManager = new ScoreManager();
+    public JFrame menuWindow = new JFrame();
+    public MainMenuBoard board;
 
     public static Rectangle windowDimensions;
 
     int menuBounceDelay = 74;
-    int menuBounceCounter = 1;
+    int menuBounceCounter = 5;
 
     public int highScore;
 
@@ -29,6 +30,9 @@ public class MainMenu extends JPanel implements KeyListener {
      * Sets up the frame to have a button and add an action listener to the button.
      */
     public MainMenu() {
+        scoreManager.createScoreFile();
+        highScore = scoreManager.getHighScore();
+        board = new MainMenuBoard(highScore);
         setMenu();
         addKeyListener(this);
         setFocusable(true);

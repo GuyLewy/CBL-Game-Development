@@ -24,7 +24,7 @@ public class EnemiesArrayList {
     int[] bounderies = new int[]{10, 20};
     
 
-    BufferedImage[] textures = new BufferedImage[11];
+    BufferedImage[] textures = new BufferedImage[12];
 
     Random rand = new Random();
 
@@ -33,19 +33,16 @@ public class EnemiesArrayList {
      */
     public EnemiesArrayList() {
         try {
-            for (int i = 1; i < 12; i++) {
+            for (int i = 1; i < 13; i++) {
+                String path = "";
                 if (i <= 4) {
-                    String path = "textures/enemies/pirateShip1/pirateShip1_" + i + ".png";
-                    textures[i - 1] = ImageIO.read(getClass().getResourceAsStream(path));
+                    path = "textures/enemies/pirateShip1/pirateShip1_" + i + ".png";
                 } else if (i <= 8) {
-                    String path = "textures/enemies/pirateShip2/pirateShip2_" + (i - 4) + ".png";
-                    textures[i - 1] = ImageIO.read(getClass().getResourceAsStream(path));
-                    System.out.println(path);
-                } else if (i <= 11) {
-                    String path = "textures/enemies/pirateShip3/pirateShip3_" + (i - 8) + ".png";
-                    System.out.println(path);
-                    textures[i - 1] = ImageIO.read(getClass().getResourceAsStream(path));
+                    path = "textures/enemies/pirateShip2/pirateShip2_" + (i - 4) + ".png";
+                } else {
+                    path = "textures/enemies/pirateShip3/pirateShip3_" + (i - 8) + ".png";
                 }
+                textures[i - 1] = ImageIO.read(getClass().getResourceAsStream(path));
             }
         } catch (IOException e) {
             System.out.println(e);
@@ -91,7 +88,7 @@ public class EnemiesArrayList {
             } else if (enemies.get(i).enemyType == 2) {
                 enemies.get(i).texture = textures[textureIndex + 4];
             } else if (enemies.get(i).enemyType == 3) {
-                enemies.get(i).texture = textures[9 + (textureIndex % 3)];
+                enemies.get(i).texture = textures[textureIndex + 8];
             }
             enemies.get(i).draw(g);
         }

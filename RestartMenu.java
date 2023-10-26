@@ -1,9 +1,7 @@
-import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
-import javax.swing.*;
+
 
 /**
  * Creates a frame that displays the score the player acheived that round and a

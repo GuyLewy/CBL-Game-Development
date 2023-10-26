@@ -15,12 +15,12 @@ public class Sound {
      * Give an index number to every sound.
      */
     public Sound() {
-        soundEffectPath[0] = "/sound/shot.wav";
-        soundEffectPath[1] = "/sound/enemyHit.wav";
-        soundEffectPath[2] = "/sound/playerHit.wav";
-        soundEffectPath[3] = "/sound/Soundtrack.wav";
-        soundEffectPath[4] = "/sound/startMenu.wav";
-        soundEffectPath[5] = "/sound/startGame.wav";
+        soundEffectPath[0] = "./sound/shot.wav";
+        soundEffectPath[1] = "./sound/enemyHit.wav";
+        soundEffectPath[2] = "./sound/playerHit.wav";
+        soundEffectPath[3] = "./sound/Soundtrack.wav";
+        soundEffectPath[4] = "./sound/startMenu.wav";
+        soundEffectPath[5] = "./sound/startGame.wav";
     }
 
     /**
