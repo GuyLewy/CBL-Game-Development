@@ -5,7 +5,9 @@ import javax.imageio.ImageIO;
 
 public class MainMenuBoard implements Drawable {
     int boardX = 550;
-    int boardY = 200;
+    int boardY = 250;
+    int titleX = 460;
+    int titleY = 20;
     int boardWidth = 400;
     int boardHeight = 500;
     int arrowPosition = 0;
@@ -54,8 +56,8 @@ public class MainMenuBoard implements Drawable {
 
     public void draw(Graphics g) {
         g.drawImage(boardTexture, boardX, boardY, null);
-        g.drawImage(pointerTexture, boardX + 20, 35 + boardY + (arrowPosition + 1) * 120, null);
-        g.drawImage(titleTexture, boardX - 90, boardY - 100, null);
+        g.drawImage(pointerTexture, boardX + 20, 35 + boardY + arrowPosition * 120, null);
+        g.drawImage(titleTexture, titleX, titleY, null);
         if (scoreVisible) {
             score.draw(g);
             for (int i = 0; i < 3; i++) {
@@ -70,6 +72,7 @@ public class MainMenuBoard implements Drawable {
             up = false;
             boardY -= 20;
             score.menuY -= 20;
+
         } else {
             up = true;
             boardY += 20;

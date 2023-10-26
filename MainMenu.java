@@ -14,7 +14,7 @@ public class MainMenu extends JPanel implements KeyListener {
 
     public static Rectangle windowDimensions;
 
-    int menuBounceDelay = 76;
+    int menuBounceDelay = 74;
     int menuBounceCounter = 1;
 
     public int highScore;

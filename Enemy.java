@@ -8,8 +8,8 @@ import javax.swing.*;
  * speed and position as well as the sprite to display.
  */
 public class Enemy extends JPanel implements Drawable {
-    static final int ENEMY_WIDTH = 128;
-    static final int ENEMY_HEIGHT = 128;
+    public int enemyWidth = 128;
+    public int enemyHeight = 128;
 
     int enemySpeed;
     int projectileDelay;
@@ -73,7 +73,7 @@ public class Enemy extends JPanel implements Drawable {
      */
     public boolean checkPlayerCollision(int playerX, int playerY,
             int playerWidth, int playerHeight) {
-        if (enemyX <= playerX + playerWidth && enemyX + ENEMY_WIDTH >= playerX + ENEMY_HEIGHT
+        if (enemyX <= playerX + playerWidth && enemyX + enemyWidth >= playerX + enemyHeight
                 && enemyY >= playerY && enemyY <= playerY + playerHeight) {
             lifePointsLeft = 0;
             return true;
