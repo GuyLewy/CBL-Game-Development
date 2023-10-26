@@ -177,6 +177,11 @@ public class EnemiesArrayList {
         moveProjectiles();
     }
 
+    /**
+     * Shoots projectiles from enemies that are set to shoot and have a delay
+     * counter that has reached the delay time. Adds the projectile to the
+     * enemiesProjectiles ArrayList.
+     */
     public void shoot() {
         for (var i = 0; i < enemies.size(); i++) {
             Enemy next = enemies.get(i);
@@ -189,6 +194,10 @@ public class EnemiesArrayList {
         }
     }
 
+    /**
+     * Moves the projectiles of the enemies and removes them if they go off the
+     * screen.
+     */
     public void moveProjectiles() {
         enemiesProjectiles.moveProjectiles();
         for (var i = 0; i < enemiesProjectiles.projectiles.size(); i++) {
