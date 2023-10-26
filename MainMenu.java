@@ -33,7 +33,6 @@ public class MainMenu extends JPanel implements KeyListener {
         scoreManager.createScoreFile();
         highScore = scoreManager.getHighScore();
         setMenu();
-        System.out.println(windowDimensions.width + " " + windowDimensions.height);
         board = new MainMenuBoard(highScore, windowDimensions.width, windowDimensions.height);
         addKeyListener(this);
         setFocusable(true);

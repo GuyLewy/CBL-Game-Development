@@ -67,13 +67,14 @@ public class Player implements Drawable {
     public void move(boolean upPressed, boolean downPressed) {
         if (upPressed) {
             playerDirection = 1;
-            if (playerY > 0) {
+            if (playerY > 20 + DisplayGraphics.blackBorderDimensions.height) {
                 playerY -= movementSpeed;
             }
         }
         if (downPressed) {
             playerDirection = 0;
-            if (playerY + 2 * playerHeight < DisplayGraphics.windowDimensions.height) {
+            if (playerY + playerHeight < DisplayGraphics.windowDimensions.height
+                    - DisplayGraphics.blackBorderDimensions.height) {
                 playerY += movementSpeed;
             }
         }

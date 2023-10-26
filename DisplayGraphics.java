@@ -15,7 +15,9 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
 
     Random rand = new Random();
 
-    public static Rectangle windowDimensions;
+    public static Dimension windowDimensions;
+    public static Dimension blackBorderDimensions;
+    public static double screenSizeMultiplier = 1;
     private ScoreManager scoreManager = new ScoreManager();
     private Player player = new Player();
     private EnemiesArrayList enemies = new EnemiesArrayList();
@@ -23,7 +25,7 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
     private PlayerShotBar playerBar = new PlayerShotBar();
     private ScoreCounter score = new ScoreCounter();
     private Wallet playerWallet = new Wallet();
-    private Dock dock = new Dock(1000);
+    private Dock dock;
     private HealthBar playerHealthBar = new HealthBar(player.playerHealth);
     private Sound sound = new Sound();
     private Sound soundtrack = new Sound();
@@ -125,15 +127,38 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
      */
     public void startGame() {
         gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        gameWindow.setSize(2000, 1000);
-        windowDimensions = gameWindow.getBounds();
+        gameWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        gameWindow.setMinimumSize(windowDimensions);
+        gameWindow.setResizable(false);
+        windowDimensions = Toolkit.getDefaultToolkit().getScreenSize();
+        checkScreenAspectRatio();
         gameWindow.add(this);
+        dock = new Dock(windowDimensions.height);
         gameWindow.setVisible(true);
         soundtrack.setSoundEffect(3);
         soundtrack.play();
         soundtrack.setVolume(soundtrackVolume);
         soundtrack.loop();
         gameRunning = true;
+    }
+
+    void checkScreenAspectRatio() {
+        blackBorderDimensions = new Dimension(0, 0);
+        if (windowDimensions.width / (double) windowDimensions.height == 16.0 / 9.0) {
+            System.out.println("16:9");
+            screenSizeMultiplier = windowDimensions.width / 1920.0;
+        } else if (windowDimensions.width / (double) windowDimensions.height > 16.0 / 9.0) {
+            blackBorderDimensions.width = (windowDimensions.width
+                    - (windowDimensions.height * 9 / 16)) / 2;
+            screenSizeMultiplier = windowDimensions.width / 1920.0;
+        } else if (windowDimensions.width / (double) windowDimensions.height < 16.0 / 9.0) {
+            blackBorderDimensions.height = (windowDimensions.height
+                    - (windowDimensions.width * 9 / 16)) / 2;
+            screenSizeMultiplier = windowDimensions.height / 1080.0;
+        }
+
+        System.out.println(screenSizeMultiplier);
+        System.out.println(blackBorderDimensions);
     }
 
     /**
