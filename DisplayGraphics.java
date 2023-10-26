@@ -16,7 +16,7 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
     Random rand = new Random();
 
     public static Dimension windowDimensions;
-    public static Dimension blackBorderDimensions;
+    public static Dimension blackBorderDimensions = new Dimension(0, 0);
     public static double screenSizeMultiplier = 1;
     private ScoreManager scoreManager = new ScoreManager();
     private Player player = new Player();
@@ -143,7 +143,6 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
     }
 
     void checkScreenAspectRatio() {
-        blackBorderDimensions = new Dimension(0, 0);
         if (windowDimensions.width / (double) windowDimensions.height == 16.0 / 9.0) {
             System.out.println("16:9");
             screenSizeMultiplier = windowDimensions.width / 1920.0;
@@ -390,6 +389,17 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
                         fireString,
                         speedString,
                         8 * player.healthUpgrades),
-                (int) (0.2 * DisplayGraphics.windowDimensions.getWidth()), 30);
+                (int) (0.2 * DisplayGraphics.windowDimensions.getWidth()), 30 + blackBorderDimensions.height);
+
+        g.setColor(Color.black);
+        // Draws black borders for displays that are tall
+        g.fillRect(0, 0, windowDimensions.width, blackBorderDimensions.height);
+        g.fillRect(0, windowDimensions.height - blackBorderDimensions.height, windowDimensions.width,
+                blackBorderDimensions.height);
+
+        // Draws black borders for displays that are wide
+        g.fillRect(0, 0, blackBorderDimensions.width, windowDimensions.height);
+        g.fillRect(windowDimensions.width - blackBorderDimensions.width, 0, blackBorderDimensions.width,
+                windowDimensions.height);
     }
 }

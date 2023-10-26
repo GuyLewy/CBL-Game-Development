@@ -32,8 +32,12 @@ public class WavesArrayList implements Drawable {
     }
 
     public void generateWave() {
-        int xPos = rand.nextInt(DisplayGraphics.windowDimensions.width - 100);
-        int yPos = rand.nextInt(DisplayGraphics.windowDimensions.height - 50);
+        int xPos = rand
+                .nextInt(DisplayGraphics.windowDimensions.width - 100 - DisplayGraphics.blackBorderDimensions.width)
+                + DisplayGraphics.blackBorderDimensions.width;
+        int yPos = rand
+                .nextInt(DisplayGraphics.windowDimensions.height - 50 - DisplayGraphics.blackBorderDimensions.height)
+                + DisplayGraphics.blackBorderDimensions.height;
 
         Wave next = new Wave(xPos, yPos, waveLifeTime);
         waves.add(next);
@@ -82,5 +86,5 @@ public class WavesArrayList implements Drawable {
             next.texture = textures[next.textureIndex];
             next.draw(g);
         }
-    }    
+    }
 }

@@ -11,6 +11,7 @@ public class HealthBar implements Drawable {
 
     /**
      * Create a new health bar.
+     * 
      * @param maxPlayerHealth used to determine the ammount of hearts.
      */
     public HealthBar(int maxPlayerHealth) {
@@ -21,9 +22,11 @@ public class HealthBar implements Drawable {
             healthBar.add(next);
         }
     }
-    
+
     /**
-     * Based on the number of health point left, fill, half-fill or leave empty hearts.
+     * Based on the number of health point left, fill, half-fill or leave empty
+     * hearts.
+     * 
      * @param healthPoints number of health point left.
      */
     public void updateHealtBar(int healthPoints) {
@@ -42,7 +45,7 @@ public class HealthBar implements Drawable {
             }
         }
     }
-    
+
     /**
      * Draw the healthBar.
      */
