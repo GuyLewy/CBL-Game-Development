@@ -6,6 +6,7 @@ import javax.swing.*;
  * Creates a frame with a button that can be pressed to start an instance of the
  * game then closses the frame.
  */
+
 public class MainMenu extends JPanel {
 
     private JButton startGameButton;
