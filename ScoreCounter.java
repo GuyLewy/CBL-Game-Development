@@ -3,6 +3,9 @@ import javax.swing.*;
 
 /**
  * Class used to count and display the score on the screen.
+ * 
+ * @author Guy Lewy
+ * @author Antoni Nowaczyk
  */
 public class ScoreCounter extends JPanel implements Drawable {
     Font f2 = new Font(Font.SANS_SERIF, Font.BOLD, 25);
@@ -23,6 +26,7 @@ public class ScoreCounter extends JPanel implements Drawable {
         g.setColor(Color.black);
         g.setFont(f2);
         g.drawString("Score: %d".formatted(gameScore),
-                (int) (0.64 * DisplayGraphics.windowDimensions.getWidth()), 65);
+                (int) (0.64 * DisplayGraphics.windowDimensions.getWidth()),
+                65 + DisplayGraphics.blackBorderDimensions.height);
     }
 }

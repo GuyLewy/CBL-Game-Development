@@ -6,6 +6,9 @@ import javax.swing.*;
 /**
  * Enemy class used to create new enemies, includes all of their details such as
  * speed and position as well as the sprite to display.
+ * 
+ * @author Guy Lewy
+ * @author Antoni Nowaczyk
  */
 public class Enemy extends JPanel implements Drawable {
     public int enemyWidth = 128;
@@ -19,7 +22,8 @@ public class Enemy extends JPanel implements Drawable {
     public BufferedImage texture;
     public int enemyType = 1;
     int lifePointsLeft = 1;
-    int enemyX = DisplayGraphics.windowDimensions.width;
+    int enemyX = DisplayGraphics.windowDimensions.width
+            - DisplayGraphics.blackBorderDimensions.width;
     int enemyY;
     int textureIndex;
     int moneyCarried;
@@ -62,8 +66,8 @@ public class Enemy extends JPanel implements Drawable {
 
     /**
      * Checks wether the enemy is colliding with the player through the use of
-     * Axis-Aligned Bound Box collision detection, if colliding it will remove all
-     * of the enemy's life points.
+     * Axis-Aligned Bound Box (AABB) collision detection, if colliding it will
+     * remove all of the enemy's life points.
      * 
      * @param playerX      The x position of the player as an int
      * @param playerY      The y position of the player as an int
@@ -74,6 +78,7 @@ public class Enemy extends JPanel implements Drawable {
      */
     public boolean checkPlayerCollision(int playerX, int playerY,
             int playerWidth, int playerHeight) {
+        // Determine if the enemy is colliding with the player using AABB collisions
         if (enemyX <= playerX + playerWidth && enemyX + enemyWidth >= playerX
                 && enemyY + enemyHeight >= playerY && enemyY <= playerY + playerHeight) {
             lifePointsLeft = 0;

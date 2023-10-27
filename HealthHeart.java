@@ -4,8 +4,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 class HealthHeart implements Drawable {
-    //private static int HEART_WIDTH = 32;
-    //private static int HEART_HEIGHT = 32;
+    // private static int HEART_WIDTH = 32;
+    // private static int HEART_HEIGHT = 32;
     private int heartX;
     private int heartY;
 
@@ -13,10 +13,11 @@ class HealthHeart implements Drawable {
     BufferedImage halfHeart;
     BufferedImage emptyHeart;
 
-    public int heartState = 2; //2 - full; 1 - half; 0 - empty
+    public int heartState = 2; // 2 - full; 1 - half; 0 - empty
 
     /**
      * Create a heart at coordinates.
+     * 
      * @param x .
      * @param y .
      */
@@ -32,11 +33,11 @@ class HealthHeart implements Drawable {
     public void getImages() {
         try {
             fullHeart = ImageIO.read(getClass()
-            .getResourceAsStream("textures/heart/fullHeart.png"));
+                    .getResourceAsStream("textures/heart/fullHeart.png"));
             halfHeart = ImageIO.read(getClass()
-            .getResourceAsStream("textures/heart/halfHeart.png"));
+                    .getResourceAsStream("textures/heart/halfHeart.png"));
             emptyHeart = ImageIO.read(getClass()
-            .getResourceAsStream("textures/heart/emptyHeart.png"));
+                    .getResourceAsStream("textures/heart/emptyHeart.png"));
         } catch (IOException e) {
             ;
         }

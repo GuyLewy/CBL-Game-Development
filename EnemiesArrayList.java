@@ -7,6 +7,9 @@ import javax.imageio.ImageIO;
 
 /**
  * EnemyArrayList, used to go through all available enemies and update them.
+ * 
+ * @author Guy Lewy
+ * @author Antoni Nowaczyk
  */
 public class EnemiesArrayList {
     public ArrayList<Enemy> enemies = new ArrayList<Enemy>();
@@ -137,7 +140,7 @@ public class EnemiesArrayList {
         for (int i = 0; i < enemies.size(); i++) {
             Enemy next = enemies.get(i);
             if (projectiles.areBulletsHitting(next.enemyX, next.enemyY,
-                next.enemyWidth, next.enemyHeight)) {
+                    next.enemyWidth, next.enemyHeight)) {
                 next.removeLifePoint();
             }
         }
@@ -172,7 +175,8 @@ public class EnemiesArrayList {
      */
     public boolean moveEnemies() {
         for (var i = 0; i < enemies.size(); i++) {
-            if (enemies.get(i).enemyX > 50) {
+            if (enemies.get(i).enemyX > (int) ((50 + DisplayGraphics.blackBorderDimensions.width)
+                    * DisplayGraphics.screenSizeMultiplier)) {
                 enemies.get(i).moveEnemy();
             } else {
                 enemies.remove(i);
@@ -228,7 +232,7 @@ public class EnemiesArrayList {
      * the enemy projectiles.
      */
     public int checkPlayerCollisions(int playerX, int playerY,
-        int playerWidth, int playerHeight) {
+            int playerWidth, int playerHeight) {
         int playerCollisionCount = 0;
         for (var i = 0; i < enemies.size(); i++) {
             if (enemies.get(i).checkPlayerCollision(playerX, playerY, playerWidth, playerHeight)) {

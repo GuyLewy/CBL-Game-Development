@@ -6,12 +6,16 @@ import javax.imageio.ImageIO;
 /**
  * Enemy class includes all of the player details such as speed and position as
  * well as the sprite to display.
+ * 
+ * @author Guy Lewy
+ * @author Antoni Nowaczyk
  */
 public class Player implements Drawable {
     public static final int BASE_MOVEMENT_SPEED = 3;
     public static final int PLAYER_MAX_HEALTH = 8;
-    public final int playerWidth = 100;
-    public final int playerHeight = 128;
+    double screenSizeMultiplier = DisplayGraphics.screenSizeMultiplier;
+    public final int playerWidth = (int) (100 * screenSizeMultiplier);
+    public final int playerHeight = (int) (128 * screenSizeMultiplier);;
     public int speedUpgrades = 0;
     public int fireRateUpgrades = 0;
     public int healthUpgrades = 1;
@@ -19,23 +23,30 @@ public class Player implements Drawable {
     int playerHealth = PLAYER_MAX_HEALTH;
     private int movementSpeed = BASE_MOVEMENT_SPEED;
 
+    public int playerY = (int) (100 + DisplayGraphics.blackBorderDimensions.height
+            * screenSizeMultiplier);
+
+    public int playerX = (int) (100 + DisplayGraphics.blackBorderDimensions.width
+            * screenSizeMultiplier);
+
     public int playerShotDelay = 70;
-    public int playerY = 100;
-    public int playerX = 100;
     public int playerDirection = 0;
     public ProjectilesArrayList playerProjectiles = new ProjectilesArrayList(5);
 
     BufferedImage playerUp;
     BufferedImage playerDown;
 
-    public int barX = 5;
+    public int barX = DisplayGraphics.windowDimensions.width - DisplayGraphics.blackBorderDimensions.width;
     public int barY = 5;
-    public HealthBar playerHealthBar = new HealthBar(playerHealth, barX, barY);
+    public HealthBar playerHealthBar;
     public PlayerShotBar playerBar = new PlayerShotBar();
-    public PlayerStatsPanel stats = new PlayerStatsPanel(4, 4, barX, barY);
+    public PlayerStatsPanel stats;
 
     public Player() {
         getPlayerImage();
+        stats = new PlayerStatsPanel(4, 4, barX, barY);
+        playerHealthBar = new HealthBar(playerHealth, barX - 50,
+                barY + DisplayGraphics.blackBorderDimensions.height);
     }
 
     /**
@@ -77,14 +88,15 @@ public class Player implements Drawable {
     public void move(boolean upPressed, boolean downPressed) {
         if (upPressed) {
             playerDirection = 1;
-            if (playerY > 0) {
-                playerY -= movementSpeed;
+            if (playerY > 20 + DisplayGraphics.blackBorderDimensions.height) {
+                playerY -= (int) (screenSizeMultiplier * movementSpeed);
             }
         }
         if (downPressed) {
             playerDirection = 0;
-            if (playerY + 2 * playerHeight < DisplayGraphics.windowDimensions.height) {
-                playerY += movementSpeed;
+            if (playerY + playerHeight < DisplayGraphics.windowDimensions.height
+                    - DisplayGraphics.blackBorderDimensions.height) {
+                playerY += (int) (screenSizeMultiplier * movementSpeed);
             }
         }
     }
@@ -111,13 +123,13 @@ public class Player implements Drawable {
                 break;
 
             case 2:
-                this.movementSpeed++;
+                movementSpeed++;
                 speedUpgrades++;
                 stats.speedLevel++;
                 break;
 
             case 3:
-                this.playerHealth += 2;
+                playerHealth += 2;
 
                 if (playerHealth > PLAYER_MAX_HEALTH) {
                     playerHealth = PLAYER_MAX_HEALTH;
@@ -130,7 +142,7 @@ public class Player implements Drawable {
 
     }
 
-    public void updatePlayerBars (int playerShotDelayCounter) {
+    public void updatePlayerBars(int playerShotDelayCounter) {
         playerBar.updateBar(playerShotDelayCounter);
         playerHealthBar.updateHealtBar(playerHealth);
     }

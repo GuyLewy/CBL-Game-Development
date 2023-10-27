@@ -5,6 +5,9 @@ import javax.sound.sampled.FloatControl;
 
 /**
  * Class sound used to store a sound effect or music.
+ * 
+ * @author Guy Lewy
+ * @author Antoni Nowaczyk
  */
 public class Sound {
     Clip clip;
@@ -26,12 +29,13 @@ public class Sound {
 
     /**
      * Assign a particular sound effect to sound object.
+     * 
      * @param i - index of the effect.
      */
     public void setSoundEffect(int i) {
         try {
             AudioInputStream ais = AudioSystem.getAudioInputStream(
-                getClass().getResource(soundEffectPath[i]));
+                    getClass().getResource(soundEffectPath[i]));
             clip = AudioSystem.getClip();
             clip.open(ais);
             fc = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);

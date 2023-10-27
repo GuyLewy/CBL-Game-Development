@@ -6,6 +6,9 @@ import javax.swing.*;
 /**
  * DisplayGraphics class acts as the main window, implementing all timing logics
  * and drawing functionality as well as well as Swing window creation.
+ * 
+ * @author Guy Lewy
+ * @author Antoni Nowaczyk
  */
 public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
     double difficultyLevel = 1.5;
@@ -15,14 +18,16 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
 
     Random rand = new Random();
 
-    public static Rectangle windowDimensions;
+    public static Dimension windowDimensions;
+    public static Dimension blackBorderDimensions = new Dimension(0, 0);
+    public static double screenSizeMultiplier = 1;
     private ScoreManager scoreManager = new ScoreManager();
-    private Player player = new Player();
+    private Player player;
     private EnemiesArrayList enemies = new EnemiesArrayList();
     private WavesArrayList waves = new WavesArrayList();
     private ScoreCounter score = new ScoreCounter();
     private Wallet playerWallet = new Wallet();
-    private Dock dock = new Dock(1000);
+    private Dock dock;
     private Sound sound = new Sound();
     private Sound soundtrack = new Sound();
 
@@ -35,7 +40,7 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
     int enemySpawnDelayCounter;
     int enemySpawnDelay = enemyInitialSpawnDelay;
     int numberOfEnemiesBound = 1;
-    int playerShotDelayCounter = player.playerShotDelay;
+    int playerShotDelayCounter;
     float soundtrackVolume = -5.0f;
     JFrame gameWindow;
 
@@ -51,8 +56,10 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
      * as focusable so that keystrokes can be recorded.
      */
     public DisplayGraphics(JFrame frame) {
-        gameWindow = frame;
+        frame.setVisible(false);
+        frame.add(this);
         this.setLayout(new BorderLayout());
+        gameWindow = frame;
         startGame();
         scoreManager.createScoreFile();
         addKeyListener(this);
@@ -123,18 +130,37 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
      * Sets up the window and starts music to the game.
      */
     public void startGame() {
-        gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        gameWindow.setSize(2000, 1000);
-        gameWindow.setBounds(0, 0, 2000, 1000);
-        windowDimensions = gameWindow.getBounds();
-        gameWindow.add(this);
-        gameWindow.setVisible(true);
+        windowDimensions = Toolkit.getDefaultToolkit().getScreenSize();
+        checkScreenAspectRatio();
+        player = new Player();
+        dock = new Dock(windowDimensions.height);
+        playerShotDelayCounter = player.playerShotDelay;
         soundtrack.setSoundEffect(3);
         soundtrack.play();
         soundtrack.setVolume(soundtrackVolume);
         soundtrack.loop();
         gameRunning = true;
-        System.out.println(windowDimensions);
+        gameWindow.setVisible(true);
+    }
+
+    /**
+     * Determines this screens aspect ratio, wether it is 16:9, wide or tall. Then
+     * determines the size of the black borders required to turn the screen into
+     * 16:9 additionally it determines a scale multiplier with relation to a
+     * 1920*1080 display to scale graphics.
+     */
+    void checkScreenAspectRatio() {
+        if (windowDimensions.width / (double) windowDimensions.height == 16.0 / 9.0) {
+            screenSizeMultiplier = windowDimensions.width / 1920.0;
+        } else if (windowDimensions.width / (double) windowDimensions.height > 16.0 / 9.0) {
+            blackBorderDimensions.width = (windowDimensions.width
+                    - (windowDimensions.height * 9 / 16)) / 2;
+            screenSizeMultiplier = windowDimensions.width / 1920.0;
+        } else if (windowDimensions.width / (double) windowDimensions.height < 16.0 / 9.0) {
+            blackBorderDimensions.height = (windowDimensions.height
+                    - (windowDimensions.width * 9 / 16)) / 2;
+            screenSizeMultiplier = windowDimensions.height / 1080.0;
+        }
     }
 
     /**
@@ -365,9 +391,19 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
 
         g.drawString(
                 "Firerate (z): %s    Speed (x): %s    Heal (c): $%d".formatted(
-                        fireString,
-                        speedString,
-                        8 * player.healthUpgrades),
-                (int) (0.2 * DisplayGraphics.windowDimensions.getWidth()), 30);
+                        fireString, speedString, 8 * player.healthUpgrades),
+                (int) (0.2 * DisplayGraphics.windowDimensions.getWidth()),
+                30 + blackBorderDimensions.height);
+
+        g.setColor(Color.black);
+        // Draws black borders for displays that are tall
+        g.fillRect(0, 0, windowDimensions.width, blackBorderDimensions.height);
+        g.fillRect(0, windowDimensions.height - blackBorderDimensions.height,
+                windowDimensions.width, blackBorderDimensions.height);
+
+        // Draws black borders for displays that are wide
+        g.fillRect(0, 0, blackBorderDimensions.width, windowDimensions.height);
+        g.fillRect(windowDimensions.width - blackBorderDimensions.width, 0,
+                blackBorderDimensions.width, windowDimensions.height);
     }
 }

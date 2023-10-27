@@ -5,6 +5,9 @@ import javax.swing.*;
 /**
  * Creates a frame with a button that can be pressed to start an instance of the
  * game then closses the frame.
+ * 
+ * @author Guy Lewy
+ * @author Antoni Nowaczyk
  */
 
 public class MainMenu extends JPanel implements KeyListener {
@@ -13,7 +16,7 @@ public class MainMenu extends JPanel implements KeyListener {
     public JFrame menuWindow;
     public MainMenuBoard board;
 
-    public static Rectangle windowDimensions;
+    public static Dimension windowDimensions;
 
     int menuBounceDelay = 74;
     int menuBounceCounter = 7;
@@ -33,8 +36,8 @@ public class MainMenu extends JPanel implements KeyListener {
         menuWindow = frame;
         scoreManager.createScoreFile();
         highScore = scoreManager.getHighScore();
-        board = new MainMenuBoard(highScore);
         setMenu();
+        board = new MainMenuBoard(highScore, windowDimensions.width, windowDimensions.height);
         addKeyListener(this);
         setFocusable(true);
         requestFocus();
@@ -89,7 +92,9 @@ public class MainMenu extends JPanel implements KeyListener {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         this.setBackground(new Color(95, 175, 250));
-        board.draw(g);
+        if (board != null) {
+            board.draw(g);
+        }
     }
 
     /**
@@ -108,11 +113,10 @@ public class MainMenu extends JPanel implements KeyListener {
      * Initialize the menu including makingthe frame and playing the music.
      */
     public void setMenu() {
-        menuWindow.setVisible(true);
-        menuWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        menuWindow.setSize(2000, 1000);
         menuWindow.add(this);
-        windowDimensions = menuWindow.getBounds();
+        windowDimensions = Toolkit.getDefaultToolkit().getScreenSize();
+        setMaximumSize(windowDimensions);
+        menuWindow.setVisible(true);
         background.setSoundEffect(4);
         background.play();
         background.loop();
@@ -152,10 +156,12 @@ public class MainMenu extends JPanel implements KeyListener {
         }
     }
 
+    @Override
     public void keyReleased(KeyEvent e) {
         ;
     }
 
+    @Override
     public void keyTyped(KeyEvent e) {
         ;
     }

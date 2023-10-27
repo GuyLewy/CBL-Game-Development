@@ -5,7 +5,11 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 
 /**
- * .
+ * Projectile class includes all of the projectile details such as speed and
+ * postion and handles drawing projectiles with an interface.
+ * 
+ * @author Guy Lewy
+ * @author Antoni Nowaczyk
  */
 public class Projectile extends JPanel implements Drawable {
     public static final int RANGE = DisplayGraphics.windowDimensions.width;
@@ -28,14 +32,13 @@ public class Projectile extends JPanel implements Drawable {
         g2D.drawImage(bullet, null, projectileX, projectileY);
     }
 
-    
     /**
      * Get the projectile image.
      */
     public void getProjectileImage() {
         try {
             bullet = ImageIO.read(getClass()
-            .getResourceAsStream("textures/projectiles/Bullet.png"));
+                    .getResourceAsStream("textures/projectiles/Bullet.png"));
         } catch (IOException e) {
             ;
         }

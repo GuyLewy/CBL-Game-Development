@@ -17,6 +17,7 @@ public class LoadingBarSquare extends JPanel implements Drawable {
      */
     public void draw(Graphics g) {
         g.setColor(color);
-        g.fillRect(xPosition, yPosition, width, height);
+        g.fillRect(xPosition, yPosition
+                + DisplayGraphics.blackBorderDimensions.height, width, height);
     }
 }
