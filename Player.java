@@ -9,7 +9,7 @@ import javax.imageio.ImageIO;
  */
 public class Player implements Drawable {
     public static final int BASE_MOVEMENT_SPEED = 5;
-    public static final int PLAYER_MAX_HEALTH = 6;
+    public static final int PLAYER_MAX_HEALTH = 8;
     public final int playerWidth = 100;
     public final int playerHeight = 128;
     public int speedUpgrades;
@@ -27,6 +27,12 @@ public class Player implements Drawable {
 
     BufferedImage playerUp;
     BufferedImage playerDown;
+
+    public int barX = 5;
+    public int barY = 5;
+    public HealthBar playerHealthBar = new HealthBar(playerHealth, barX, barY);
+    public PlayerShotBar playerBar = new PlayerShotBar();
+    public PlayerStatsPanel stats = new PlayerStatsPanel(4, 4, barX, barY);
 
     public Player() {
         getPlayerImage();
@@ -55,6 +61,10 @@ public class Player implements Drawable {
             g2D.drawImage(playerDown, null, playerX, playerY);
         }
         playerProjectiles.draw(g);
+        stats.draw(g);
+        playerBar.draw(g);
+        playerHealthBar.draw(g);
+
     }
 
     /**
@@ -96,11 +106,13 @@ public class Player implements Drawable {
             case 1:
                 this.playerShotDelay -= 10;
                 fireRateUpgrades++;
+                stats.attackLevel++;
                 break;
 
             case 2:
                 this.movementSpeed++;
                 speedUpgrades++;
+                stats.speedLevel++;
                 break;
 
             case 3:
@@ -115,5 +127,10 @@ public class Player implements Drawable {
 
         }
 
+    }
+
+    public void updatePlayerBars (int playerShotDelayCounter) {
+        playerBar.updateBar(playerShotDelayCounter);
+        playerHealthBar.updateHealtBar(playerHealth);
     }
 }
