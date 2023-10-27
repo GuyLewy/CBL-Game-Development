@@ -128,8 +128,7 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
     public void startGame() {
         gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         gameWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        gameWindow.setMinimumSize(windowDimensions);
-        gameWindow.setResizable(false);
+        gameWindow.setUndecorated(true);
         windowDimensions = Toolkit.getDefaultToolkit().getScreenSize();
         checkScreenAspectRatio();
         gameWindow.add(this);
@@ -144,7 +143,6 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
 
     void checkScreenAspectRatio() {
         if (windowDimensions.width / (double) windowDimensions.height == 16.0 / 9.0) {
-            System.out.println("16:9");
             screenSizeMultiplier = windowDimensions.width / 1920.0;
         } else if (windowDimensions.width / (double) windowDimensions.height > 16.0 / 9.0) {
             blackBorderDimensions.width = (windowDimensions.width
@@ -155,9 +153,6 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
                     - (windowDimensions.width * 9 / 16)) / 2;
             screenSizeMultiplier = windowDimensions.height / 1080.0;
         }
-
-        System.out.println(screenSizeMultiplier);
-        System.out.println(blackBorderDimensions);
     }
 
     /**
