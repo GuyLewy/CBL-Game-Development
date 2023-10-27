@@ -24,8 +24,12 @@ public class Player implements Drawable {
     private int movementSpeed = BASE_MOVEMENT_SPEED;
 
     public static int playerShotDelay = 60;
-    public int playerY = (int) (100 + DisplayGraphics.blackBorderDimensions.height * screenSizeMultiplier);
-    public int playerX = (int) (100 + DisplayGraphics.blackBorderDimensions.width * screenSizeMultiplier);
+
+    public int playerY = (int) (100 + DisplayGraphics.blackBorderDimensions.height
+            * screenSizeMultiplier);
+
+    public int playerX = (int) (100 + DisplayGraphics.blackBorderDimensions.width
+            * screenSizeMultiplier);
     public int playerDirection = 0;
     public ProjectilesArrayList playerProjectiles = new ProjectilesArrayList(5);
 
@@ -99,17 +103,17 @@ public class Player implements Drawable {
                 break;
 
             case 1:
-                this.playerShotDelay -= 10;
+                playerShotDelay -= 10;
                 fireRateUpgrades++;
                 break;
 
             case 2:
-                this.movementSpeed++;
+                movementSpeed++;
                 speedUpgrades++;
                 break;
 
             case 3:
-                this.playerHealth += 2;
+                playerHealth += 2;
 
                 if (playerHealth > PLAYER_MAX_HEALTH) {
                     playerHealth = PLAYER_MAX_HEALTH;
