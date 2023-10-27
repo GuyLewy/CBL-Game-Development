@@ -8,18 +8,18 @@ import javax.imageio.ImageIO;
  * well as the sprite to display.
  */
 public class Player implements Drawable {
-    public static final int BASE_MOVEMENT_SPEED = 5;
+    public static final int BASE_MOVEMENT_SPEED = 3;
     public static final int PLAYER_MAX_HEALTH = 8;
     public final int playerWidth = 100;
     public final int playerHeight = 128;
-    public int speedUpgrades;
-    public int fireRateUpgrades;
+    public int speedUpgrades = 0;
+    public int fireRateUpgrades = 0;
     public int healthUpgrades = 1;
 
     int playerHealth = PLAYER_MAX_HEALTH;
     private int movementSpeed = BASE_MOVEMENT_SPEED;
 
-    public int playerShotDelay = 60;
+    public int playerShotDelay = 70;
     public int playerY = 100;
     public int playerX = 100;
     public int playerDirection = 0;
@@ -105,6 +105,7 @@ public class Player implements Drawable {
 
             case 1:
                 this.playerShotDelay -= 10;
+                playerBar.updateDelay(playerShotDelay);
                 fireRateUpgrades++;
                 stats.attackLevel++;
                 break;

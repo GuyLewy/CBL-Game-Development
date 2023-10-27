@@ -36,6 +36,12 @@ public class PlayerShotBar extends JPanel implements Drawable {
         timePassed = time;
     }
 
+    public void updateDelay(int delay) {
+        for (int i = 0; i < 9; i++) {
+            squares[i].time = (int) (delay) / 10 * (i + 2);
+        }
+    }
+
     /**
      * Draws the progress bar with proper colors for each square.
      */
