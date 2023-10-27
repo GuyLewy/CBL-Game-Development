@@ -23,6 +23,7 @@ public class ScoreCounter extends JPanel implements Drawable {
         g.setColor(Color.black);
         g.setFont(f2);
         g.drawString("Score: %d".formatted(gameScore),
-                (int) (0.64 * DisplayGraphics.windowDimensions.getWidth()), 65);
+                (int) (0.64 * DisplayGraphics.windowDimensions.getWidth()),
+                65 + DisplayGraphics.blackBorderDimensions.height);
     }
 }

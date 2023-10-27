@@ -112,7 +112,7 @@ public class MainMenu extends JPanel implements KeyListener {
         menuWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         menuWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
         menuWindow.setMinimumSize(windowDimensions);
-        menuWindow.setResizable(false);
+        menuWindow.setUndecorated(true);
         menuWindow.add(this);
         windowDimensions = Toolkit.getDefaultToolkit().getScreenSize();
         setMaximumSize(windowDimensions);

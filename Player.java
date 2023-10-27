@@ -10,8 +10,9 @@ import javax.imageio.ImageIO;
 public class Player implements Drawable {
     public static final int BASE_MOVEMENT_SPEED = 5;
     public static final int PLAYER_MAX_HEALTH = 6;
-    public final int playerWidth = 100;
-    public final int playerHeight = 128;
+    double screenSizeMultiplier = DisplayGraphics.screenSizeMultiplier;
+    public final int playerWidth = (int) (100 * screenSizeMultiplier);
+    public final int playerHeight = (int) (128 * screenSizeMultiplier);;
     public int speedUpgrades;
     public int fireRateUpgrades;
     public int healthUpgrades = 1;
@@ -20,8 +21,8 @@ public class Player implements Drawable {
     private int movementSpeed = BASE_MOVEMENT_SPEED;
 
     public int playerShotDelay = 60;
-    public int playerY = 100;
-    public int playerX = 100;
+    public int playerY = (int) (100 + DisplayGraphics.blackBorderDimensions.height * screenSizeMultiplier);
+    public int playerX = (int) (100 + DisplayGraphics.blackBorderDimensions.width * screenSizeMultiplier);
     public int playerDirection = 0;
     public ProjectilesArrayList playerProjectiles = new ProjectilesArrayList(5);
 
@@ -68,14 +69,14 @@ public class Player implements Drawable {
         if (upPressed) {
             playerDirection = 1;
             if (playerY > 20 + DisplayGraphics.blackBorderDimensions.height) {
-                playerY -= movementSpeed;
+                playerY -= (int) (screenSizeMultiplier * movementSpeed);
             }
         }
         if (downPressed) {
             playerDirection = 0;
             if (playerY + playerHeight < DisplayGraphics.windowDimensions.height
                     - DisplayGraphics.blackBorderDimensions.height) {
-                playerY += movementSpeed;
+                playerY += (int) (screenSizeMultiplier * movementSpeed);
             }
         }
     }
