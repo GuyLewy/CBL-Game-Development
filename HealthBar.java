@@ -6,6 +6,8 @@ import java.util.*;
  */
 public class HealthBar implements Drawable {
     private int maxHealth;
+    int barX;
+    int barY;
 
     ArrayList<HealthHeart> healthBar = new ArrayList<HealthHeart>();
 
@@ -14,11 +16,13 @@ public class HealthBar implements Drawable {
      * 
      * @param maxPlayerHealth used to determine the ammount of hearts.
      */
-    public HealthBar(int maxPlayerHealth) {
+    public HealthBar(int maxPlayerHealth, int x, int y) {
+        barX = x;
+        barY = y;
         maxHealth = maxPlayerHealth;
 
         for (int i = 0; i < maxHealth / 2; i++) {
-            HealthHeart next = new HealthHeart(5 + 35 * i, 5);
+            HealthHeart next = new HealthHeart((barX + 15) + 35 * i, barY + 15);
             healthBar.add(next);
         }
     }

@@ -25,15 +25,13 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
     private Player player = new Player();
     private EnemiesArrayList enemies = new EnemiesArrayList();
     private WavesArrayList waves = new WavesArrayList();
-    private PlayerShotBar playerBar = new PlayerShotBar();
     private ScoreCounter score = new ScoreCounter();
     private Wallet playerWallet = new Wallet();
     private Dock dock;
-    private HealthBar playerHealthBar = new HealthBar(player.playerHealth);
     private Sound sound = new Sound();
     private Sound soundtrack = new Sound();
 
-    private boolean statUpgraded;
+    private boolean statUpgraded = false;
     public static boolean gameRunning;
     boolean upPressed = false;
     boolean downPressed = false;
@@ -44,7 +42,7 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
     int numberOfEnemiesBound = 1;
     int playerShotDelayCounter = Player.playerShotDelay;
     float soundtrackVolume = -5.0f;
-    JFrame gameWindow = new JFrame();
+    JFrame gameWindow;
 
     private int[] fireRateUpgradePrices = { 20, 30, 40, 50 };
     private int[] movementSpeedUpgradePrices = { 10, 15, 20, 25 };
@@ -57,7 +55,8 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
      * Constructor method to initialize a timer and set the DisplayGraphics object
      * as focusable so that keystrokes can be recorded.
      */
-    public DisplayGraphics() {
+    public DisplayGraphics(JFrame frame) {
+        gameWindow = frame;
         this.setLayout(new BorderLayout());
         startGame();
         scoreManager.createScoreFile();
@@ -65,7 +64,7 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
         setFocusable(true);
         requestFocus();
         setFocusTraversalKeysEnabled(false);
-        playerBar.playerBarSetup(Player.playerShotDelay);
+        player.playerBar.playerBarSetup(player.playerShotDelay);
         Thread gameLoopThread = new Thread(this::startGameLoop);
         gameLoopThread.start();
     }
@@ -117,8 +116,8 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
         gameRunning = false;
         soundtrack.stop();
         scoreManager.saveScore(score.gameScore);
-        new RestartMenu(score.gameScore);
-        gameWindow.setVisible(false);
+        gameWindow.remove(this);
+        new RestartMenu(score.gameScore, gameWindow);
         player.playerX = 0;
         player.playerY = 0;
         score.gameScore = 0;
@@ -142,6 +141,7 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
         soundtrack.setVolume(soundtrackVolume);
         soundtrack.loop();
         gameRunning = true;
+        System.out.println(windowDimensions);
     }
 
     /**
@@ -263,8 +263,7 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
 
         waves.updateWaves();
         score.updateScore(enemies);
-        playerBar.updateBar(playerShotDelayCounter);
-        playerHealthBar.updateHealtBar(player.playerHealth);
+        player.updatePlayerBars(playerShotDelayCounter);
     }
 
     /**
@@ -277,14 +276,12 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
         super.paintComponent(g);
         this.setBackground(new Color(95, 175, 250));
         waves.draw(g);
-        player.draw(g);
         dock.draw(g);
         enemies.draw(g);
-        playerBar.draw(g);
         score.draw(g);
         playerWallet.draw(g);
-        playerHealthBar.draw(g);
         this.draw(g);
+        player.draw(g);
     }
 
     /**
@@ -313,22 +310,27 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
         }
 
         if (code == KeyEvent.VK_Z && !statUpgraded
-                && player.fireRateUpgrades <= fireRateUpgradePrices.length
+                && player.fireRateUpgrades < fireRateUpgradePrices.length
                 && playerWallet.money >= fireRateUpgradePrices[player.fireRateUpgrades]) {
             playerWallet.money -= fireRateUpgradePrices[player.fireRateUpgrades];
             player.upgradeStat(1);
-            playerBar.playerBarSetup(Player.playerShotDelay);
+            sound.setSoundEffect(6);
+            sound.play();
             statUpgraded = true;
         } else if (code == KeyEvent.VK_X && !statUpgraded
-                && player.speedUpgrades <= movementSpeedUpgradePrices.length
+                && player.speedUpgrades < movementSpeedUpgradePrices.length
                 && playerWallet.money >= movementSpeedUpgradePrices[player.speedUpgrades]) {
             playerWallet.money -= movementSpeedUpgradePrices[player.speedUpgrades];
             player.upgradeStat(2);
+            sound.setSoundEffect(6);
+            sound.play();
             statUpgraded = true;
         } else if (code == KeyEvent.VK_C && !statUpgraded
                 && playerWallet.money >= 8 * player.healthUpgrades) {
             playerWallet.money -= 8 * player.healthUpgrades;
             player.upgradeStat(3);
+            sound.setSoundEffect(6);
+            sound.play();
             statUpgraded = true;
         }
     }
@@ -348,10 +350,9 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
             upPressed = false;
         } else if (code == KeyEvent.VK_DOWN) {
             downPressed = false;
+        } else if (code == KeyEvent.VK_Z || code == KeyEvent.VK_X || code == KeyEvent.VK_C) {
+            statUpgraded = false;
         }
-
-        statUpgraded = (!(code == KeyEvent.VK_Z || code == KeyEvent.VK_X || code == KeyEvent.VK_C));
-
     }
 
     /**

@@ -24,6 +24,7 @@ public class Sound {
         soundEffectPath[3] = "./sound/Soundtrack.wav";
         soundEffectPath[4] = "./sound/startMenu.wav";
         soundEffectPath[5] = "./sound/startGame.wav";
+        soundEffectPath[6] = "./sound/powerUp.wav";
     }
 
     /**
