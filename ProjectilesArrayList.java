@@ -2,7 +2,10 @@ import java.awt.*;
 import java.util.*;
 
 /**
- * .
+ * ProjectilesArrayList, used to update projectiles and create new projectiles.
+ * 
+ * @author Guy Lewy
+ * @author Antoni Nowaczyk
  */
 public class ProjectilesArrayList implements Drawable {
     public ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
@@ -36,9 +39,10 @@ public class ProjectilesArrayList implements Drawable {
 
     /**
      * .
-     * @param x .
-     * @param y .
-     * @param targetWidth .
+     * 
+     * @param x            .
+     * @param y            .
+     * @param targetWidth  .
      * @param targetHeight .
      * @return .
      */

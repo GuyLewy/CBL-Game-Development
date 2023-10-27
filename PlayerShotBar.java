@@ -4,6 +4,9 @@ import javax.swing.*;
 /**
  * PlayerShotBar class used to create a progression bar presenting the time left
  * to another shot.
+ * 
+ * @author Guy Lewy
+ * @author Antoni Nowaczyk
  */
 public class PlayerShotBar extends JPanel implements Drawable {
     private int timePassed;

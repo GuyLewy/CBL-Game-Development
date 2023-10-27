@@ -6,6 +6,9 @@ import javax.swing.*;
 /**
  * DisplayGraphics class acts as the main window, implementing all timing logics
  * and drawing functionality as well as well as Swing window creation.
+ * 
+ * @author Guy Lewy
+ * @author Antoni Nowaczyk
  */
 public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
     double difficultyLevel = 1.5;
@@ -39,7 +42,7 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
     int enemySpawnDelayCounter;
     int enemySpawnDelay = enemyInitialSpawnDelay;
     int numberOfEnemiesBound = 1;
-    int playerShotDelayCounter = player.playerShotDelay;
+    int playerShotDelayCounter = Player.playerShotDelay;
     float soundtrackVolume = -5.0f;
     JFrame gameWindow = new JFrame();
 
@@ -62,7 +65,7 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
         setFocusable(true);
         requestFocus();
         setFocusTraversalKeysEnabled(false);
-        playerBar.playerBarSetup(player.playerShotDelay);
+        playerBar.playerBarSetup(Player.playerShotDelay);
         Thread gameLoopThread = new Thread(this::startGameLoop);
         gameLoopThread.start();
     }
@@ -141,6 +144,12 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
         gameRunning = true;
     }
 
+    /**
+     * Determines this screens aspect ratio, wether it is 16:9, wide or tall. Then
+     * determines the size of the black borders required to turn the screen into
+     * 16:9 additionally it determines a scale multiplier with relation to a
+     * 1920*1080 display to scale graphics.
+     */
     void checkScreenAspectRatio() {
         if (windowDimensions.width / (double) windowDimensions.height == 16.0 / 9.0) {
             screenSizeMultiplier = windowDimensions.width / 1920.0;
@@ -239,7 +248,7 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
             enemySpawnDelayCounter = 0;
         }
 
-        if (playerShotDelayCounter >= player.playerShotDelay) {
+        if (playerShotDelayCounter >= Player.playerShotDelay) {
             blockNextShot = false;
         } else {
             playerShotDelayCounter++;
@@ -308,6 +317,7 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
                 && playerWallet.money >= fireRateUpgradePrices[player.fireRateUpgrades]) {
             playerWallet.money -= fireRateUpgradePrices[player.fireRateUpgrades];
             player.upgradeStat(1);
+            playerBar.playerBarSetup(Player.playerShotDelay);
             statUpgraded = true;
         } else if (code == KeyEvent.VK_X && !statUpgraded
                 && player.speedUpgrades <= movementSpeedUpgradePrices.length
@@ -381,20 +391,19 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
 
         g.drawString(
                 "Firerate (z): %s    Speed (x): %s    Heal (c): $%d".formatted(
-                        fireString,
-                        speedString,
-                        8 * player.healthUpgrades),
-                (int) (0.2 * DisplayGraphics.windowDimensions.getWidth()), 30 + blackBorderDimensions.height);
+                        fireString, speedString, 8 * player.healthUpgrades),
+                (int) (0.2 * DisplayGraphics.windowDimensions.getWidth()),
+                30 + blackBorderDimensions.height);
 
         g.setColor(Color.black);
         // Draws black borders for displays that are tall
         g.fillRect(0, 0, windowDimensions.width, blackBorderDimensions.height);
-        g.fillRect(0, windowDimensions.height - blackBorderDimensions.height, windowDimensions.width,
-                blackBorderDimensions.height);
+        g.fillRect(0, windowDimensions.height - blackBorderDimensions.height,
+                windowDimensions.width, blackBorderDimensions.height);
 
         // Draws black borders for displays that are wide
         g.fillRect(0, 0, blackBorderDimensions.width, windowDimensions.height);
-        g.fillRect(windowDimensions.width - blackBorderDimensions.width, 0, blackBorderDimensions.width,
-                windowDimensions.height);
+        g.fillRect(windowDimensions.width - blackBorderDimensions.width, 0,
+                blackBorderDimensions.width, windowDimensions.height);
     }
 }

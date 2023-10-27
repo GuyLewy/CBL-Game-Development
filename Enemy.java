@@ -6,6 +6,9 @@ import javax.swing.*;
 /**
  * Enemy class used to create new enemies, includes all of their details such as
  * speed and position as well as the sprite to display.
+ * 
+ * @author Guy Lewy
+ * @author Antoni Nowaczyk
  */
 public class Enemy extends JPanel implements Drawable {
     public int enemyWidth = 128;

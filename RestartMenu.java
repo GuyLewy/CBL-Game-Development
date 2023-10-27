@@ -6,6 +6,9 @@ import javax.imageio.ImageIO;
  * Creates a frame that displays the score the player acheived that round and a
  * button that can be pressed to start an instance of the game then closses this
  * frame.
+ * 
+ * @author Guy Lewy
+ * @author Antoni Nowaczyk
  */
 public class RestartMenu extends MainMenu {
 

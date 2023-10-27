@@ -2,6 +2,9 @@ import java.awt.*;
 
 /**
  * A Wallet class to store money in.
+ * 
+ * @author Guy Lewy
+ * @author Antoni Nowaczyk
  */
 public class Wallet implements Drawable {
     Font f2 = new Font(Font.SANS_SERIF, Font.BOLD, 25);
