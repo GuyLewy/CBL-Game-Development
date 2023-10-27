@@ -42,7 +42,6 @@ public class MainMenuBoard implements Drawable {
         titleX = boardX - 90;
         titleY = boardY - boardHeight / 2;
         score = new ScoreMenu(boardX + 380, boardY + 100);
-        highScore = score;
         getScore();
         getTextures();
     }

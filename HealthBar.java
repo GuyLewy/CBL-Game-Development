@@ -22,7 +22,7 @@ public class HealthBar implements Drawable {
         maxHealth = maxPlayerHealth;
 
         for (int i = 0; i < maxHealth / 2; i++) {
-            HealthHeart next = new HealthHeart((barX + 15) + 35 * i, barY + 15);
+            HealthHeart next = new HealthHeart(barX - 160 + (35 * i), barY + 15);
             healthBar.add(next);
         }
     }

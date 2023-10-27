@@ -48,11 +48,11 @@ class HealthHeart implements Drawable {
      */
     public void draw(Graphics g) {
         if (heartState == 2) {
-            g.drawImage(fullHeart, heartX, heartY + DisplayGraphics.blackBorderDimensions.height, null);
+            g.drawImage(fullHeart, heartX, heartY, null);
         } else if (heartState == 1) {
-            g.drawImage(halfHeart, heartX, heartY + DisplayGraphics.blackBorderDimensions.height, null);
+            g.drawImage(halfHeart, heartX, heartY, null);
         } else {
-            g.drawImage(emptyHeart, heartX, heartY + DisplayGraphics.blackBorderDimensions.height, null);
+            g.drawImage(emptyHeart, heartX, heartY, null);
         }
     }
 }

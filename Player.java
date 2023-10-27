@@ -28,7 +28,7 @@ public class Player implements Drawable {
 
     public int playerX = (int) (100 + DisplayGraphics.blackBorderDimensions.width
             * screenSizeMultiplier);
-  
+
     public int playerShotDelay = 70;
     public int playerDirection = 0;
     public ProjectilesArrayList playerProjectiles = new ProjectilesArrayList(5);
@@ -36,14 +36,17 @@ public class Player implements Drawable {
     BufferedImage playerUp;
     BufferedImage playerDown;
 
-    public int barX = 5;
+    public int barX = DisplayGraphics.windowDimensions.width - DisplayGraphics.blackBorderDimensions.width;
     public int barY = 5;
-    public HealthBar playerHealthBar = new HealthBar(playerHealth, barX, barY);
+    public HealthBar playerHealthBar;
     public PlayerShotBar playerBar = new PlayerShotBar();
-    public PlayerStatsPanel stats = new PlayerStatsPanel(4, 4, barX, barY);
+    public PlayerStatsPanel stats;
 
     public Player() {
         getPlayerImage();
+        stats = new PlayerStatsPanel(4, 4, barX, barY);
+        playerHealthBar = new HealthBar(playerHealth, barX,
+                barY + DisplayGraphics.blackBorderDimensions.height);
     }
 
     /**
@@ -139,7 +142,7 @@ public class Player implements Drawable {
 
     }
 
-    public void updatePlayerBars (int playerShotDelayCounter) {
+    public void updatePlayerBars(int playerShotDelayCounter) {
         playerBar.updateBar(playerShotDelayCounter);
         playerHealthBar.updateHealtBar(playerHealth);
     }

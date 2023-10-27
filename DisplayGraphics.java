@@ -22,7 +22,7 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
     public static Dimension blackBorderDimensions = new Dimension(0, 0);
     public static double screenSizeMultiplier = 1;
     private ScoreManager scoreManager = new ScoreManager();
-    private Player player = new Player();
+    private Player player;
     private EnemiesArrayList enemies = new EnemiesArrayList();
     private WavesArrayList waves = new WavesArrayList();
     private ScoreCounter score = new ScoreCounter();
@@ -40,7 +40,7 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
     int enemySpawnDelayCounter;
     int enemySpawnDelay = enemyInitialSpawnDelay;
     int numberOfEnemiesBound = 1;
-    int playerShotDelayCounter = Player.playerShotDelay;
+    int playerShotDelayCounter;
     float soundtrackVolume = -5.0f;
     JFrame gameWindow;
 
@@ -56,8 +56,10 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
      * as focusable so that keystrokes can be recorded.
      */
     public DisplayGraphics(JFrame frame) {
-        gameWindow = frame;
+        frame.setVisible(false);
+        frame.add(this);
         this.setLayout(new BorderLayout());
+        gameWindow = frame;
         startGame();
         scoreManager.createScoreFile();
         addKeyListener(this);
@@ -128,20 +130,17 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
      * Sets up the window and starts music to the game.
      */
     public void startGame() {
-        gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        gameWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        gameWindow.setUndecorated(true);
         windowDimensions = Toolkit.getDefaultToolkit().getScreenSize();
         checkScreenAspectRatio();
-        gameWindow.add(this);
+        player = new Player();
         dock = new Dock(windowDimensions.height);
-        gameWindow.setVisible(true);
+        playerShotDelayCounter = player.playerShotDelay;
         soundtrack.setSoundEffect(3);
         soundtrack.play();
         soundtrack.setVolume(soundtrackVolume);
         soundtrack.loop();
         gameRunning = true;
-        System.out.println(windowDimensions);
+        gameWindow.setVisible(true);
     }
 
     /**
@@ -248,7 +247,7 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
             enemySpawnDelayCounter = 0;
         }
 
-        if (playerShotDelayCounter >= Player.playerShotDelay) {
+        if (playerShotDelayCounter >= player.playerShotDelay) {
             blockNextShot = false;
         } else {
             playerShotDelayCounter++;
