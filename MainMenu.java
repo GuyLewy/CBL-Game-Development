@@ -22,12 +22,22 @@ public class MainMenu extends JPanel implements KeyListener {
     int menuBounceCounter = 7;
 
     public int highScore;
+    boolean showTutorial = false;
+    long timer;
 
     private final int ups = 120; // Updates per second
     private final int fps = 60; // Frames per second
 
     Sound sound = new Sound();
     Sound background = new Sound();
+
+    String[] tutorialStringArray = {
+        "Move up and down with the Up and Down keys",
+        "Shoot with space, defeat the enemies before they reach the dock and avoid their shots",
+        "Upgrade your ship's movement speed, fire rate and heal it with z, x, and c respectively",
+        "Press esc to pause the game",
+        "PRESS SPACE TO RETURN TO MENU"
+    };
 
     /**
      * Sets up the frame to have a button and add an action listener to the button.
@@ -56,7 +66,7 @@ public class MainMenu extends JPanel implements KeyListener {
         final double timeFPS = 1000000000 / fps;
         double deltaUPS = 0;
         double deltaFPS = 0;
-        long timer = System.currentTimeMillis();
+        timer = System.currentTimeMillis();
 
         while (menuRunning) {
             long currentTime = System.nanoTime();
@@ -92,9 +102,27 @@ public class MainMenu extends JPanel implements KeyListener {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         this.setBackground(new Color(95, 175, 250));
-        if (board != null) {
+        if (board != null && !showTutorial) {
             board.draw(g);
+        } else if (timer > 1000) {
+            for (int i = 0; i < tutorialStringArray.length; i++) {
+                drawTutorialString(g, tutorialStringArray[i], 100 + 50 * i);
+            }
         }
+    }
+
+    /**
+     * Draws the tutorial string to the screen centering the text horizontally.
+     * 
+     * @param g graphics object that is being drawn to
+     * @param text text to be added to the graphics object
+     * @param y y position of the text on the screen
+     */
+    void drawTutorialString(Graphics g, String text, int y) {
+        Font tutorialFont = new Font(null, Font.BOLD, 24);
+        FontMetrics metrics = g.getFontMetrics(tutorialFont);
+        g.setFont(tutorialFont);
+        g.drawString(text, (windowDimensions.width - metrics.stringWidth(text)) / 2, y);
     }
 
     /**
@@ -123,6 +151,10 @@ public class MainMenu extends JPanel implements KeyListener {
         menuRunning = true;
     }
 
+    void showTutorial() {
+        showTutorial = true;
+    }
+
     @Override
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
@@ -131,26 +163,31 @@ public class MainMenu extends JPanel implements KeyListener {
         } else if (code == KeyEvent.VK_DOWN) {
             board.arrowPosition++;
         }
-        board.arrowPosition %= 3;
+        board.arrowPosition %= 4;
         if (board.arrowPosition < 0) {
-            board.arrowPosition = 2;
+            board.arrowPosition = 3;
         }
 
         if (code == KeyEvent.VK_SPACE) {
             sound.setSoundEffect(5);
             sound.play();
-            if (board.scoreVisible) {
+
+            if (showTutorial) {
+                showTutorial = false;
+                return;
+            }
+
+            if (board.arrowPosition == 0) {
+                background.stop();
+                startGame();
+            } else if (board.arrowPosition == 1) {
+                board.scoreVisible = !board.scoreVisible;
+            } else if (board.arrowPosition == 2) {
                 board.scoreVisible = false;
-            } else {
-                if (board.arrowPosition == 0) {
-                    background.stop();
-                    startGame();
-                } else if (board.arrowPosition == 1) {
-                    board.scoreVisible = true;
-                } else if (board.arrowPosition == 2) {
-                    menuWindow.dispose();
-                    System.exit(0);
-                }
+                showTutorial();
+            } else if (board.arrowPosition == 3) {
+                menuWindow.dispose();
+                System.exit(0);
             }
 
         }
