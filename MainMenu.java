@@ -10,13 +10,13 @@ import javax.swing.*;
 public class MainMenu extends JPanel implements KeyListener {
     private boolean menuRunning;
     private ScoreManager scoreManager = new ScoreManager();
-    public JFrame menuWindow = new JFrame();
+    public JFrame menuWindow;
     public MainMenuBoard board;
 
     public static Rectangle windowDimensions;
 
     int menuBounceDelay = 74;
-    int menuBounceCounter = 5;
+    int menuBounceCounter = 7;
 
     public int highScore;
 
@@ -29,7 +29,8 @@ public class MainMenu extends JPanel implements KeyListener {
     /**
      * Sets up the frame to have a button and add an action listener to the button.
      */
-    public MainMenu() {
+    public MainMenu(JFrame frame) {
+        menuWindow = frame;
         scoreManager.createScoreFile();
         highScore = scoreManager.getHighScore();
         board = new MainMenuBoard(highScore);
@@ -107,19 +108,15 @@ public class MainMenu extends JPanel implements KeyListener {
      * Initialize the menu including makingthe frame and playing the music.
      */
     public void setMenu() {
+        menuWindow.setVisible(true);
         menuWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         menuWindow.setSize(2000, 1000);
         menuWindow.add(this);
         windowDimensions = menuWindow.getBounds();
-        menuWindow.setVisible(true);
         background.setSoundEffect(4);
         background.play();
         background.loop();
         menuRunning = true;
-    }
-
-    public static void main(String[] args) {
-        new MainMenu();
     }
 
     @Override
@@ -167,7 +164,7 @@ public class MainMenu extends JPanel implements KeyListener {
      * Create a new DisplayGraphics object and dispose of the menu window.
      */
     public void startGame() {
-        new DisplayGraphics();
-        menuWindow.dispose();
+        menuWindow.remove(this);
+        new DisplayGraphics(menuWindow);
     }
 }
