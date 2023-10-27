@@ -7,7 +7,7 @@ import javax.imageio.ImageIO;
 public class PlayerStatsPanel implements Drawable {
     static int squareSize = 20;
     static int panelHeight = 125;
-    static int panelWidht = 175;
+    static int panelWidht = 225;
     static int panelX;
     static int panelY;
 

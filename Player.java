@@ -45,7 +45,7 @@ public class Player implements Drawable {
     public Player() {
         getPlayerImage();
         stats = new PlayerStatsPanel(4, 4, barX, barY);
-        playerHealthBar = new HealthBar(playerHealth, barX,
+        playerHealthBar = new HealthBar(playerHealth, barX - 50,
                 barY + DisplayGraphics.blackBorderDimensions.height);
     }
 
