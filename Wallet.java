@@ -11,7 +11,7 @@ public class Wallet implements Drawable {
     public int money;
 
     public Wallet() {
-        money = 200;
+        money = 0;
     }
 
     /**
