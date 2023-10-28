@@ -3,6 +3,12 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
+/**
+ * @author Antoni Nowaczyk
+ * @id 1934899
+ * @author Guy Lewy
+ * @id 1954962 
+ */
 class HealthHeart implements Drawable {
     // private static int HEART_WIDTH = 32;
     // private static int HEART_HEIGHT = 32;

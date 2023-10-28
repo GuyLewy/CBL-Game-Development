@@ -8,8 +8,10 @@ import javax.imageio.ImageIO;
 /**
  * EnemyArrayList, used to go through all available enemies and update them.
  * 
- * @author Guy Lewy
  * @author Antoni Nowaczyk
+ * @id 1934899
+ * @author Guy Lewy
+ * @id 1954962
  */
 public class EnemiesArrayList {
     public ArrayList<Enemy> enemies = new ArrayList<Enemy>();

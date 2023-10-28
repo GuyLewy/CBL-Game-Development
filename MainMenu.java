@@ -6,8 +6,10 @@ import javax.swing.*;
  * Creates a frame with a button that can be pressed to start an instance of the
  * game then closses the frame.
  * 
- * @author Guy Lewy
  * @author Antoni Nowaczyk
+ * @id 1934899
+ * @author Guy Lewy
+ * @id 1954962 
  */
 
 public class MainMenu extends JPanel implements KeyListener {
