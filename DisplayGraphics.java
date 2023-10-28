@@ -26,7 +26,7 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
     private EnemiesArrayList enemies = new EnemiesArrayList();
     private WavesArrayList waves = new WavesArrayList();
     private ScoreCounter score = new ScoreCounter();
-    private Wallet playerWallet = new Wallet();
+    private Wallet playerWallet;
     private Dock dock;
     private Sound sound = new Sound();
     private Sound soundtrack = new Sound();
@@ -45,8 +45,8 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
     float soundtrackVolume = -5.0f;
     JFrame gameWindow;
 
-    private int[] fireRateUpgradePrices = { 20, 30, 40, 50 };
-    private int[] movementSpeedUpgradePrices = { 10, 15, 20, 25 };
+    private int[] fireRateUpgradePrices = { 20, 35, 50, 65, 9999 };
+    private int[] movementSpeedUpgradePrices = { 10, 20, 30, 40, 9999 };
 
     private final int ups = 120; // Updates per second
     private final int fps = 120; // Frames per second
@@ -135,6 +135,7 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
         checkScreenAspectRatio();
         player = new Player();
         dock = new Dock(windowDimensions.height);
+        playerWallet = new Wallet();
         playerShotDelayCounter = player.playerShotDelay;
         soundtrack.setSoundEffect(3);
         soundtrack.play();
@@ -280,8 +281,8 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
         waves.draw(g);
         dock.draw(g);
         enemies.draw(g);
-        score.draw(g);
         playerWallet.draw(g);
+        score.draw(g);
         this.draw(g);
         player.draw(g);
     }
@@ -350,6 +351,9 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
             sound.play();
             statUpgraded = true;
         }
+
+        player.stats.updateUpdatesCosts(movementSpeedUpgradePrices[player.speedUpgrades], 
+            fireRateUpgradePrices[player.fireRateUpgrades], 8 * player.healthUpgrades);
     }
 
     /**
@@ -390,29 +394,6 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
      */
     @Override
     public void draw(Graphics g) {
-        g.setColor(new Color(0, 0, 0, 255));
-        g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 25));
-        String fireString;
-        String speedString;
-
-        if (player.fireRateUpgrades < fireRateUpgradePrices.length) {
-            fireString = "$" + fireRateUpgradePrices[player.fireRateUpgrades];
-        } else {
-            fireString = "MAX LEVEL";
-        }
-
-        if (player.speedUpgrades < movementSpeedUpgradePrices.length) {
-            speedString = "$" + movementSpeedUpgradePrices[player.speedUpgrades];
-        } else {
-            speedString = "MAX LEVEL";
-        }
-
-        g.drawString(
-                "Firerate (z): %s    Speed (x): %s    Heal (c): $%d".formatted(
-                        fireString, speedString, 8 * player.healthUpgrades),
-                (int) (0.2 * DisplayGraphics.windowDimensions.getWidth()),
-                30 + blackBorderDimensions.height);
-
         g.setColor(Color.black);
         // Draws black borders for displays that are tall
         g.fillRect(0, 0, windowDimensions.width, blackBorderDimensions.height);
