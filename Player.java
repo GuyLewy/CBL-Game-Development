@@ -15,7 +15,7 @@ public class Player implements Drawable {
     public static final int PLAYER_MAX_HEALTH = 8;
     double screenSizeMultiplier = DisplayGraphics.screenSizeMultiplier;
     public final int playerWidth = (int) (100 * screenSizeMultiplier);
-    public final int playerHeight = (int) (128 * screenSizeMultiplier);;
+    public final int playerHeight = (int) (128 * screenSizeMultiplier);
     public int speedUpgrades = 0;
     public int fireRateUpgrades = 0;
     public int healthUpgrades = 1;
@@ -36,12 +36,16 @@ public class Player implements Drawable {
     BufferedImage playerUp;
     BufferedImage playerDown;
 
-    public int barX = DisplayGraphics.windowDimensions.width - DisplayGraphics.blackBorderDimensions.width;
+    public int barX = DisplayGraphics.windowDimensions.width
+            - DisplayGraphics.blackBorderDimensions.width;
     public int barY = 5;
     public HealthBar playerHealthBar;
     public PlayerShotBar playerBar = new PlayerShotBar();
     public PlayerStatsPanel stats;
 
+    /**
+     * Constructor for the player class, creates a new healthbar and stats panel.
+     */
     public Player() {
         getPlayerImage();
         stats = new PlayerStatsPanel(4, 4, barX, barY);
@@ -142,6 +146,12 @@ public class Player implements Drawable {
 
     }
 
+    /**
+     * Update the player shot delay bar so that it maxes out at the players new
+     * delay.
+     * 
+     * @param playerShotDelayCounter new player shot delay
+     */
     public void updatePlayerBars(int playerShotDelayCounter) {
         playerBar.updateBar(playerShotDelayCounter);
         playerHealthBar.updateHealtBar(playerHealth);

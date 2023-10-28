@@ -30,6 +30,7 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
     private Dock dock;
     private Sound sound = new Sound();
     private Sound soundtrack = new Sound();
+    private boolean gamePaused = false;
 
     private boolean statUpgraded = false;
     public static boolean gameRunning;
@@ -195,7 +196,9 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
 
             if (deltaUPS >= 1) {
                 // Update all game logic
-                updateGame();
+                if (!gamePaused) {
+                    updateGame();
+                }
                 deltaUPS--;
             }
 
@@ -293,6 +296,21 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
     @Override
     public void keyPressed(KeyEvent e) {
         int code = e.getKeyCode();
+
+        if (gamePaused) {
+            if (code == KeyEvent.VK_SPACE) {
+                endGame();
+            } else if (code == KeyEvent.VK_ESCAPE) {
+                gamePaused = false;
+            }
+
+            return;
+        }
+
+        if (code == KeyEvent.VK_ESCAPE) {
+            gamePaused = true;
+        }
+
         if (code == KeyEvent.VK_UP) {
             upPressed = true;
         } else if (code == KeyEvent.VK_DOWN) {
@@ -405,5 +423,26 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
         g.fillRect(0, 0, blackBorderDimensions.width, windowDimensions.height);
         g.fillRect(windowDimensions.width - blackBorderDimensions.width, 0,
                 blackBorderDimensions.width, windowDimensions.height);
+    
+        if (gamePaused) {
+            drawPausedString(g, "PAUSED", DisplayGraphics.windowDimensions.height / 2);
+            drawPausedString(g, "Press space to return to main menu",
+                DisplayGraphics.windowDimensions.height / 2 + 50);
+            drawPausedString(g, "Press esc to unpause", 
+                DisplayGraphics.windowDimensions.height / 2 + 100);
+        }
+    }
+
+    /**
+     * Draws the paused string to the screen centering the text horizontally.
+     * @param g graphics object that the text is added to
+     * @param text text that is printed to the screen
+     * @param y y position of the text written to the screen
+     */
+    void drawPausedString(Graphics g, String text, int y) {
+        Font pausedFont = new Font(null, Font.BOLD, 40);
+        FontMetrics metrics = g.getFontMetrics(pausedFont);
+        g.setFont(pausedFont);
+        g.drawString(text, (windowDimensions.width - metrics.stringWidth(text)) / 2, y);
     }
 }
