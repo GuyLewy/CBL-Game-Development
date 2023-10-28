@@ -44,8 +44,8 @@ public class PlayerStatsPanel implements Drawable {
      * @param y y posiiton.
      */
     public PlayerStatsPanel(int maxSpeed, int maxAttackSpeed, int x, int y) {
-        panelX = x - panelWidht + DisplayGraphics.blackBorderDimensions.width;
-        panelY = y + DisplayGraphics.blackBorderDimensions.height;
+        panelX = x - panelWidht;
+        panelY = y;
 
         try {
             statsBar = ImageIO.read(getClass().getResourceAsStream("/textures/menu/statsBar.png"));
