@@ -222,7 +222,7 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
      * Checks if the player wants to shoot and if the next shot should be blocked, if not it shoots.
      */
     void checkPlayerShoot() {
-        if(player.wantsToShoot && !blockNextShot) {
+        if (player.wantsToShoot && !blockNextShot) {
             sound.setSoundEffect(0);
             sound.play();
             player.playerProjectiles.addProjectile((int) (player.playerX + 95),
