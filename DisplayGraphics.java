@@ -7,8 +7,10 @@ import javax.swing.*;
  * DisplayGraphics class acts as the main window, implementing all timing logics
  * and drawing functionality as well as well as Swing window creation.
  * 
- * @author Guy Lewy
  * @author Antoni Nowaczyk
+ * @id 1934899
+ * @author Guy Lewy
+ * @id 1954962
  */
 public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
     double difficultyLevel = 1.5;
@@ -242,31 +244,53 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
             }
         }
 
+        updateGenerateWaves();
+        updateSpawnEnemy();
+        checkPlayerShoting();
+
         enemySpawnDelayCounter++;
 
+        waves.updateWaves();
+        score.updateScore(enemies);
+        player.updatePlayerBars(playerShotDelayCounter);
+    }
+
+    /**
+     * Enemy spawn logic, if enough time has passed then it spawns an enemy otherwise 
+     * it increments the enemySpawnDelayCounter.
+     */
+    void updateSpawnEnemy() {
         if (enemySpawnDelayCounter >= enemySpawnDelay) {
             for (int i = 0; i < rand.nextInt(numberOfEnemiesBound) + 1; i++) {
                 enemies.generateEnemy();
             }
             enemySpawnDelayCounter = 0;
         }
+    }
 
-        if (playerShotDelayCounter >= player.playerShotDelay) {
-            blockNextShot = false;
-        } else {
-            playerShotDelayCounter++;
-        }
-
+    /**
+     * Wave spawn logic, if enough time has passed then it spawns a wave otherwise it 
+     * incrememnts the wabeDelayCounter.
+     */
+    void updateGenerateWaves() {
         if (waves.waveDelayCounter >= waves.waveDelay) {
             waves.generateWave();
             waves.waveDelayCounter = 0;
         } else {
             waves.waveDelayCounter++;
         }
+    }
 
-        waves.updateWaves();
-        score.updateScore(enemies);
-        player.updatePlayerBars(playerShotDelayCounter);
+    /**
+     * Checks if the player can shoot again, if the player can shoot and they are holding 
+     * space it shoots.
+     */
+    void checkPlayerShoting() {
+        if (playerShotDelayCounter >= player.playerShotDelay) {
+            blockNextShot = false;
+        } else {
+            playerShotDelayCounter++;
+        }
     }
 
     /**

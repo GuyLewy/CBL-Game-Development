@@ -1,6 +1,11 @@
 /**
  * Tank enemy inherits from enemy increasing health while decreasing helalth and
  * projectile delay.
+ * 
+ * @author Antoni Nowaczyk
+ * @id 1934899
+ * @author Guy Lewy
+ * @id 1954962
  */
 public class EnemyTank extends Enemy {
 

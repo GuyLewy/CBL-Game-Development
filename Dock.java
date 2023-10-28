@@ -4,8 +4,10 @@ import java.awt.*;
  * Class that draws the dock onto the screen given the parameters of the
  * height of the dock.
  * 
- * @author Guy Lewy
  * @author Antoni Nowaczyk
+ * @id 1934899
+ * @author Guy Lewy
+ * @id 1954962
  */
 public class Dock implements Drawable {
     int dockHeight;
@@ -23,8 +25,9 @@ public class Dock implements Drawable {
     private void drawDockLines(Graphics g, int numLines) {
         for (int i = 1; i <= numLines; i++) {
             g.setColor(Color.black);
-            g.fillRect(0, dockHeight * i / numLines + 50 + DisplayGraphics.blackBorderDimensions.height,
-                    (int) (100 * DisplayGraphics.screenSizeMultiplier), 3);
+            g.fillRect(0, dockHeight * i / numLines + 50 
+                + DisplayGraphics.blackBorderDimensions.height, 
+                (int) (100 * DisplayGraphics.screenSizeMultiplier), 3);
         }
     }
 

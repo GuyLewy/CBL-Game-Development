@@ -12,9 +12,7 @@ public class LoadingBarSquare extends JPanel implements Drawable {
     int time;
     Color color;
 
-    /**
-     * .
-     */
+    @Override
     public void draw(Graphics g) {
         g.setColor(color);
         g.fillRect(xPosition, yPosition
