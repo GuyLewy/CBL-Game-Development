@@ -41,6 +41,7 @@ public class Enemy extends JPanel implements Drawable {
     Enemy(int yPos) {
         lifePointsLeft = 1;
         projectileDelay = 200;
+        projectileDelayCounter = rand.nextInt(projectileDelay);
         enemySpeed = 3;
         moneyCarried = rand.nextInt(3) + 1; // Set bound to the max value that should be given
         enemyY = yPos;

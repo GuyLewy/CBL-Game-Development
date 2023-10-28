@@ -215,6 +215,17 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
         }
     }
 
+    void checkPlayerShoot() {
+        if(player.wantsToShoot && !blockNextShot) {
+            sound.setSoundEffect(0);
+            sound.play();
+            player.playerProjectiles.addProjectile((int) (player.playerX + 95),
+                    (int) (player.playerY + 72));
+            blockNextShot = true;
+            playerShotDelayCounter = 0;
+        }
+    }
+
     /**
      * Method that handles all of the logic of the game including player movement,
      * enemy and player collisions as well as damage and awarding money for
@@ -230,6 +241,8 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
             sound.play();
             player.playerProjectiles.bulletInTarget = false;
         }
+
+        checkPlayerShoot(); 
 
         int playerDamage = enemies.updateEnemies(player.playerProjectiles, playerWallet,
                 player.playerX, player.playerY, player.playerWidth, player.playerHeight,
@@ -317,13 +330,8 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
             downPressed = true;
         }
 
-        if (code == KeyEvent.VK_SPACE && !blockNextShot) {
-            sound.setSoundEffect(0);
-            sound.play();
-            player.playerProjectiles.addProjectile((int) (player.playerX + 95),
-                    (int) (player.playerY + 72));
-            blockNextShot = true;
-            playerShotDelayCounter = 0;
+        if (code == KeyEvent.VK_SPACE) {
+            player.wantsToShoot = true;
         }
 
         if (code == KeyEvent.VK_Z && !statUpgraded
@@ -367,6 +375,8 @@ public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
             upPressed = false;
         } else if (code == KeyEvent.VK_DOWN) {
             downPressed = false;
+        } else if (code == KeyEvent.VK_SPACE) {
+            player.wantsToShoot = false;
         } else if (code == KeyEvent.VK_Z || code == KeyEvent.VK_X || code == KeyEvent.VK_C) {
             statUpgraded = false;
         }
