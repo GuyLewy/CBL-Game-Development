@@ -3,6 +3,10 @@ import java.util.*;
 
 /**
  * Health bar used to show life point left.
+ * @author Antoni Nowaczyk
+ * @id 1934899
+ * @author Guy Lewy
+ * @id 1954962 
  */
 public class HealthBar implements Drawable {
     private int maxHealth;
