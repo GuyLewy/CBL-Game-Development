@@ -6,8 +6,10 @@ import javax.imageio.ImageIO;
 /**
  * Generates the score menu and displays it.
  * 
- * @author Guy Lewy
  * @author Antoni Nowaczyk
+ * @id 1934899
+ * @author Guy Lewy
+ * @id 1954962 
  */
 public class ScoreMenu implements Drawable {
     public int menuX;

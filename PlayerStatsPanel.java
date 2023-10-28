@@ -1,9 +1,17 @@
 import java.awt.*;
-import java.util.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.*;
 import javax.imageio.ImageIO;
 
+/**
+ * A player stats panel used to store player's speed and attack speed and display them on screen.
+ * 
+ * @author Antoni Nowaczyk
+ * @id 1934899
+ * @author Guy Lewy
+ * @id 1954962 
+ */
 public class PlayerStatsPanel implements Drawable {
     static int squareSize = 20;
     static int panelHeight = 125;
@@ -17,6 +25,9 @@ public class PlayerStatsPanel implements Drawable {
     public int currentAttackCost = 20;
     public int currentHealCost = 8;
 
+    String speedCost = "";
+    String attackCost = "";
+
     ArrayList<LoadingBarSquare> playerSpeedBar = new ArrayList<LoadingBarSquare>();
     ArrayList<LoadingBarSquare> attackSpeedBar = new ArrayList<LoadingBarSquare>();
 
@@ -24,6 +35,14 @@ public class PlayerStatsPanel implements Drawable {
     BufferedImage attackIcon;
     BufferedImage speedIcon;
 
+    /**
+     * Create a stats panel displayed on a given position with 
+     * a given maximum speed and attack speed level.
+     * @param maxSpeed number of speed squares on the panel.
+     * @param maxAttackSpeed number of attack speed squares on the panel.
+     * @param x x posiiton.
+     * @param y y posiiton.
+     */
     public PlayerStatsPanel(int maxSpeed, int maxAttackSpeed, int x, int y) {
         panelX = x - panelWidht + DisplayGraphics.blackBorderDimensions.width;
         panelY = y + DisplayGraphics.blackBorderDimensions.height;
@@ -59,12 +78,12 @@ public class PlayerStatsPanel implements Drawable {
         }
     }
 
+    /**
+     * Draw the panel.
+     */
     public void draw(Graphics g) {
         int priceTagX = panelX + 160;
         int priceTagY = panelY + 40;
-
-        String speedCost = "";
-        String attackCost = "";
 
         g.drawImage(statsBar, panelX, panelY, null);
         g.drawImage(speedIcon, panelX + 20, panelY + 48, null);
@@ -84,6 +103,32 @@ public class PlayerStatsPanel implements Drawable {
             attackSpeedBar.get(i).draw(g);
         }
 
+        setStatTexts();
+
+        g.setColor(new Color(175, 140, 45));
+        g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 25));
+
+        g.drawString("(c) " + Integer.toString(currentHealCost) + "$", priceTagX, priceTagY);
+        g.drawString(speedCost, priceTagX, priceTagY + 30);
+        g.drawString(attackCost, priceTagX, priceTagY + 60);
+    }
+
+    /**
+     * Update displayed costs of upgrades.
+     * @param movementCost current cost of movement speed upgrade.
+     * @param attackCost current cost of attack speed upgrade.
+     * @param healCost current cost of heal.
+     */
+    public void updateUpdatesCosts(int movementCost, int attackCost, int healCost) {
+        currentAttackCost = attackCost;
+        currentSpeedCost = movementCost;
+        currentHealCost = healCost;
+    }
+
+    /**
+     * Check if there's a next upgrade available, if so get the price, if not get "MAX".
+     */
+    void setStatTexts() {
         if (currentSpeedCost == 9999) {
             speedCost = "MAX";
         } else {
@@ -95,18 +140,5 @@ public class PlayerStatsPanel implements Drawable {
         } else {
             attackCost = "(z) " + Integer.toString(currentAttackCost) + "$";
         }
-
-        g.setColor(new Color(175, 140, 45));
-        g.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 25));
-
-        g.drawString("(c) " + Integer.toString(currentHealCost) + "$", priceTagX, priceTagY);
-        g.drawString(speedCost, priceTagX, priceTagY + 30);
-        g.drawString(attackCost, priceTagX, priceTagY + 60);
-    }
-
-    public void updateUpdatesCosts(int movementCost, int attackCost, int healCost) {
-        currentAttackCost = attackCost;
-        currentSpeedCost = movementCost;
-        currentHealCost = healCost;
     }
 }

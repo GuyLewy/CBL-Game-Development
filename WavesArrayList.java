@@ -7,8 +7,10 @@ import javax.imageio.ImageIO;
 /**
  * WavesArrayList, used to update waves and create new waves.
  * 
- * @author Guy Lewy
  * @author Antoni Nowaczyk
+ * @id 1934899
+ * @author Guy Lewy
+ * @id 1954962
  */
 public class WavesArrayList implements Drawable {
     public ArrayList<Wave> waves = new ArrayList<Wave>();

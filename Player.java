@@ -7,8 +7,10 @@ import javax.imageio.ImageIO;
  * Enemy class includes all of the player details such as speed and position as
  * well as the sprite to display.
  * 
- * @author Guy Lewy
  * @author Antoni Nowaczyk
+ * @id 1934899
+ * @author Guy Lewy
+ * @id 1954962 
  */
 public class Player implements Drawable {
     public static final int BASE_MOVEMENT_SPEED = 3;
@@ -54,7 +56,7 @@ public class Player implements Drawable {
     }
 
     /**
-     * .
+     * Loads player textures.
      */
     public void getPlayerImage() {
         try {

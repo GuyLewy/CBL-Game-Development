@@ -8,8 +8,10 @@ import javax.swing.*;
  * PlayerShotBar class used to create a progression bar presenting the time left
  * to another shot.
  * 
- * @author Guy Lewy
  * @author Antoni Nowaczyk
+ * @id 1934899
+ * @author Guy Lewy
+ * @id 1954962 
  */
 public class PlayerShotBar extends JPanel implements Drawable {
     private int timePassed;
@@ -27,6 +29,9 @@ public class PlayerShotBar extends JPanel implements Drawable {
 
     BufferedImage barTexture;
 
+    /**
+     * Create a shot bar and get a texture.
+     */
     public PlayerShotBar() {
         try { 
             barTexture = ImageIO.read(getClass().getResourceAsStream(
@@ -36,8 +41,6 @@ public class PlayerShotBar extends JPanel implements Drawable {
         }
     }
                 
-
-
     /**
      * Initializes the bar, creates an array of squares.
      */
@@ -58,6 +61,10 @@ public class PlayerShotBar extends JPanel implements Drawable {
         timePassed = time;
     }
 
+    /**
+     * Updates the shot delay after the player stat upgrade.
+     * @param delay new delay time.
+     */
     public void updateDelay(int delay) {
         for (int i = 0; i < 9; i++) {
             squares[i].time = (int) (delay) / 10 * (i + 2);

@@ -6,8 +6,10 @@ import javax.imageio.ImageIO;
 /**
  * A Wallet class to store money in.
  * 
- * @author Guy Lewy
  * @author Antoni Nowaczyk
+ * @id 1934899
+ * @author Guy Lewy
+ * @id 1954962 
  */
 public class Wallet implements Drawable {
     BufferedImage boardTexture;
@@ -17,8 +19,11 @@ public class Wallet implements Drawable {
          - DisplayGraphics.blackBorderDimensions.width - 500;
     public int walletY = DisplayGraphics.blackBorderDimensions.height + 5;
 
+    /**
+     * Create an empty wallet and load the image.
+     */
     public Wallet() {
-        money = 200;
+        money = 0;
 
         try { 
             boardTexture = ImageIO.read(getClass().getResourceAsStream(

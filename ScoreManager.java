@@ -8,8 +8,10 @@ import java.util.Scanner;
  * Handles all of the score related functions such as reading and writing the
  * high score.
  * 
- * @author Guy Lewy
  * @author Antoni Nowaczyk
+ * @id 1934899
+ * @author Guy Lewy
+ * @id 1954962 
  */
 public class ScoreManager {
     File highScoreF = new File("highScore.txt");

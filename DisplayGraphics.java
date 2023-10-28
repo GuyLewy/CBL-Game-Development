@@ -7,8 +7,10 @@ import javax.swing.*;
  * DisplayGraphics class acts as the main window, implementing all timing logics
  * and drawing functionality as well as well as Swing window creation.
  * 
- * @author Guy Lewy
  * @author Antoni Nowaczyk
+ * @id 1934899
+ * @author Guy Lewy
+ * @id 1954962
  */
 public class DisplayGraphics extends JPanel implements KeyListener, Drawable {
     double difficultyLevel = 1.5;
