@@ -6,8 +6,10 @@ import javax.imageio.ImageIO;
 /**
  * Class deals with all of the drawing of the main menu board.
  * 
- * @author Guy Lewy
  * @author Antoni Nowaczyk
+ * @id 1934899
+ * @author Guy Lewy
+ * @id 1954962 
  */
 public class MainMenuBoard implements Drawable {
     int boardX = 550;

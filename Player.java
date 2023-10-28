@@ -7,8 +7,10 @@ import javax.imageio.ImageIO;
  * Enemy class includes all of the player details such as speed and position as
  * well as the sprite to display.
  * 
- * @author Guy Lewy
  * @author Antoni Nowaczyk
+ * @id 1934899
+ * @author Guy Lewy
+ * @id 1954962 
  */
 public class Player implements Drawable {
     public static final int BASE_MOVEMENT_SPEED = 3;
@@ -39,7 +41,7 @@ public class Player implements Drawable {
 
     public int barX = DisplayGraphics.windowDimensions.width
             - DisplayGraphics.blackBorderDimensions.width;
-    public int barY = 5;
+    public int barY = 5 + DisplayGraphics.blackBorderDimensions.height;
     public HealthBar playerHealthBar;
     public PlayerShotBar playerBar = new PlayerShotBar();
     public PlayerStatsPanel stats;
@@ -50,12 +52,11 @@ public class Player implements Drawable {
     public Player() {
         getPlayerImage();
         stats = new PlayerStatsPanel(4, 4, barX, barY);
-        playerHealthBar = new HealthBar(playerHealth, barX - 50,
-                barY + DisplayGraphics.blackBorderDimensions.height);
+        playerHealthBar = new HealthBar(playerHealth, barX - 95, barY);
     }
 
     /**
-     * .
+     * Loads player textures.
      */
     public void getPlayerImage() {
         try {
@@ -142,9 +143,7 @@ public class Player implements Drawable {
 
                 healthUpgrades++;
                 break;
-
         }
-
     }
 
     /**

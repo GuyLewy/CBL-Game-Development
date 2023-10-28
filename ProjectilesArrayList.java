@@ -4,8 +4,10 @@ import java.util.*;
 /**
  * ProjectilesArrayList, used to update projectiles and create new projectiles.
  * 
- * @author Guy Lewy
  * @author Antoni Nowaczyk
+ * @id 1934899
+ * @author Guy Lewy
+ * @id 1954962 
  */
 public class ProjectilesArrayList implements Drawable {
     public ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
@@ -19,7 +21,7 @@ public class ProjectilesArrayList implements Drawable {
     }
 
     /**
-     * .
+     * Add a new enemy at a given position.
      */
     public void addProjectile(int projectileX, int projectileY) {
         Projectile p = new Projectile();
@@ -28,7 +30,7 @@ public class ProjectilesArrayList implements Drawable {
     }
 
     /**
-     * .
+     * Move every projectile. Method called every update.
      */
     public void moveProjectiles() {
         for (int i = 0; i < projectiles.size(); i++) {
@@ -38,19 +40,19 @@ public class ProjectilesArrayList implements Drawable {
     }
 
     /**
-     * .
+     * A method checks, if any of the prejectile hits a given target.
      * 
-     * @param x            .
-     * @param y            .
-     * @param targetWidth  .
-     * @param targetHeight .
-     * @return .
+     * @param x x position of a target.
+     * @param y y position of a target.
+     * @param targetWidth width of a target.
+     * @param targetHeight height of a target.
+     * @return returns true if a target is hit.
      */
     public boolean areBulletsHitting(int x, int y, int targetWidth, int targetHeight) {
         for (int i = 0; i < projectiles.size(); i++) {
             Projectile next = projectiles.get(i);
-            if (next.projectileX < x + targetWidth && next.projectileX > x && next.projectileY > y
-                    && next.projectileY < y + targetHeight) {
+            if ((x - next.projectileX) * (x - next.projectileX + targetWidth) < 0 
+                && next.projectileY > y && next.projectileY < y + targetHeight) {
                 next.disappear = true;
                 bulletInTarget = true;
                 return true;
@@ -60,7 +62,7 @@ public class ProjectilesArrayList implements Drawable {
     }
 
     /**
-     * .
+     * Draw every projectile.
      */
     public void draw(Graphics g) {
         for (int i = 0; i < projectiles.size(); i++) {

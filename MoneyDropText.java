@@ -6,6 +6,11 @@ import java.awt.*;
  * The MoneyDropText stays on the screen for a particular ammount of time, slowly moving up
  * and decreasing its opacity.
  * Then it disappears.
+ * 
+ * @author Antoni Nowaczyk
+ * @id 1934899
+ * @author Guy Lewy
+ * @id 1954962 
  */
 public class MoneyDropText implements Drawable {
     String moneyString;

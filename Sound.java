@@ -6,8 +6,10 @@ import javax.sound.sampled.FloatControl;
 /**
  * Class sound used to store a sound effect or music.
  * 
- * @author Guy Lewy
  * @author Antoni Nowaczyk
+ * @id 1934899
+ * @author Guy Lewy
+ * @id 1954962 
  */
 public class Sound {
     Clip clip;

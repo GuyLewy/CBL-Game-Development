@@ -3,6 +3,11 @@ import java.util.*;
 
 /**
  * Array stores all visible MoneyDropTexts.
+ * 
+ * @author Antoni Nowaczyk
+ * @id 1934899
+ * @author Guy Lewy
+ * @id 1954962 
  */
 public class MoneyDropTextArray implements Drawable {
     ArrayList<MoneyDropText> texts = new ArrayList<MoneyDropText>(); 

@@ -9,8 +9,10 @@ import javax.swing.*;
  * button that can be pressed to start an instance of the game then closses this
  * frame.
  * 
- * @author Guy Lewy
  * @author Antoni Nowaczyk
+ * @id 1934899
+ * @author Guy Lewy
+ * @id 1954962 
  */
 public class RestartMenu extends MainMenu {
 

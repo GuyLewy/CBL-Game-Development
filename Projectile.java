@@ -8,8 +8,10 @@ import javax.swing.*;
  * Projectile class includes all of the projectile details such as speed and
  * postion and handles drawing projectiles with an interface.
  * 
- * @author Guy Lewy
  * @author Antoni Nowaczyk
+ * @id 1934899
+ * @author Guy Lewy
+ * @id 1954962 
  */
 public class Projectile extends JPanel implements Drawable {
     public static final int RANGE = DisplayGraphics.windowDimensions.width;
@@ -45,7 +47,7 @@ public class Projectile extends JPanel implements Drawable {
     }
 
     /**
-     * .
+     * Moves all the projectiles. A method called every game update.
      */
     public void moveProjectile(int projectileSpeed) {
         if (projectileX < RANGE && projectileX > 0) {
@@ -56,7 +58,9 @@ public class Projectile extends JPanel implements Drawable {
     }
 
     /**
-     * .
+     * Assigns a position to the projectile.
+     * @param x x position.
+     * @param y y position.
      */
     public void givePosition(int x, int y) {
         projectileX = x;
