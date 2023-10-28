@@ -21,6 +21,7 @@ public class Player implements Drawable {
     public int speedUpgrades = 0;
     public int fireRateUpgrades = 0;
     public int healthUpgrades = 1;
+    public boolean wantsToShoot = false;
 
     int playerHealth = PLAYER_MAX_HEALTH;
     private int movementSpeed = BASE_MOVEMENT_SPEED;
