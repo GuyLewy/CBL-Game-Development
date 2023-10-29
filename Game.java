@@ -1,6 +1,7 @@
 import javax.swing.*;
 
 /**
+ * Game class creates a JFrame and creates main menu.
  * @author Antoni Nowaczyk
  * @id 1934899
  * @author Guy Lewy
