@@ -4,6 +4,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 /**
+ * Health heart used to show life points left.
  * @author Antoni Nowaczyk
  * @id 1934899
  * @author Guy Lewy
